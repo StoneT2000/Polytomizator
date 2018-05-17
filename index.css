@@ -1,0 +1,86 @@
+body{
+  width:4000px;
+  height:
+}
+.main{
+  margin:auto;
+  top:35px;
+  position:relative;
+  
+
+}
+#gamedisplay{
+  margin:auto;
+
+  margin-left:50%;
+  right:1504px;
+  position: relative;
+  margin-bottom:200px;
+}
+.container{
+  padding:0px;
+  margin:0px;
+  height:700px;
+
+  width: 100%;
+  text-align:center;
+}
+.buttonRow{
+
+  position: fixed;
+  bottom:15px;
+  width:900px;
+  margin-left:-400px;
+  left:50%;
+    text-align:center;
+  height:70px;
+}
+#buttonList{
+  float:left;
+  text-align:center;
+  position:relative;
+  
+}
+.buttonRow li{
+  display:inline-block;
+  background-color:RGB(40,40,40);
+  border:1px solid RGB(100,100,100);
+  border-radius:5px;
+  margin-top:10px;
+  color:white;
+  width: 100px;
+  height:50px;
+  cursor:pointer;
+}
+#colorMap{
+  color:white;
+  background-color:RGB(40,40,40);
+  cursor: pointer;
+  width:400px;
+  margin:auto;
+}
+.brushes{
+  position:fixed;
+  width: 100px;
+  left: 20px;
+  top:40px;
+}
+.brushes li{
+  display:inline-block;
+  background-color:RGB(40,40,40);
+  border:1px solid RGB(100,100,100);
+  border-radius:5px;
+  margin-top:10px;
+  color:white;
+  width: 80px;
+  height:50px;
+  cursor:pointer;
+}
+.brushes input{
+  width: 50px;
+  line-height:20px;
+  margin-top:10px;
+}
+.brushes #sizing{
+  height:100px;
+}

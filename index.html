@@ -1,0 +1,53 @@
+<html>
+<head>
+  <meta charset="UTF-8">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+  <script language="javascript" type="text/javascript" src="sketch.js"></script>
+  <script language="javascript" type="text/javascript" src="buttons.js"></script>
+
+  <link rel ="stylesheet" href="index.css">
+  <script src="https://unpkg.com/delaunator@2.0.0/delaunator.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.6.1/p5.js"></script>
+  <!--<script src="delaunatormin.js"></script>-->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
+</head>
+
+<body>
+  <div class='container'>
+    <h1 style="margin-top:10px">Make Poly ART! (Beta)</h1>
+    <p>By Stone Tao</p>
+    <h3>Add points with the brushes on the sidebar. Then press "D" to polytomize the points</h3>
+    <h3>Press the spacebar to save the current canvas</h3>
+    <h3>Press the backslash to switch between brushes</h3>
+    <h3>Turn coloring map on to start coloring the resulting shapes</h3>
+    <p>Debugging</p>
+    <h4 id="colorMap">Coloring Map: Off (Press M to switch)</h4>
+    <div class="main">
+      <div id="gamedisplay"></div>
+    </div>
+    
+    <div class="buttonRow">
+      <ul id ="buttonList">
+        <li id="displayText">Hide<br>Text<br></li>
+        <li id="displayAnchors">Hide <br>Anchors<br></li>
+        <li id="displayPoints">Hide <br>Points<br></li>
+        <li id="displayCurves">Hide <br>Curves<br></li>
+        <li id="displayTriangulation">Hide <br>Triangles<br></li>
+        <li id="displayImage">Hide <br>Background<br></li>
+        <li id="displayAll">Hide <br>Everything<br></li>
+        
+      </ul>
+    </div>
+    <div class="brushes">
+      <ul>
+        <li id="pointBrush"><img src="pointIcon.png" width="50px"></li>
+        <li id="lineBrush"><img src="brushIcon.png" width="50px"></li>
+        <li id="sizing">Brush Size<input id="brushSize" type="text" placeholder="10"></li>
+      </ul>
+    </div>
+    
+  </div>
+  
+</body>
+</html>
