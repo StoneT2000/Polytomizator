@@ -1,6 +1,6 @@
 $(document).on('ready',function(){
-
-  console.log("Let's make computer generated art that looks pretty cool")
+  
+  console.log("Let's make computer generated art that looks pretty cool...v6")
   $("#displayText").on("click",function(){
     if (displayText == false){
       displayText = true;
