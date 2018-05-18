@@ -1,4 +1,5 @@
 $(document).on('ready',function(){
+
   console.log("Let's make computer generated art that looks pretty cool")
   $("#displayText").on("click",function(){
     if (displayText == false){
@@ -121,11 +122,11 @@ $(document).on('ready',function(){
   $("#colorMap").on("click",function(){
     if (colorMap == false){
       colorMap= true;
-      $("#colorMap").text("Coloring Map: On (Press M to switch)")
+      $("#colorMap").text("Coloring Map: On (M)")
     }
     else {
       colorMap = false;
-      $("#colorMap").text("Coloring Map: Off (Press M to switch)")
+      $("#colorMap").text("Coloring Map: Off (M)")
     }
   })
   $("#brushSize").on("focusout",function(){
@@ -149,7 +150,6 @@ $(document).on('ready',function(){
         cWidth = round(img1.width/factor);
         cHeight = round(img1.height/factor);
         myCanvas =createCanvas(cWidth,cHeight);
-
         
       }
       else {
@@ -161,32 +161,67 @@ $(document).on('ready',function(){
       $("body").css("width",(cWidth+500).toString()+"px")
       $("body").css("height",(cHeight+400).toString()+"px")
       myCanvas.parent('gamedisplay');
-       vertices = [];
-       curves = [];
-       totalPointsOnCurve = [];
-       bPoints = [];
+      vertices = [];
+      curves = [];
+      totalPointsOnCurve = [];
+      bPoints = [];
       oPoints = [];
       allVertices=[];
-       triangulations = [0];
-       tColors = [];
-       nPoints =[];
-       previousData =[];
-       dataPos = 0;
+      triangulations = [0];
+      tColors = [];
+      nPoints =[];
+      previousData =[];
+      dataPos = 0;
       d = pixelDensity();
-      allVertices.push([1,1]);
-      allVertices.push([cWidth-1,1]);
-      allVertices.push([1,cHeight-1]);
+       
+  
+      allVertices.push([0,0]);
+      allVertices.push([cWidth-1,0]);
+      allVertices.push([0,cHeight-1]);
       allVertices.push([cWidth-1,cHeight-1]);
+
       for(i=0;i<cWidth/80;i++){
-        allVertices.push([i*80+round(random(-30,30)),cHeight-1])
-        allVertices.push([i*80+round(random(-30,30)),1])
+        var tempv = i*80+round(random(0,30));
+        var tempv2 = i*80+round(random(0,30));
+        if (inCanvas(tempv,cHeight-1)){
+          allVertices.push([i*80+round(random(0,30))-1,cHeight-1])
+        }
+        if (inCanvas(tempv,cHeight-1)){
+          allVertices.push([i*80+round(random(0,30))-1,0])
+        }
+
+
       }
       for(i=0;i<cHeight/80;i++){
-        allVertices.push([cWidth-1,i*80+round(random(-30,30))])
-        allVertices.push([1,i*80+round(random(-30,30))])
+        var tempv = i*80+round(random(0,30));
+        var tempv2 = i*80+round(random(0,30));
+        if (inCanvas(cWidth-1,tempv)){
+          allVertices.push([cWidth-1,i*80+round(random(0,30))-1])
+        }
+        if (inCanvas(0,tempv2)){
+          allVertices.push([0,i*80+round(random(0,30))-1])
+        }
+
       }
+
+        
+      previousData.push([vertices.slice(),curves.slice(),totalPointsOnCurve.slice(),bPoints.slice(),oPoints.slice(),allVertices.slice(),triangulations.slice(),tColors.slice(),nPoints.slice(),currSetPt.slice()]);
     });
     
   });
+  $("#expandImage").on("click",function(){
+    if (finishedColoring == false){
+      alert("Please wait until the coloring is finished before enlargining the work and downloading it")
+    }
+    else {
+      if (window.confirm("Are you sure you want to do this? You cannot go back and edit this work again.")){
+        var factor = 6000/cWidth;
+        expandImage(factor,true);
+      }
+    }
+  });
+  $("#polytomize").on("click",function(){
+    triangulize();
+  })
 
 })

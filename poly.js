@@ -34,7 +34,7 @@ function preload(){
 function setup(){
   
   d = pixelDensity();
-
+  loadPixels();
   cWidth = img1.width;
   cHeight = img1.height;
   myCanvas =createCanvas(cWidth,cHeight);
@@ -48,11 +48,11 @@ function setup(){
   for(i=0;i<cWidth/80;i++){
     var tempv = i*80+round(random(0,30));
     var tempv2 = i*80+round(random(0,30));
-    if (inCanvas(tempv,cHeight)){
-      allVertices.push([i*80+round(random(0,30)),cHeight-1])
+    if (inCanvas(tempv,cHeight-1)){
+      allVertices.push([i*80+round(random(0,30))-1,cHeight-1])
     }
-    if (inCanvas(tempv,cHeight)){
-      allVertices.push([i*80+round(random(0,30)),0])
+    if (inCanvas(tempv,cHeight-1)){
+      allVertices.push([i*80+round(random(0,30))-1,0])
     }
         
         
@@ -60,11 +60,11 @@ function setup(){
   for(i=0;i<cHeight/80;i++){
     var tempv = i*80+round(random(0,30));
     var tempv2 = i*80+round(random(0,30));
-    if (inCanvas(cWidth,tempv)){
-      allVertices.push([cWidth-1,i*80+round(random(0,30))])
+    if (inCanvas(cWidth-1,tempv)){
+      allVertices.push([cWidth-1,i*80+round(random(0,30))-1])
     }
     if (inCanvas(0,tempv2)){
-      allVertices.push([0,i*80+round(random(0,30))])
+      allVertices.push([0,i*80+round(random(0,30))-1])
     }
 
 
@@ -88,53 +88,28 @@ function draw(){
   if (displayImage == true){
     image(img1,0,0,cWidth,cHeight);
   }
-  loadPixels();
-  for (i=0;i<iterStep;i++){
-
-    if (stepDelaunate == true && triangulations.length>0 && colorMap == true){
-      if (stepD==0){
-        finishedColoring = false;
-        image(img1,0,0,cWidth-1,cHeight-1);
-        loadPixels();
-        tColors=[];
-        $("#displayText").html("Show<br>Text<br>");
-        $("#displayText").css("background-color","RGB(100,100,100)");
-        $("#displayAnchors").html("Show<br>Anchors<br>");
-        $("#displayAnchors").css("background-color","RGB(100,100,100)");
-        $("#displayPoints").html("Show<br>Points<br>");
-        $("#displayPoints").css("background-color","RGB(100,100,100)");
-        $("#displayCurves").html("Show<br>Curves<br>");
-        $("#displayCurves").css("background-color","RGB(100,100,100)");
-
-      }
-      else if (stepD>=triangulations[triangulations.length-1].length){
-       
-      }
-      var triangles = triangulations[triangulations.length-1];
-      if (stepD<triangulations[triangulations.length-1].length){
+  if (stepDelaunate == true && triangulations.length>0 && colorMap == true){
+      if (workTriangles.length>0){
         displayText=false;
         displayCurves=false;
         displayPoints=false;
         displayAnchors=false;
-        
-        var set1 = fget(allVertices[triangles[stepD]][0],allVertices[triangles[stepD]][1]);
-        var set2 = fget(allVertices[triangles[stepD+1]][0],allVertices[triangles[stepD+1]][1]);
-        var set3 = fget(allVertices[triangles[stepD+2]][0],allVertices[triangles[stepD+2]][1]);
-
-
+        var set1 = fget(allVertices[workTriangles[stepD]][0],allVertices[workTriangles[stepD]][1]);
+        var set2 = fget(allVertices[workTriangles[stepD+1]][0],allVertices[workTriangles[stepD+1]][1]);
+        var set3 = fget(allVertices[workTriangles[stepD+2]][0],allVertices[workTriangles[stepD+2]][1]);
         var cR=(set1[0]+set2[0]+set3[0])/3;
         var cG=(set1[1]+set2[1]+set3[1])/3;
         var cB=(set1[2]+set2[2]+set3[2])/3;
         tColors.push(cR,cG,cB);
+        workTriangles = workTriangles.slice(3,workTriangles.length);
 
       }
       else{
         finishedColoring = true;
       }
 
-      stepD+=3;
-    }
   }
+  
   stroke(2);
 
   fill(256,256,256)
@@ -231,7 +206,19 @@ function keyPressed(){
   }
   else if (keyCode===68){
     triangulize();
-    
+    finishedColoring = false;
+    image(img1,0,0,cWidth,cHeight);
+    loadPixels();
+    tColors=[];
+    $("#displayText").html("Show<br>Text<br>");
+    $("#displayText").css("background-color","RGB(100,100,100)");
+    $("#displayAnchors").html("Show<br>Anchors<br>");
+    $("#displayAnchors").css("background-color","RGB(100,100,100)");
+    $("#displayPoints").html("Show<br>Points<br>");
+    $("#displayPoints").css("background-color","RGB(100,100,100)");
+    $("#displayCurves").html("Show<br>Curves<br>");
+    $("#displayCurves").css("background-color","RGB(100,100,100)");
+    workTriangles =triangulations[triangulations.length-1];
   }
   else if (keyCode===220){
 
@@ -527,7 +514,7 @@ function scanLR(data,degree,accuracy){
   }
 }
 function inCanvas(x,y){
-  if (x > cWidth || x<0 || y>cHeight||y<0){
+  if (x > cWidth-1 || x<0 || y>cHeight-1||y<0){
     return false;
   }
   else {
