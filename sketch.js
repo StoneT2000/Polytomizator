@@ -1,18 +1,15 @@
-//import Delaunator from 'delaunator';
-
-var vertices = [];//anchors for bezier
+var vertices = [];
 var curves = [];
 var totalPointsOnCurve = [];
-var bPoints = [];//Bezier points
-var oPoints = [];//Other points created by bezier jitter
-var allVertices=[];//allVertices list
-var triangulations = [0];//the triangulations
+var bPoints = [];
+var oPoints = [];
+var allVertices=[];
+var triangulations = [0];
 var tColors = [];
-var nPoints =[];//normal points
-var mode = 0;//0: curves, 1: points, 2: drawing points tool
+var nPoints =[];
+var mode = 1;
 var previousData =[];
 var dataPos = 0;
-//BOOLS
 var displayText = true;
 var displayTriangulation = true;
 var displayCurves =true;
@@ -24,7 +21,7 @@ var noColors = false;
 var colorMap = false;
 var flowing = true;
 var brushSize = 10;
-var magnification = 1; //Max canvas size is less than 9000
+var magnification = 1;
 function preload(){
 }
 var myCanvas;
@@ -37,33 +34,45 @@ function setup(){
   
   d = pixelDensity();
   loadPixels();
-  console.log(get(0,0));
-  console.log(pixels);
-  myCanvas =createCanvas(img1.width,img1.height);
   cWidth = img1.width;
   cHeight = img1.height;
-  console.log(img1.width);
+  myCanvas =createCanvas(cWidth,cHeight);
   
-  allVertices.push([1,1]);
-  allVertices.push([img1.width-1,1]);
-  allVertices.push([1,img1.height-1]);
-  allVertices.push([img1.width-1,img1.height-1]);
-  //push vertices to edges
   
-  for(i=0;i<img1.width/80;i++){
-    allVertices.push([i*80+round(random(-30,30)),img1.height-1])
-    allVertices.push([i*80+round(random(-30,30)),1])
+  allVertices.push([0,0]);
+  allVertices.push([cWidth,0]);
+  allVertices.push([0,cHeight]);
+  allVertices.push([cWidth,cHeight]);
+  
+  for(i=0;i<cWidth/80;i++){
+    var tempv = i*80+round(random(0,30));
+    var tempv2 = i*80+round(random(0,30));
+    if (inCanvas(tempv,cHeight)){
+      allVertices.push([i*80+round(random(0,30)),cHeight])
+    }
+    if (inCanvas(tempv,cHeight)){
+      allVertices.push([i*80+round(random(0,30)),0])
+    }
+        
+        
   }
-  for(i=0;i<img1.height/80;i++){
-    allVertices.push([img1.width-1,i*80+round(random(-30,30))])
-    allVertices.push([1,i*80+round(random(-30,30))])
+  for(i=0;i<cHeight/80;i++){
+    var tempv = i*80+round(random(0,30));
+    var tempv2 = i*80+round(random(0,30));
+    if (inCanvas(cWidth,tempv)){
+      allVertices.push([cWidth,i*80+round(random(0,30))])
+    }
+    if (inCanvas(0,tempv2)){
+      allVertices.push([0,i*80+round(random(0,30))])
+    }
+
+
   }
   
   $("#gamedisplay").css("right",(cWidth/2).toString()+"px")
   $("body").css("width",(cWidth+500).toString()+"px")
   $("body").css("height",(cHeight+400).toString()+"px")
   myCanvas.parent('gamedisplay');
-  //noStroke();
   angleMode(DEGREES)
 }
 var accDist = 0;
@@ -76,15 +85,14 @@ function draw(){
   
   background("#FFFFFF")
   if (displayImage == true){
-    image(img1,0,0);
+    image(img1,0,0,cWidth,cHeight);
   }
-  //code to do progressive loading of triangles
   for (i=0;i<iterStep;i++){
 
     if (stepDelaunate == true && triangulations.length>0 && colorMap == true){
-      //image(img1,0,0);
       if (stepD==0){
-        image(img1,0,0);
+        finishedColoring = false;
+        image(img1,0,0,cWidth,cHeight);
         loadPixels();
         tColors=[];
         $("#displayText").html("Show<br>Text<br>");
@@ -111,14 +119,15 @@ function draw(){
         var set2 = fget(allVertices[triangles[stepD+1]][0],allVertices[triangles[stepD+1]][1]);
         var set3 = fget(allVertices[triangles[stepD+2]][0],allVertices[triangles[stepD+2]][1]);
 
-        //console.log(allVertices[triangles[stepD]][0],allVertices[triangles[stepD]][1])
-        //var ta = allVertices[triangles[stepD]][0];
-        //var tb = allVertices[triangles[stepD]][1];
+
         var cR=(set1[0]+set2[0]+set3[0])/3;
         var cG=(set1[1]+set2[1]+set3[1])/3;
         var cB=(set1[2]+set2[2]+set3[2])/3;
         tColors.push(cR,cG,cB);
 
+      }
+      else{
+        finishedColoring = true;
       }
 
       stepD+=3;
@@ -164,10 +173,8 @@ function draw(){
   }
   
 
-  //Texts
   if (displayText == true){
     var accum = 0;
-    //accum is just so we can determine which bPoint is part of which curve
     for (i=0;i<curves.length;i++){
       accum += totalPointsOnCurve[i];
       textSize(20);
@@ -177,7 +184,6 @@ function draw(){
     }
   }
   
-  //code for random brushes
   var dx=oldX-mouseX;
   var dy=oldY-mouseY;
   accDist = sqrt(dx*dx+dy*dy)
@@ -187,7 +193,6 @@ function draw(){
     }
     else {
       accDist =0;
-      //store old pos.
       critDist = random(15,20)
       oldX=mouseX;
       oldY=mouseY;
@@ -215,64 +220,17 @@ function keyPressed(){
     saveCanvas(myCanvas, 'myCanvas', 'jpg');
   }
   else if (keyCode === 13){
-    //pressing enter pushes current set of points from curve
     for (i=0;i<currSetPt.length;i++){
       vertices.push(currSetPt[i]);
     }
-    //console.log(currSetPt);
     produceJitterPt(currSetPt);
-    //then produce bezier curve based points with jitter
     currSetPt = [];
   
   }
-  //click "d" to produce triangulated image
   else if (keyCode===68){
-
-    //perhaps just find all vertices near the new points, and delaunate it
-    var delaunay;
-    //console.log(vertices)
-    //allVertices=[[0,0],[100,100],[200,100]]
-    delaunay = (Delaunator.from(allVertices))
-    triangles = (delaunay.triangles)
-    //console.log(triangles)
-    //fill(256,256,256)
-    
-    //triangulations.push(triangles);
-    //If we have the functionality to onyl recalculate a part at a time, then use push, otherwise
-    triangulations[0] = triangles;
-    
-    //var coordinates = [];
-    //sort out the colors:
-    displayText=false;
-    displayCurves=false;
-    displayPoints=false;
-    displayAnchors=false;
-    image(img1,0,0)
-    //tColors = [];
-    if (stepDelaunate == false){
-      for (var i = 0; i < triangles.length; i += 3) {
-
-        
-        var set1 = fget(allVertices[triangles[i]][0],allVertices[triangles[i]][1]);
-        var set2 = fget(allVertices[triangles[i+1]][0],allVertices[triangles[i+1]][1]);
-        var set3 = fget(allVertices[triangles[i+2]][0],allVertices[triangles[i+2]][1]);
-        //console.log(allVertices[triangles[i]][0],allVertices[triangles[i]][1])
-        //var ta = allVertices[triangles[i]][0];
-        //var tb = allVertices[triangles[i]][1];
-        var cR=(set1[0]+set2[0]+set3[0])/3;
-        var cG=(set1[1]+set2[1]+set3[1])/3;
-        var cB=(set1[2]+set2[2]+set3[2])/3;
-        tColors.push(cR,cG,cB);
-      }
-    }
-    displayText=true;
-    displayCurves=true;
-    displayPoints=true;
-    displayAnchors=true;
-    stepD = 0;
+    triangulize();
     
   }
-  //"\" change paint mode
   else if (keyCode===220){
 
     if (mode==0){
@@ -288,7 +246,6 @@ function keyPressed(){
       console.log("curves mode")
     }
   }
-  //pressing "C" displays colors
   else if (keyCode===67){
     
     if (noColors == false){
@@ -299,7 +256,6 @@ function keyPressed(){
       noColors = false;
     }
   }
-  //pressing "M" shortcut, stops or continues coloring
   else if (keyCode===77){
     
     if (colorMap == false){
@@ -311,14 +267,11 @@ function keyPressed(){
       $("#colorMap").text("Coloring Map: Off (Press M to switch)")
     }
   }
-  else if (/*(keyCode === 224 || keyCode===91)*/ keyCode===90){
-    //comannd Z!
+  else if (keyCode===90){
 
     if (dataPos>0){
       dataPos--;
-      //console.log(dataPos)
       loadData(previousData[dataPos])
-      //console.log(previousData.slice())
     }
     
   }
@@ -345,15 +298,12 @@ function mouseClicked(){
         
       }
       if (dataPos < previousData.length-1){
-        //console.log("redo",dataPos,previousData.length-1)
         previousData.splice(dataPos+1,previousData.length-1-dataPos);
-        //console.log(previousData.slice())
       }
       previousData.push([vertices.slice(),curves.slice(),totalPointsOnCurve.slice(),bPoints.slice(),oPoints.slice(),allVertices.slice(),triangulations.slice(),tColors.slice(),nPoints.slice(),currSetPt.slice()]);
       
       
       dataPos=previousData.length-1;
-      //console.log(dataPos);
       
     }
   }
@@ -361,12 +311,9 @@ function mouseClicked(){
   
 }
 function produceJitterPt(verticesSet){
-  //first flatten array
   var flatV= verticesSet.reduce((acc,curr)=> acc.concat(curr));
   curves.push(flatV);
-  //console.log(curves[curves.length-1])
   var total = 5;
-  //can be reset somewhere
   totalPointsOnCurve.push(total);
   for (m=0;m<=total;m++){
     var t=m/total;
@@ -374,20 +321,15 @@ function produceJitterPt(verticesSet){
     var by=round(bezierPoint(flatV[1],flatV[3],flatV[5],flatV[7],t));
     bPoints.push([bx,by]);
 
-    //jittered.push([bx-round(random(10,100)),by-round(random(10,100))])
-    //uncomment below to add traignels connecting to curve
     allVertices.push(bPoints[bPoints.length-1]);
     
     var tx = bezierTangent(flatV[0],flatV[2],flatV[4],flatV[6],t);
     var ty = bezierTangent(flatV[1],flatV[3],flatV[5],flatV[7],t);
-    // Calculate an angle from the tangent points
     
     var a = atan2(ty, tx);
     a-=HALF_PI
-    //line(bx, by, cos(a) * 30 + bx, sin(a) * 30 + by);
     var jitterAmount = 3;
     var randomAmount = 100;
-    //tailling effects? By reducing probbility of jitter
     for (ci=1;ci<=jitterAmount;ci++){
       if (ci/random(1,jitterAmount+0.1) <=1){
         var cx = cos(a)*30*ci 
@@ -412,8 +354,6 @@ function produceJitterPt(verticesSet){
           oPoints.push([nx,ny])
           allVertices.push(oPoints[oPoints.length-1]);
         }
-        //look at delaunay.hull
-        //Add option to have no specific hull
       }
     }
   }
@@ -430,7 +370,6 @@ function delaunayDisplay(tng){
       
       fill(tColors[i],tColors[i+1],tColors[i+2]);
       stroke(tColors[i],tColors[i+1],tColors[i+2]);
-      //store color data later
       
     }
     else if (noColors == true){
@@ -465,7 +404,6 @@ function saveData(){
 
 }
 function expandVertex(vertex,expandValue){
-  //expands the point outward somewhere depending on initial positon
   if (expandValue<1){
     expandValue*=-1;
     expandValue = 1/expandValue;
@@ -478,7 +416,6 @@ function expandVertex(vertex,expandValue){
   var ch=1;
   var dx=vertex[0]-cx;
   var dy=vertex[1]-ch;
-  //console.log(vertex[0]+dx*expandValue);
   return [vertex[0]+dx*(expandValue),vertex[1]+dy*(expandValue)];
   
 }
@@ -506,10 +443,8 @@ function expandImage(mvalue){
       var tempV = expandVertex(allVertices[p],mvalue)
       allVertices[p] = tempV;
     }
-    //search through one of previous data, the current canvas
     for (k=0;k<previousData[previousData.length-1].length;k++){
       if (k!=1 && k!=2 && k!=5 && k!=6 && k!=7){
-        //for each part of the previous data that is expandable, e.g the vertices, expand it
         for (t=0;t<previousData[previousData.length-1][k].length;t++){
           var tempV = expandVertex(previousData[previousData.length-1][k][t],mvalue);
           previousData[previousData.length-1][k][t]=tempV;
@@ -519,21 +454,19 @@ function expandImage(mvalue){
 }
 function fget(x,y){
   y=parseInt(y.toFixed(0));
-  var off = ((y*img1.width + x)*d*4);
+  var off = ((y*cWidth + x)*d*4);
   var components = [ pixels[off], pixels[off + 1], pixels[off + 2], pixels[off + 3] ]
   return components;
 }
 function scanLR(data,degree,accuracy){
-  //image data is the pixels
-  for (j=0;j<img1.height-accuracy;j+=accuracy){
-    for (i=0;i<img1.width-accuracy;i+=accuracy){
+  for (j=0;j<cHeight-accuracy;j+=accuracy){
+    for (i=0;i<cWidth-accuracy;i+=accuracy){
       var c1=fget(i,j);
       var c2=fget(i+1,j);
       var dr = c1[0]-c2[0]
       var dg = c1[1]-c2[1]
       var db = c1[2]-c2[2]
       var da = c1[3]-c2[3]
-      //console.log(i,j)
       if (dr*dr+dg*dg+db*db+da*da > degree){
         nPoints.push([i,j]);
         allVertices.push([i,j]);
@@ -554,4 +487,43 @@ function scanLR(data,degree,accuracy){
       }
     }
   }
+}
+function inCanvas(x,y){
+  if (x > cWidth || x<0 || y>cHeight||y<0){
+    return false;
+  }
+  else {
+    return true;
+  }
+}
+function triangulize(){
+    var delaunay;
+    delaunay = (Delaunator.from(allVertices))
+    triangles = (delaunay.triangles)
+    triangulations[0] = triangles;
+
+    displayText=false;
+    displayCurves=false;
+    displayPoints=false;
+    displayAnchors=false;
+    image(img1,0,0,cWidth,cHeight)
+    if (stepDelaunate == false){
+      for (var i = 0; i < triangles.length; i += 3) {
+
+        
+        var set1 = fget(allVertices[triangles[i]][0],allVertices[triangles[i]][1]);
+        var set2 = fget(allVertices[triangles[i+1]][0],allVertices[triangles[i+1]][1]);
+        var set3 = fget(allVertices[triangles[i+2]][0],allVertices[triangles[i+2]][1]);
+
+        var cR=(set1[0]+set2[0]+set3[0])/3;
+        var cG=(set1[1]+set2[1]+set3[1])/3;
+        var cB=(set1[2]+set2[2]+set3[2])/3;
+        tColors.push(cR,cG,cB);
+      }
+    }
+    displayText=true;
+    displayCurves=true;
+    displayPoints=true;
+    displayAnchors=true;
+    stepD = 0;
 }

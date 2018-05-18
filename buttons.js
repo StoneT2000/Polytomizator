@@ -144,9 +144,19 @@ $(document).on('ready',function(){
   })
   $("#file").on('change',function(){
     img1 = loadImage(window.URL.createObjectURL(document.getElementById("file").files[0]),function(){
-      myCanvas =createCanvas(img1.width,img1.height);
-      cWidth = img1.width;
-      cHeight = img1.height;
+      if (img1.width*img1.height>800000){
+        var factor = sqrt(img1.width*img1.height/800000);
+        cWidth = round(img1.width/factor);
+        cHeight = round(img1.height/factor);
+        myCanvas =createCanvas(cWidth,cHeight);
+
+        
+      }
+      else {
+        myCanvas =createCanvas(img1.width,img1.height);
+        cWidth = img1.width;
+        cHeight = img1.height;
+      }
       $("#gamedisplay").css("right",(cWidth/2).toString()+"px")
       $("body").css("width",(cWidth+500).toString()+"px")
       $("body").css("height",(cHeight+400).toString()+"px")
@@ -164,15 +174,15 @@ $(document).on('ready',function(){
        dataPos = 0;
       d = pixelDensity();
       allVertices.push([1,1]);
-      allVertices.push([img1.width-1,1]);
-      allVertices.push([1,img1.height-1]);
-      allVertices.push([img1.width-1,img1.height-1]);
-      for(i=0;i<img1.width/80;i++){
-        allVertices.push([i*80+round(random(-30,30)),img1.height-1])
+      allVertices.push([cWidth-1,1]);
+      allVertices.push([1,cHeight-1]);
+      allVertices.push([cWidth-1,cHeight-1]);
+      for(i=0;i<cWidth/80;i++){
+        allVertices.push([i*80+round(random(-30,30)),cHeight-1])
         allVertices.push([i*80+round(random(-30,30)),1])
       }
-      for(i=0;i<img1.height/80;i++){
-        allVertices.push([img1.width-1,i*80+round(random(-30,30))])
+      for(i=0;i<cHeight/80;i++){
+        allVertices.push([cWidth-1,i*80+round(random(-30,30))])
         allVertices.push([1,i*80+round(random(-30,30))])
       }
     });

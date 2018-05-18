@@ -29,10 +29,10 @@ body{
 
   position: fixed;
   bottom:15px;
-  width:900px;
-  margin-left:-400px;
+  width:500px;
+  margin-left:-250px;
   left:50%;
-    text-align:center;
+  text-align:center;
   height:70px;
 }
 #buttonList{
@@ -58,6 +58,16 @@ body{
   cursor: pointer;
   width:400px;
   margin:auto;
+  margin-right:50px;
+  display: inline-block;
+}
+#polytomize{
+  display: inline-block;
+  color:white;
+  margin-left:50px;
+  background-color:RGB(40,40,40);
+  width:400px;
+  cursor: pointer;
 }
 .brushes{
   position:fixed;
@@ -94,4 +104,7 @@ body{
 #uploadText{
   position:relative;
   margin-top:60px;
+}
+#expandImage{
+  height:100px;
 }
