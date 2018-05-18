@@ -23,6 +23,10 @@ var flowing = true;
 var brushSize = 10;
 var magnification = 1;
 var finishedColoring = false;
+var quickColor = false;
+var sTime = 0;
+var fTime = 0;
+var colorAccuracy = 1;
 function preload(){
 }
 var myCanvas;
@@ -88,24 +92,21 @@ function draw(){
   if (displayImage == true){
     image(img1,0,0,cWidth,cHeight);
   }
-  if (stepDelaunate == true && triangulations.length>0 && colorMap == true){
+  if (stepDelaunate == true && triangulations.length>0 && colorMap == true && finishedColoring== false){
       if (workTriangles.length>0){
         displayText=false;
         displayCurves=false;
         displayPoints=false;
         displayAnchors=false;
-        var set1 = fget(allVertices[workTriangles[stepD]][0],allVertices[workTriangles[stepD]][1]);
-        var set2 = fget(allVertices[workTriangles[stepD+1]][0],allVertices[workTriangles[stepD+1]][1]);
-        var set3 = fget(allVertices[workTriangles[stepD+2]][0],allVertices[workTriangles[stepD+2]][1]);
-        var cR=(set1[0]+set2[0]+set3[0])/3;
-        var cG=(set1[1]+set2[1]+set3[1])/3;
-        var cB=(set1[2]+set2[2]+set3[2])/3;
-        tColors.push(cR,cG,cB);
+        var tAC = averageColor(allVertices[workTriangles[stepD]][0],allVertices[workTriangles[stepD]][1],allVertices[workTriangles[stepD+1]][0],allVertices[workTriangles[stepD+1]][1],allVertices[workTriangles[stepD+2]][0],allVertices[workTriangles[stepD+2]][1],colorAccuracy)
+        tColors.push(tAC[0],tAC[1],tAC[2]);
         workTriangles = workTriangles.slice(3,workTriangles.length);
 
       }
       else{
         finishedColoring = true;
+        fTime = millis();
+        console.log("Coloring took:" + (fTime-sTime)/1000 + " secs")
       }
 
   }
@@ -210,6 +211,7 @@ function keyPressed(){
     image(img1,0,0,cWidth,cHeight);
     loadPixels();
     tColors=[];
+    sTime = millis();
     $("#displayText").html("Show<br>Text<br>");
     $("#displayText").css("background-color","RGB(100,100,100)");
     $("#displayAnchors").html("Show<br>Anchors<br>");
@@ -266,7 +268,7 @@ function keyPressed(){
   }
   else if (keyCode===80){
     
-      
+      console.log(mouseX,mouseY)
     
     
   }
@@ -520,4 +522,50 @@ function inCanvas(x,y){
   else {
     return true;
   }
+}
+function sign(x1,y1,x2,y2,x3,y3){
+  return (x1-x3)*(y2-y3)-(x2-x3)*(y1-y3);
+}
+function pointInTriangle(x1,y1,x2,y2,x3,y3,x4,y4){
+  bc1= sign(x4,y4,x1,y1,x2,y2) <0;
+  bc2= sign(x4,y4,x2,y2,x3,y3)<0;
+  bc3= sign(x4,y4,x3,y3,x1,y1)<0;
+  return ((bc1==bc2)&&(bc2==bc3))
+}
+function averageColor(x1,y1,x2,y2,x3,y3,accuracy){
+  var xs =[x1,x2,x3];
+  var ys=[y1,y2,y3];
+  
+  var bx1 =  xs.reduce((acc,curr)=>curr <=acc ?curr : acc)
+  var bx2 =  xs.reduce((acc,curr)=>curr >=acc ?curr : acc)
+  var by1 =  ys.reduce((acc,curr)=>curr <=acc ?curr : acc)
+  var by2 =  ys.reduce((acc,curr)=>curr >=acc ?curr : acc)
+  if (quickColor == true){
+    return quickAverageColor(x1,y1,x2,y2,x3,y3);
+  }
+  var tr =0;
+  var tg=0;
+  var tb=0;
+  var totalSample =0;
+  for (i=0;i<by2-by1;i+=accuracy){
+    for (j=0;j<bx2-bx1;j+=accuracy){
+      if (pointInTriangle(x1,y1,x2,y2,x3,y3,bx1+j,by1+i)){
+        var tempColor = fget(bx1+j,by1+i)
+        tr+=tempColor[0];
+        tg+=tempColor[1];
+        tb+=tempColor[2];
+        totalSample+=1;
+      }
+    }
+  }
+  return [tr/totalSample,tg/totalSample,tb/totalSample]
+}
+function quickAverageColor(x1,y1,x2,y2,x3,y3){
+  var set1 = fget(x1,y1);
+  var set2 = fget(x2,y2);
+  var set3 = fget(x3,y3);
+  var cR=(set1[0]+set2[0]+set3[0])/3;
+  var cG=(set1[1]+set2[1]+set3[1])/3;
+  var cB=(set1[2]+set2[2]+set3[2])/3;
+  return [cR,cG,cB];
 }
