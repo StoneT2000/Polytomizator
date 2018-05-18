@@ -1,6 +1,5 @@
 //import Delaunator from 'delaunator';
 
-var m1,m2,m3;
 var vertices = [];//anchors for bezier
 var curves = [];
 var totalPointsOnCurve = [];
@@ -32,7 +31,7 @@ var myCanvas;
 var img1;
 var d;
 function preload(){
-  img1=loadImage("https://images.pexels.com/photos/270756/pexels-photo-270756.jpeg?w=940&h=650&auto=compress&cs=tinysrgb");
+  img1=loadImage("images/m10.jpg");
 }
 function setup(){
   
@@ -85,6 +84,7 @@ function draw(){
     if (stepDelaunate == true && triangulations.length>0 && colorMap == true){
       //image(img1,0,0);
       if (stepD==0){
+        image(img1,0,0);
         loadPixels();
         tColors=[];
         $("#displayText").html("Show<br>Text<br>");

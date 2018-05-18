@@ -15,7 +15,7 @@ body{
   margin-left:50%;
   right:1504px;
   position: relative;
-  margin-bottom:200px;
+  
 }
 .container{
   padding:0px;
@@ -83,4 +83,15 @@ body{
 }
 .brushes #sizing{
   height:100px;
+}
+#file{
+  margin-top:15px;
+  margin-bottom:200px;
+  font-size: 25px;
+  background-color: RGB(40,40,40);
+  color:white;
+}
+#uploadText{
+  position:relative;
+  margin-top:60px;
 }

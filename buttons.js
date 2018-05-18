@@ -142,5 +142,41 @@ $(document).on('ready',function(){
     $("#lineBrush").css("background-color","RGB(140,140,140)")
     $("#pointBrush").css("background-color","")
   })
+  $("#file").on('change',function(){
+    img1 = loadImage(window.URL.createObjectURL(document.getElementById("file").files[0]),function(){
+      myCanvas =createCanvas(img1.width,img1.height);
+      cWidth = img1.width;
+      cHeight = img1.height;
+      $("#gamedisplay").css("right",(cWidth/2).toString()+"px")
+      $("body").css("width",(cWidth+500).toString()+"px")
+      $("body").css("height",(cHeight+400).toString()+"px")
+      myCanvas.parent('gamedisplay');
+       vertices = [];
+       curves = [];
+       totalPointsOnCurve = [];
+       bPoints = [];
+      oPoints = [];
+      allVertices=[];
+       triangulations = [0];
+       tColors = [];
+       nPoints =[];
+       previousData =[];
+       dataPos = 0;
+      d = pixelDensity();
+      allVertices.push([1,1]);
+      allVertices.push([img1.width-1,1]);
+      allVertices.push([1,img1.height-1]);
+      allVertices.push([img1.width-1,img1.height-1]);
+      for(i=0;i<img1.width/80;i++){
+        allVertices.push([i*80+round(random(-30,30)),img1.height-1])
+        allVertices.push([i*80+round(random(-30,30)),1])
+      }
+      for(i=0;i<img1.height/80;i++){
+        allVertices.push([img1.width-1,i*80+round(random(-30,30))])
+        allVertices.push([1,i*80+round(random(-30,30))])
+      }
+    });
+    
+  });
 
 })
