@@ -106,7 +106,7 @@ function draw(){
       else{
         finishedColoring = true;
         fTime = millis();
-        console.log("Coloring took: " + fTime-sTime + " mills",(fTime-sTime)/1000 + " secs")
+        console.log("Coloring took:" + (fTime-sTime)/1000 + " secs")
       }
 
   }
