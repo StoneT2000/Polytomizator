@@ -558,6 +558,9 @@ function averageColor(x1,y1,x2,y2,x3,y3,accuracy){
       }
     }
   }
+  if (totalSample == 0){
+    return quickAverageColor(x1,y1,x2,y2,x3,y3);
+  }
   return [tr/totalSample,tg/totalSample,tb/totalSample]
 }
 function quickAverageColor(x1,y1,x2,y2,x3,y3){
