@@ -210,7 +210,7 @@ function draw(){
       rect(tempSquareColor[3],tempSquareColor[4],20,20)
     }
   }
-  
+  $("#numberPoints").text(allVertices.length +" points")
   
 }
 function keyPressed(){
