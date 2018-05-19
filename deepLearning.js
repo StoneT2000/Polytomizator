@@ -97,8 +97,6 @@ function scanLR(data,degree,accuracy){
 }
 
 function lossFunction(manualData,data){
-  //Loss function calculating error of data set
-  //Heuristic: Find if there are points near this point
   
 }
 

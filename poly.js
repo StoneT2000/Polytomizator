@@ -195,22 +195,17 @@ function draw(){
   }
   if (colorOfSquares.length>0 && squares==true){
     noStroke();
-    /*
-    for (i=0;i<cHeight/20;i++){
-      for (j=0;j<cWidth/20;j++){
-        fill(colorOfSquares[i+j][0],colorOfSquares[i+j][1],colorOfSquares[i+j][2]);
-        rect(i*20,j*20,20,20)
-      }
-    }
-    */
     for (i=0;i<colorOfSquares.length;i++){
       var tempSquareColor = colorOfSquares[i];
-      //console.log(tempSquareColor)
       fill(tempSquareColor[0],tempSquareColor[1],tempSquareColor[2])
       rect(tempSquareColor[3],tempSquareColor[4],20,20)
     }
   }
   $("#numberPoints").text(allVertices.length +" points")
+  $("#numberTriangles").text(triangulations[triangulations.length-1].length +" triangles")
+  if (finishedColoring ==true){
+    $("#lastTiming").text((fTime-sTime)/1000 +" seconds")
+  }
   
 }
 function keyPressed(){
@@ -258,7 +253,6 @@ function keyPressed(){
     }
   }
   else if (keyCode===67){
-    
     if (noColors == false){
       noColors = true;
       

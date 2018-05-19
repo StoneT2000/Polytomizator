@@ -29,8 +29,8 @@ body{
 
   position: fixed;
   bottom:15px;
-  width:500px;
-  margin-left:-250px;
+  width:600px;
+  margin-left:-300px;
   left:50%;
   text-align:center;
   height:70px;
@@ -96,7 +96,7 @@ body{
 }
 #file{
   margin-top:15px;
-  margin-bottom:200px;
+  margin-bottom:40px;
   font-size: 25px;
   background-color: RGB(40,40,40);
   color:white;
@@ -107,4 +107,46 @@ body{
 }
 #expandImage{
   height:100px;
+}
+#loadThis{
+}
+#saveThis{
+
+}
+.statistics{
+  margin-bottom:200px;
+  display:inline-block;
+}
+#statsTable{
+  margin-left:25%;
+  margin-right:25%;
+}
+#statsHeader{
+}
+th{
+  width: 50%;
+  font-size: 34px;
+  padding-bottom: 20px;
+  text-decoration: 
+}
+tr{
+  font-size: 25px;
+}
+td{
+
+  height:50px;
+  line-height:25px;
+}
+
+th:nth-child(even){
+  text-align: center;
+}
+td:nth-child(even){
+  text-align: center;
+}
+td:nth-child(odd){
+  text-align:;
+}
+th, td{
+  border-bottom:solid black 1px;
 }

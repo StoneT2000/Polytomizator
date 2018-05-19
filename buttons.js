@@ -13,6 +13,18 @@ $(document).on('ready',function(){
       $("#displayText").css("background-color","RGB(100,100,100)");
     }
   });
+  $("#displayColor").on("click",function(){
+    if (noColors==true){
+      noColors = false;
+      $("#displayColor").html("Hide <br>Colors<br>")
+      $("#displayColor").css("background-color","RGB(40,40,40)");
+    }
+    else {
+      $("#displayColor").html("Show <br>Colors<br>")
+      noColors = true;
+      $("#displayColor").css("background-color","RGB(100,100,100)");
+    }
+  })
   $("#displayAnchors").on("click",function(){
     if (displayAnchors == false){
       displayAnchors = true;
@@ -222,6 +234,20 @@ $(document).on('ready',function(){
   });
   $("#polytomize").on("click",function(){
     triangulize();
+  })
+  $("#saveThis").on("click",function(){
+    saveData();
+    $("#saveThis").text("Saved data!");
+    window.setTimeout(function(){
+      $("#saveThis").text("Save this canvas");
+    },2000)
+  });
+  $("#loadThis").on("click",function(){
+    loadData(JSON.parse(localStorage.getItem("art1")))
+    $("#loadThis").text("Loaded Data!");
+    window.setTimeout(function(){
+      $("#loadThis").text("Load last saved");
+    },2000)
   })
 
 })
