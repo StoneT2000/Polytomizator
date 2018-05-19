@@ -27,6 +27,7 @@ var quickColor = false;
 var sTime = 0;
 var fTime = 0;
 var colorAccuracy = 1;
+var workTriangles=[];
 function preload(){
 }
 var myCanvas;
@@ -485,36 +486,7 @@ function fget(x,y){
   var components = [ pixels[off], pixels[off + 1], pixels[off + 2], pixels[off + 3] ]
   return components;
 }
-function scanLR(data,degree,accuracy){
-  for (j=0;j<cHeight-accuracy;j+=accuracy){
-    for (i=0;i<cWidth-accuracy;i+=accuracy){
-      var c1=fget(i,j);
-      var c2=fget(i+1,j);
-      var dr = c1[0]-c2[0]
-      var dg = c1[1]-c2[1]
-      var db = c1[2]-c2[2]
-      var da = c1[3]-c2[3]
-      if (dr*dr+dg*dg+db*db+da*da > degree){
-        nPoints.push([i,j]);
-        allVertices.push([i,j]);
-        if (flowing == true){
-          for (ij=0;ij<2;ij++){
-            var cr1=round(random(-10,10));
-            var cr2=round(random(-10,10));
-            if (i+cr1 > cWidth-1 || i+cr1<1 || j+cr2>cHeight-1||j+cr2<1){
-          
-            }  
-            else {
-              nPoints.push([i+cr1,j+cr2]);
-              allVertices.push([i+cr1,j+cr2]);
-            }
-          }
-          
-        }
-      }
-    }
-  }
-}
+
 function inCanvas(x,y){
   if (x > cWidth-1 || x<0 || y>cHeight-1||y<0){
     return false;
