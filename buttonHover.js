@@ -23,30 +23,37 @@ $(document).on('ready',function(){
     noPopUp();
    
   })
+  $("#eraser").mouseenter(function(){
+    hoverEnterText('#eraser','175','Erase what you don\'t want');
+  })
+  $("#eraser").mouseleave(function(){
+    noPopUp();
+  })
   $("#sizing").mouseenter(function(){
-    hoverEnterText('#sizing','200','Adjust radius of line brush');
+    hoverEnterText('#sizing','250','Adjust radius of line brush');
   })
   $("#sizing").mouseleave(function(){
     noPopUp();
   })
   $("#expandImage").mouseenter(function(){
-    hoverEnterText('#expandImage','300','Download the current image at a higher resolution');
+    hoverEnterText('#expandImage','350','Download the current image at a higher resolution');
   })
   $("#expandImage").mouseleave(function(){
     noPopUp();
   })
   $("#saveThis").mouseenter(function(){
-    hoverEnterText('#saveThis','400','Save the set of points drawn');
+    hoverEnterText('#saveThis','450','Save the set of points drawn');
   })
   $("#saveThis").mouseleave(function(){
     noPopUp();
   })
   $("#loadThis").mouseenter(function(){
-    hoverEnterText('#loadThis','450','Load the last set of points saved');
+    hoverEnterText('#loadThis','500','Load the last set of points saved');
   })
   $("#loadThis").mouseleave(function(){
     noPopUp();
   })
+  
 
   function noPopUp(){
      $("#popUp").css("display","none");

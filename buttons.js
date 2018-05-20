@@ -149,11 +149,19 @@ $(document).on('ready',function(){
     mode=1;
     $("#pointBrush").css("background-color","RGB(140,140,140)")
     $("#lineBrush").css("background-color","")
+    $("#eraser").css("background-color","")
   })
   $("#lineBrush").on("click",function(){
     mode = 2;
     $("#lineBrush").css("background-color","RGB(140,140,140)")
     $("#pointBrush").css("background-color","")
+    $("#eraser").css("background-color","")
+  })
+  $("#eraser").on("click",function(){
+    mode =3;
+    $("#eraser").css("background-color","RGB(140,140,140)")
+    $("#pointBrush").css("background-color","")
+    $("#lineBrush").css("background-color","")
   })
   $("#file").on('change',function(){
     img1 = loadImage(window.URL.createObjectURL(document.getElementById("file").files[0]),function(){
@@ -177,7 +185,8 @@ $(document).on('ready',function(){
       allVertices=[];
       triangulations = [0];
       tColors = [];
-
+      verticesHashTable=[];
+      verticesHashTableFlat=[];
       previousData =[];
       dataPos = 0;
       d = pixelDensity();
@@ -211,9 +220,9 @@ $(document).on('ready',function(){
         }
 
       }
-
+      generateHashSpace();
         
-      previousData.push([allVertices.slice(),triangulations.slice(),tColors.slice()]);
+      previousData.push([allVertices.slice(),triangulations.slice(),tColors.slice(),verticesHashTable.slice(),verticesHashTableFlat.slice()]);
     });
     
   });

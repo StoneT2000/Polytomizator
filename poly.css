@@ -93,6 +93,9 @@ body{
 .brushes #sizing{
   height:100px;
 }
+.brushes #eraser{
+  cursor:pointer;
+}
 #file{
   margin-top:15px;
   margin-bottom:40px;
@@ -107,6 +110,7 @@ body{
 #expandImage{
   height:100px;
 }
+
 #loadThis{
   font-size:15px;
 }
