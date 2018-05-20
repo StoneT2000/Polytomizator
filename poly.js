@@ -46,18 +46,18 @@ function setup(){
   myCanvas =createCanvas(cWidth,cHeight);
   
   allVertices.push([0,0]);
-  allVertices.push([cWidth-1,0]);
-  allVertices.push([0,cHeight-1]);
-  allVertices.push([cWidth-1,cHeight-1]);
+  allVertices.push([cWidth,0]);
+  allVertices.push([0,cHeight]);
+  allVertices.push([cWidth,cHeight]);
   
   for(i=0;i<cWidth/80;i++){
     var tempv = i*80+round(random(0,30));
     var tempv2 = i*80+round(random(0,30));
-    if (inCanvas(tempv,cHeight-1)){
-      allVertices.push([i*80+round(random(0,30))-1,cHeight-1])
+    if (inCanvas(tempv,cHeight)){
+      allVertices.push([i*80+round(random(0,30)),cHeight])
     }
-    if (inCanvas(tempv,cHeight-1)){
-      allVertices.push([i*80+round(random(0,30))-1,0])
+    if (inCanvas(tempv,cHeight)){
+      allVertices.push([i*80+round(random(0,30)),0])
     }
         
         
@@ -65,15 +65,16 @@ function setup(){
   for(i=0;i<cHeight/80;i++){
     var tempv = i*80+round(random(0,30));
     var tempv2 = i*80+round(random(0,30));
-    if (inCanvas(cWidth-1,tempv)){
-      allVertices.push([cWidth-1,i*80+round(random(0,30))-1])
+    if (inCanvas(cWidth,tempv)){
+      allVertices.push([cWidth,i*80+round(random(0,30))])
     }
     if (inCanvas(0,tempv2)){
-      allVertices.push([0,i*80+round(random(0,30))-1])
+      allVertices.push([0,i*80+round(random(0,30))])
     }
 
 
   }
+  loadPixels();
   generateHashSpace();
   
   $("#gamedisplay").css("right",(cWidth/2).toString()+"px")
@@ -492,7 +493,7 @@ function fget(x,y){
 }
 
 function inCanvas(x,y){
-  if (x > cWidth-1 || x<0 || y>cHeight-1||y<0){
+  if (x > cWidth || x<0 || y>cHeight||y<0){
     return false;
   }
   else {
