@@ -139,18 +139,10 @@ function draw(){
     }
   }
   if (displayPoints == true){
-    for (j=0;j<bPoints.length;j++){
-      strokeWeight(1);
-      fill(256,256,256)
-      ellipse(bPoints[j][0],bPoints[j][1],5,5)
-
+    for (j=0;j<allVertices.length;j++){
+      ellipse(allVertices[j][0],allVertices[j][1],5,5)
     }
-    for (j=0;j<oPoints.length;j++){
-      ellipse(oPoints[j][0],oPoints[j][1],5,5)
-    }
-    for (j=0;j<nPoints.length;j++){
-      ellipse(nPoints[j][0],nPoints[j][1],5,5)
-    }
+    
   }
   
 
@@ -165,34 +157,7 @@ function draw(){
     }
   }
   
-  var dx=oldX-mouseX;
-  var dy=oldY-mouseY;
-  accDist = sqrt(dx*dx+dy*dy)
-  if (mode==2 && accDist>=critDist && mouseIsPressed){
-
-    if (mouseX>cWidth-1 || mouseX<1 || mouseY >cHeight-1 || mouseY<1){
-    }
-    else {
-      accDist =0;
-      critDist = random(15,20)
-      oldX=mouseX;
-      oldY=mouseY;
-      allVertices.push([round(mouseX),round(mouseY)]);
-      
-      nPoints.push([round(mouseX),round(mouseY)]);
-      for (i=0;i<2;i++){
-        var r1=random(-brushSize,brushSize)
-        var r2=random(-brushSize,brushSize);
-        if (mouseX+r1>cWidth-1 || mouseX+r1<1 || mouseY+r2 >cHeight-1 || mouseY+r2<1){
-        }
-        else{
-          allVertices.push([round(mouseX+r1),round(mouseY+r2)]);
-        nPoints.push([round(mouseX+r1),round(mouseY+r2)]);
-        }
-      }
-    }
-
-  }
+  
   if (colorOfSquares.length>0 && squares==true){
     noStroke();
     for (i=0;i<colorOfSquares.length;i++){
@@ -206,7 +171,58 @@ function draw(){
   if (finishedColoring ==true){
     $("#lastTiming").text((fTime-sTime)/1000 +" seconds")
   }
-  
+  var dx=oldX-mouseX;
+  var dy=oldY-mouseY;
+  accDist = sqrt(dx*dx+dy*dy)
+  if (mode===2){
+    noFill();
+    stroke(2);
+    stroke(200,200,200)
+    ellipse(mouseX,mouseY,brushSize*2,brushSize*2)
+    if (accDist>=critDist && mouseIsPressed){
+
+      
+      if (mouseX>cWidth-1 || mouseX<1 || mouseY >cHeight-1 || mouseY<1){
+      }
+      else {
+        accDist =0;
+        critDist = random(15,20)
+        oldX=mouseX;
+        oldY=mouseY;
+        allVertices.push([round(mouseX),round(mouseY)]);
+
+        nPoints.push([round(mouseX),round(mouseY)]);
+        for (i=0;i<2;i++){
+          var r1=random(-brushSize,brushSize)
+          var r2=random(-brushSize,brushSize);
+          if (mouseX+r1>cWidth-1 || mouseX+r1<1 || mouseY+r2 >cHeight-1 || mouseY+r2<1){
+          }
+          else{
+            allVertices.push([round(mouseX+r1),round(mouseY+r2)]);
+          nPoints.push([round(mouseX+r1),round(mouseY+r2)]);
+          }
+        }
+      }
+
+    }
+  }
+  if (mode===3){
+    noFill();
+    stroke(2);
+    stroke(200,200,200)
+    ellipse(mouseX,mouseY,brushSize*2,brushSize*2)
+    if (mouseIsPressed){
+      for (k=0;k<allVertices.length;k++){
+        let dx = allVertices[k][0]-mouseX;
+        let dy = allVertices[k][1]-mouseY;
+        if (dx*dx+dy*dy < brushSize*brushSize){
+          console.log(dx,dy,brushSize)
+          allVertices.splice(k,1)
+        }
+        
+      }
+    }
+  }
 }
 function keyPressed(){
   if (keyCode === 32) {
