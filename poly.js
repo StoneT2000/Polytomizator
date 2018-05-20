@@ -30,6 +30,7 @@ var fTime = 0;
 var squares = false;
 var colorAccuracy = 1;
 var workTriangles=[];
+var verticesHashTable = [];
 function preload(){
 }
 var myCanvas;
@@ -76,6 +77,7 @@ function setup(){
 
 
   }
+  generateHashSpace();
   
   $("#gamedisplay").css("right",(cWidth/2).toString()+"px")
   $("body").css("width",(cWidth+500).toString()+"px")
@@ -206,20 +208,85 @@ function draw(){
 
     }
   }
-  if (mode===3){
+  if (mode===3 && useHash == false){
     noFill();
     stroke(2);
     stroke(200,200,200)
     ellipse(mouseX,mouseY,brushSize*2,brushSize*2)
     if (mouseIsPressed){
       for (k=0;k<allVertices.length;k++){
-        let dx = allVertices[k][0]-mouseX;
-        let dy = allVertices[k][1]-mouseY;
+        var dx = allVertices[k][0]-mouseX;
+        var dy = allVertices[k][1]-mouseY;
         if (dx*dx+dy*dy < brushSize*brushSize){
           console.log(dx,dy,brushSize)
           allVertices.splice(k,1)
         }
         
+      }
+    }
+  }
+  if (mode===3 && useHash == true){
+    noFill();
+    stroke(2);
+    stroke(200,200,200)
+    ellipse(mouseX,mouseY,brushSize*2,brushSize*2)
+    if (mouseIsPressed){
+      //find which squres its part of
+      //xi,yi are coordinates of the square mouse is in
+      var xs = floor(mouseX/50);
+      var ys = floor(mouseY/50);
+      //now find all cartesian integer coords that are within the range
+      var verticesRange = [];
+      for (k=0;k<)
+      for (k=0;k<allVertices.length;k++){
+        var dx = allVertices[k][0]-mouseX;
+        var dy = allVertices[k][1]-mouseY;
+        if (dx*dx+dy*dy < brushSize*brushSize){
+          console.log(dx,dy,brushSize)
+          allVertices.splice(k,1)
+        }
+        
+      }
+    }
+  }
+  for (i=0;i<cHeight/50;i++){
+    line(0,i*50,cWidth,i*50);
+  }
+  for (i=0;i<cWidth/50;i++){
+    line(i*50,0,i*50,cHeight);
+  }
+  //console.log(mouseX,mouseY,hashCoordinate(mouseX,mouseY));
+}
+function hashCoordinate(x,y){
+  return floor(x/50)*100+floor(y/50);
+}
+function findIndexFromHash(hash){
+  var xi = floor((hash/100));
+  var yi = hash%100;
+  return xi+yi*ceil(cWidth/50)
+}
+function generateHashSpace(){
+  verticesHashTable=[];
+  for (i=0;i<ceil(cWidth/50)*ceil(cHeight/50);i++){
+    verticesHashTable.push([]);
+  }
+  for (i=0;i<allVertices.length;i++){
+    var hashVal = hashCoordinate(allVertices[i][0],allVertices[i][1]);
+    var index = findIndexFromHash(hashVal);
+    verticesHashTable[index].push([allVertices[i][0],allVertices[i][1]])
+  }
+}
+function updateHashSpace(x,y,add){
+  
+  var hashVal = hashCoordinate(x,y);
+  var index = findIndexFromHash(hashVal);
+  if (add==true){
+    verticesHashTable[index].push(x,y)
+  }
+  if (add==false){
+    for (i=0;i<verticesHashTable[index].length;i++){
+      if (verticesHashTable[index][i][0] == x && verticesHashTable[index][i][1] == y){
+        verticesHashTable[i].splice(i,1)
       }
     }
   }
@@ -305,7 +372,7 @@ function keyPressed(){
 }
 var currSetPt = [];
 function mouseClicked(){
-
+  console.log(mouseX,mouseY,hashCoordinate(mouseX,mouseY));
   if (mouseX<=cWidth && mouseX>=0){
     if(mouseY<=cHeight && mouseY>=0){
       if (mode==0){
