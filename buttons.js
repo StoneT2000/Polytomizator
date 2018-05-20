@@ -1,5 +1,5 @@
 $(document).on('ready',function(){
-  
+    $("#pointBrush").css("background-color","RGB(140,140,140)")
   console.log("Let's make computer generated art that looks pretty cool...v6")
   $("#displayText").on("click",function(){
     if (displayText == false){

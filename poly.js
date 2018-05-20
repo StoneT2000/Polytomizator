@@ -26,6 +26,7 @@ var colorAccuracy = 1;
 var workTriangles=[];
 var verticesHashTable = [];
 var verticesHashTableFlat = [];
+var pointDensity = 2;
 function preload(){
 }
 var myCanvas;
@@ -164,7 +165,7 @@ function draw(){
         allVertices.push([round(mouseX),round(mouseY)]);
         updateHashSpace(round(mouseX),round(mouseY),true)
 
-        for (i=0;i<2;i++){
+        for (i=0;i<pointDensity;i++){
           var r1=random(-brushSize,brushSize)
           var r2=random(-brushSize,brushSize);
           if (mouseX+r1>cWidth-1 || mouseX+r1<1 || mouseY+r2 >cHeight-1 || mouseY+r2<1){
@@ -379,7 +380,9 @@ function delaunayDisplay(tng){
   }
 }
 function loadData(dataStored){
-
+  if (dataStored === null){
+    alert("No recently saved data")
+  }
   allVertices=dataStored[0];
   triangulations=dataStored[1];
   tColors=dataStored[2];
