@@ -1,3 +1,4 @@
+
 var allVertices=[];
 var triangulations = [0];
 var tColors = [];
@@ -16,6 +17,7 @@ var noColors = false;
 var colorMap = false;
 var flowing = true;
 var brushSize = 10;
+var downloading = false;
 var magnification = 1;
 var finishedColoring = false;
 var quickColor = false;
@@ -42,7 +44,6 @@ function setup(){
   cWidth = img1.width;
   cHeight = img1.height;
   myCanvas =createCanvas(cWidth,cHeight);
-  
   
   allVertices.push([0,0]);
   allVertices.push([cWidth-1,0]);
@@ -119,6 +120,7 @@ function draw(){
   if (displayTriangulation == true){
     for (j=0;j<triangulations.length;j++){
       delaunayDisplay(triangulations[j]);
+      
     }
   }
   fill(256,256,256)
@@ -148,10 +150,12 @@ function draw(){
   var dy=oldY-mouseY;
   accDist = sqrt(dx*dx+dy*dy)
   if (mode===2){
-    noFill();
-    stroke(2);
-    stroke(200,200,200)
-    ellipse(mouseX,mouseY,brushSize*2,brushSize*2)
+    if(downloading == false){
+      noFill();
+      stroke(2);
+      stroke(200,200,200)
+      ellipse(mouseX,mouseY,brushSize*2,brushSize*2)
+    }
     if (accDist>=critDist && mouseIsPressed){
 
       
@@ -181,10 +185,12 @@ function draw(){
   }
 
   if (mode===3){
-    noFill();
-    stroke(2);
-    stroke(200,200,200)
-    ellipse(mouseX,mouseY,brushSize*2,brushSize*2)
+    if(downloading == false){
+      noFill();
+      stroke(2);
+      stroke(200,200,200)
+      ellipse(mouseX,mouseY,brushSize*2,brushSize*2)
+    }
     if (mouseIsPressed){
       var xs = floor(mouseX/50);
       var ys = floor(mouseY/50);
@@ -264,6 +270,9 @@ function updateHashSpace(x,y,add){
 }
 function keyPressed(){
   if (keyCode === 32) {
+    downloading = true;
+    draw();
+    downloading = false;
     saveCanvas(myCanvas, 'myCanvas', 'jpg');
   }
   else if (keyCode===68){
@@ -445,9 +454,11 @@ function expandImage(mvalue,save){
     }
   }
   if (save==true){
-    n
+    downloading = true;
     draw();
+   
     saveCanvas(myCanvas, 'PolyArt', 'jpg');
+    downloading = false;
   }
 }
 function triangulize(){
@@ -541,4 +552,9 @@ function quickAverageColor(x1,y1,x2,y2,x3,y3){
 }
 function squaredist(x1,y1,x2,y2){
   return (x2-x1)*(x2-x1)+(y2-y1)*(y2-y1)
+}
+function findStuff(){
+  for (k=3;k<pixels.length;k+=4){
+    console.log(pixels[k]);
+  }
 }
