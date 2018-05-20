@@ -207,13 +207,15 @@ function draw(){
 
       if (verticesRange.length >0){
         for (k=0;k<verticesRange.length;k++){
-          for (p=0;p<verticesRange[k].length;p++){
-            var dx = verticesRange[k][p][0]-mouseX;
-            var dy = verticesRange[k][p][1]-mouseY;
-            
-            if (dx*dx+dy*dy <= brushSize*brushSize){
+          if (verticesRange[k]!= undefined){
+            for (p=0;p<verticesRange[k].length;p++){
+              var dx = verticesRange[k][p][0]-mouseX;
+              var dy = verticesRange[k][p][1]-mouseY;
 
-              updateHashSpace(verticesRange[k][p][0],verticesRange[k][p][1],false);
+              if (dx*dx+dy*dy <= brushSize*brushSize){
+
+                updateHashSpace(verticesRange[k][p][0],verticesRange[k][p][1],false);
+              }
             }
           }
 

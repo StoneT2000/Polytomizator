@@ -144,6 +144,10 @@ $(document).on('ready',function(){
   $("#brushSize").on("focusout",function(){
 
     brushSize = parseInt(document.querySelector('#brushSize').value);
+    if (isNaN(brushSize) === true || brushSize <1){
+      alert("Type in a number larger than 0 for brush size");
+    }
+    console.log(brushSize);
   });
   $("#pointBrush").on("click",function(){
     mode=1;
