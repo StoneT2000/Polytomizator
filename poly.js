@@ -26,6 +26,7 @@ var squares = false;
 var colorAccuracy = 1;
 var workTriangles=[];
 var verticesHashTable = [];
+var verticesHashTableFlat = [];
 function preload(){
 }
 var myCanvas;
@@ -98,7 +99,13 @@ function draw(){
         displayCurves=false;
         displayPoints=false;
         displayAnchors=false;
-        var tAC = averageColor(allVertices[triangulations[triangulations.length-1][stepD]][0],allVertices[triangulations[triangulations.length-1][stepD]][1],allVertices[triangulations[triangulations.length-1][stepD+1]][0],allVertices[triangulations[triangulations.length-1][stepD+1]][1],allVertices[triangulations[triangulations.length-1][stepD+2]][0],allVertices[triangulations[triangulations.length-1][stepD+2]][1],colorAccuracy)
+        var tAC=[0,0,0];
+        if (useHash == false){
+          tAC = averageColor(allVertices[triangulations[triangulations.length-1][stepD]][0],allVertices[triangulations[triangulations.length-1][stepD]][1],allVertices[triangulations[triangulations.length-1][stepD+1]][0],allVertices[triangulations[triangulations.length-1][stepD+1]][1],allVertices[triangulations[triangulations.length-1][stepD+2]][0],allVertices[triangulations[triangulations.length-1][stepD+2]][1],colorAccuracy)
+        }
+        else {
+          tAC = averageColor(verticesHashTableFlat[triangulations[triangulations.length-1][stepD]][0],verticesHashTableFlat[triangulations[triangulations.length-1][stepD]][1],verticesHashTableFlat[triangulations[triangulations.length-1][stepD+1]][0],verticesHashTableFlat[triangulations[triangulations.length-1][stepD+1]][1],verticesHashTableFlat[triangulations[triangulations.length-1][stepD+2]][0],verticesHashTableFlat[triangulations[triangulations.length-1][stepD+2]][1],colorAccuracy)
+        }
         tColors.push(tAC[0],tAC[1],tAC[2]);
         stepD+=3;
 
@@ -122,9 +129,19 @@ function draw(){
   fill(256,256,256)
   stroke(0,0,0)
   if (displayPoints == true){
-    for (j=0;j<allVertices.length;j++){
-      ellipse(allVertices[j][0],allVertices[j][1],5,5)
+    if (useHash == false){
+      for (j=0;j<allVertices.length;j++){
+        ellipse(allVertices[j][0],allVertices[j][1],5,5)
+      }
     }
+    else {
+      for (j=0;j<verticesHashTable.length;j++){
+        for (k=0;k<verticesHashTable[j].length;k++){
+          ellipse(verticesHashTable[j][k][0],verticesHashTable[j][k][1],5,5)
+        }
+      }
+    }
+    
     
   }
   
@@ -168,6 +185,7 @@ function draw(){
           }
           else{
             allVertices.push([round(mouseX+r1),round(mouseY+r2)]);
+            updateHashSpace(round(mouseX+r1),round(mouseY+r2),true)
           }
         }
       }
@@ -184,7 +202,7 @@ function draw(){
         var dx = allVertices[k][0]-mouseX;
         var dy = allVertices[k][1]-mouseY;
         if (dx*dx+dy*dy < brushSize*brushSize){
-          console.log(dx,dy,brushSize)
+
           allVertices.splice(k,1)
         }
         
@@ -208,18 +226,12 @@ function draw(){
         var dx = allVertices[k][0]-mouseX;
         var dy = allVertices[k][1]-mouseY;
         if (dx*dx+dy*dy < brushSize*brushSize){
-          console.log(dx,dy,brushSize)
+
           allVertices.splice(k,1)
         }
         
       }
     }
-  }
-  for (i=0;i<cHeight/50;i++){
-    line(0,i*50,cWidth,i*50);
-  }
-  for (i=0;i<cWidth/50;i++){
-    line(i*50,0,i*50,cHeight);
   }
   //console.log(mouseX,mouseY,hashCoordinate(mouseX,mouseY));
 }
@@ -247,7 +259,8 @@ function updateHashSpace(x,y,add){
   var hashVal = hashCoordinate(x,y);
   var index = findIndexFromHash(hashVal);
   if (add==true){
-    verticesHashTable[index].push(x,y)
+    console.log("updating")
+    verticesHashTable[index].push([x,y])
   }
   if (add==false){
     for (i=0;i<verticesHashTable[index].length;i++){
@@ -329,13 +342,13 @@ function keyPressed(){
   }
 }
 function mouseClicked(){
-  console.log(mouseX,mouseY,hashCoordinate(mouseX,mouseY));
+
   if (mouseX<=cWidth && mouseX>=0){
     if(mouseY<=cHeight && mouseY>=0){
 
       if (mode == 1){
         allVertices.push([round(mouseX),round(mouseY)]);
-        updateHashSpace([round(mouseX),round(mouseY)])
+        updateHashSpace(round(mouseX),round(mouseY),true)
       }
       if (mode==2){
         
@@ -370,9 +383,14 @@ function delaunayDisplay(tng){
       fill(256,256,256);
       stroke(10,10,10);
     }
-    var eX=[0,0],eY=[0,0],eZ=[0,0];
-
-    triangle(allVertices[tng[i]][0]+eX[0],allVertices[tng[i]][1]+eX[1],allVertices[tng[i+1]][0]+eY[0],allVertices[tng[i+1]][1]+eY[1],allVertices[tng[i+2]][0]+eZ[0],allVertices[tng[i+2]][1]+eZ[1]);
+    if (useHash == true && verticesHashTableFlat.length > 0){
+      triangle(verticesHashTableFlat[tng[i]][0],verticesHashTableFlat[tng[i]][1],verticesHashTableFlat[tng[i+1]][0],verticesHashTableFlat[tng[i+1]][1],verticesHashTableFlat[tng[i+2]][0],verticesHashTableFlat[tng[i+2]][1]);
+    }
+    else {
+      triangle(allVertices[tng[i]][0],allVertices[tng[i]][1],allVertices[tng[i+1]][0],allVertices[tng[i+1]][1],allVertices[tng[i+2]][0],allVertices[tng[i+2]][1]);
+    }
+    
+    //
   }
 }
 function loadData(dataStored){
@@ -442,8 +460,16 @@ function expandImage(mvalue,save){
 }
 function triangulize(){
     var delaunay;
+    if (useHash == true){
+      verticesHashTableFlat = verticesHashTable.reduce((acc,curr)=> acc.concat(curr));
+      delaunay = (Delaunator.from(verticesHashTableFlat))
+    }
+    else {
+      delaunay = (Delaunator.from(allVertices))
+    }
+    
     stepD=0;
-    delaunay = (Delaunator.from(allVertices))
+    
     var triangles = (delaunay.triangles)
     triangulations[0] = triangles;
     
@@ -453,20 +479,7 @@ function triangulize(){
     displayAnchors=false;
     displayTriangulation=false;
     image(img1,0,0,cWidth,cHeight)
-    if (stepDelaunate == false){
-      for (var i = 0; i < triangles.length; i += 3) {
 
-        
-        var set1 = fget(allVertices[triangles[i]][0],allVertices[triangles[i]][1]);
-        var set2 = fget(allVertices[triangles[i+1]][0],allVertices[triangles[i+1]][1]);
-        var set3 = fget(allVertices[triangles[i+2]][0],allVertices[triangles[i+2]][1]);
-
-        var cR=(set1[0]+set2[0]+set3[0])/3;
-        var cG=(set1[1]+set2[1]+set3[1])/3;
-        var cB=(set1[2]+set2[2]+set3[2])/3;
-        tColors.push(cR,cG,cB);
-      }
-    }
     displayText=true;
     displayCurves=true;
     displayPoints=true;
