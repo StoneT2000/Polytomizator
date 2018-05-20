@@ -272,8 +272,9 @@ function keyPressed(){
   if (keyCode === 32) {
     downloading = true;
     draw();
-    downloading = false;
+    
     saveCanvas(myCanvas, 'myCanvas', 'jpg');
+    downloading = false;
   }
   else if (keyCode===68){
     triangulize();
@@ -441,22 +442,19 @@ function expandImage(mvalue,save){
   $("body").css("width",(cWidth+500).toString()+"px")
   $("body").css("height",(cHeight+400).toString()+"px")
   myCanvas.parent('gamedisplay');
-  for (p=0;p<allVertices.length;p++){
-    var tempV = expandVertex(allVertices[p],mvalue)
-    allVertices[p] = tempV;
-  }
-  for (k=0;k<previousData[previousData.length-1].length;k++){
-    if (k!=1 && k!=2 && k!=5 && k!=6 && k!=7){
-      for (t=0;t<previousData[previousData.length-1][k].length;t++){
-        var tempV = expandVertex(previousData[previousData.length-1][k][t],mvalue);
-        previousData[previousData.length-1][k][t]=tempV;
-      }
+  for (p=0;p<verticesHashTable.length;p++){
+    
+    for (l=0;l<verticesHashTable[p].length;l++){
+      var tempV = expandVertex(verticesHashTable[p][l],mvalue);
+      verticesHashTable[p][l] = tempV;
+      console.log(tempV)
+      
     }
   }
+  verticesHashTableFlat = verticesHashTable.reduce((acc,curr)=> acc.concat(curr));
   if (save==true){
     downloading = true;
     draw();
-   
     saveCanvas(myCanvas, 'PolyArt', 'jpg');
     downloading = false;
   }

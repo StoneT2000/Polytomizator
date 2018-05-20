@@ -237,8 +237,6 @@ $(document).on('ready',function(){
     else {
       if (window.confirm("Are you sure you want to do this? You cannot go back and edit this work again.")){
         var factor = 6000/cWidth;
-        downloading=true;
-        draw();
         expandImage(factor,true);
       }
     }
