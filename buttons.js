@@ -173,15 +173,11 @@ $(document).on('ready',function(){
       $("body").css("width",(cWidth+500).toString()+"px")
       $("body").css("height",(cHeight+400).toString()+"px")
       myCanvas.parent('gamedisplay');
-      vertices = [];
-      curves = [];
-      totalPointsOnCurve = [];
-      bPoints = [];
-      oPoints = [];
+
       allVertices=[];
       triangulations = [0];
       tColors = [];
-      nPoints =[];
+
       previousData =[];
       dataPos = 0;
       d = pixelDensity();
@@ -217,7 +213,7 @@ $(document).on('ready',function(){
       }
 
         
-      previousData.push([vertices.slice(),curves.slice(),totalPointsOnCurve.slice(),bPoints.slice(),oPoints.slice(),allVertices.slice(),triangulations.slice(),tColors.slice(),nPoints.slice(),currSetPt.slice()]);
+      previousData.push([allVertices.slice(),triangulations.slice(),tColors.slice()]);
     });
     
   });

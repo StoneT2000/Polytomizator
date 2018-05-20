@@ -1,12 +1,6 @@
-var vertices = [];
-var curves = [];
-var totalPointsOnCurve = [];
-var bPoints = [];
-var oPoints = [];
 var allVertices=[];
 var triangulations = [0];
 var tColors = [];
-var nPoints =[];
 var mode = 1;
 var previousData =[];
 var colorOfSquares =[];
@@ -27,6 +21,7 @@ var finishedColoring = false;
 var quickColor = false;
 var sTime = 0;
 var fTime = 0;
+var useHash = false;
 var squares = false;
 var colorAccuracy = 1;
 var workTriangles=[];
@@ -84,7 +79,7 @@ function setup(){
   $("body").css("height",(cHeight+400).toString()+"px")
   myCanvas.parent('gamedisplay');
   angleMode(DEGREES)
-  previousData.push([vertices.slice(),curves.slice(),totalPointsOnCurve.slice(),bPoints.slice(),oPoints.slice(),allVertices.slice(),triangulations.slice(),tColors.slice(),nPoints.slice(),currSetPt.slice()]);
+  previousData.push([allVertices.slice(),triangulations.slice(),tColors.slice()]);
 }
 var accDist = 0;
 var oldX=0;
@@ -126,39 +121,12 @@ function draw(){
   }
   fill(256,256,256)
   stroke(0,0,0)
-  if (displayAnchors == true){
-    for (k=0;k<vertices.length;k++){
-      ellipse(vertices[k][0],vertices[k][1],10,10)
-    }
-    for (j=0;j<currSetPt.length;j++){
-      ellipse(currSetPt[j][0],currSetPt[j][1],10,10)
-    }
-  }
-  if (displayCurves == true){
-    for (j=0;j<curves.length;j++){
-      noFill();
-      curveDisplay(curves[j],j)
-    }
-  }
   if (displayPoints == true){
     for (j=0;j<allVertices.length;j++){
       ellipse(allVertices[j][0],allVertices[j][1],5,5)
     }
     
   }
-  
-
-  if (displayText == true){
-    var accum = 0;
-    for (i=0;i<curves.length;i++){
-      accum += totalPointsOnCurve[i];
-      textSize(20);
-      noStroke();
-      fill(256,256,256)
-      text("Curve: " + (i+1),bPoints[accum-floor(totalPointsOnCurve[i]/2)][0],bPoints[accum-floor(totalPointsOnCurve[i]/2)][1])
-    }
-  }
-  
   
   if (colorOfSquares.length>0 && squares==true){
     noStroke();
@@ -193,7 +161,6 @@ function draw(){
         oldY=mouseY;
         allVertices.push([round(mouseX),round(mouseY)]);
 
-        nPoints.push([round(mouseX),round(mouseY)]);
         for (i=0;i<2;i++){
           var r1=random(-brushSize,brushSize)
           var r2=random(-brushSize,brushSize);
@@ -201,7 +168,6 @@ function draw(){
           }
           else{
             allVertices.push([round(mouseX+r1),round(mouseY+r2)]);
-          nPoints.push([round(mouseX+r1),round(mouseY+r2)]);
           }
         }
       }
@@ -237,7 +203,7 @@ function draw(){
       var ys = floor(mouseY/50);
       //now find all cartesian integer coords that are within the range
       var verticesRange = [];
-      for (k=0;k<)
+
       for (k=0;k<allVertices.length;k++){
         var dx = allVertices[k][0]-mouseX;
         var dy = allVertices[k][1]-mouseY;
@@ -294,14 +260,6 @@ function updateHashSpace(x,y,add){
 function keyPressed(){
   if (keyCode === 32) {
     saveCanvas(myCanvas, 'myCanvas', 'jpg');
-  }
-  else if (keyCode === 13){
-    for (i=0;i<currSetPt.length;i++){
-      vertices.push(currSetPt[i]);
-    }
-    produceJitterPt(currSetPt);
-    currSetPt = [];
-  
   }
   else if (keyCode===68){
     triangulize();
@@ -370,17 +328,14 @@ function keyPressed(){
     
   }
 }
-var currSetPt = [];
 function mouseClicked(){
   console.log(mouseX,mouseY,hashCoordinate(mouseX,mouseY));
   if (mouseX<=cWidth && mouseX>=0){
     if(mouseY<=cHeight && mouseY>=0){
-      if (mode==0){
-        currSetPt.push([round(mouseX),round(mouseY)])
-      }
+
       if (mode == 1){
         allVertices.push([round(mouseX),round(mouseY)]);
-        nPoints.push([round(mouseX),round(mouseY)]);
+        updateHashSpace([round(mouseX),round(mouseY)])
       }
       if (mode==2){
         
@@ -388,7 +343,7 @@ function mouseClicked(){
       if (dataPos < previousData.length-1){
         previousData.splice(dataPos+1,previousData.length-1-dataPos);
       }
-      previousData.push([vertices.slice(),curves.slice(),totalPointsOnCurve.slice(),bPoints.slice(),oPoints.slice(),allVertices.slice(),triangulations.slice(),tColors.slice(),nPoints.slice(),currSetPt.slice()]);
+      previousData.push([allVertices.slice(),triangulations.slice(),tColors.slice()]);
       
       
       dataPos=previousData.length-1;
@@ -396,59 +351,6 @@ function mouseClicked(){
     }
   }
   
-  
-}
-function produceJitterPt(verticesSet){
-  var flatV= verticesSet.reduce((acc,curr)=> acc.concat(curr));
-  curves.push(flatV);
-  var total = 5;
-  totalPointsOnCurve.push(total);
-  for (m=0;m<=total;m++){
-    var t=m/total;
-    var bx=round(bezierPoint(flatV[0],flatV[2],flatV[4],flatV[6],t))
-    var by=round(bezierPoint(flatV[1],flatV[3],flatV[5],flatV[7],t));
-    bPoints.push([bx,by]);
-
-    allVertices.push(bPoints[bPoints.length-1]);
-    
-    var tx = bezierTangent(flatV[0],flatV[2],flatV[4],flatV[6],t);
-    var ty = bezierTangent(flatV[1],flatV[3],flatV[5],flatV[7],t);
-    
-    var a = atan2(ty, tx);
-    a-=HALF_PI
-    var jitterAmount = 3;
-    var randomAmount = 100;
-    for (ci=1;ci<=jitterAmount;ci++){
-      if (ci/random(1,jitterAmount+0.1) <=1){
-        var cx = cos(a)*30*ci 
-        var nx= round(cx+ bx+random(-randomAmount,randomAmount))
-        var cy= sin(a)*30*ci 
-        var ny= round(cy+ by+random(-randomAmount,randomAmount))
-        if (nx > cWidth-1 || nx<1 || ny>cHeight-1||ny<1){
-          
-        }
-        else {
-          oPoints.push([nx,ny])
-          allVertices.push(oPoints[oPoints.length-1]);
-        }
-        cx*=-1;
-        nx= round(cx+ bx+random(-randomAmount,randomAmount))
-        cy*=-1;
-        ny= round(cy+ by+random(-randomAmount,randomAmount))
-        if (nx >= cWidth-1 || nx<1 || ny>=cHeight-1||ny<1){
-          
-        }
-        else {
-          oPoints.push([nx,ny])
-          allVertices.push(oPoints[oPoints.length-1]);
-        }
-      }
-    }
-  }
-  
-}
-function curveDisplay(coords,i){
-  bezier(coords[0],coords[1],coords[2],coords[3],coords[4],coords[5],coords[6],coords[7]);
   
 }
 function delaunayDisplay(tng){
@@ -475,19 +377,12 @@ function delaunayDisplay(tng){
 }
 function loadData(dataStored){
 
-  vertices=dataStored[0];
-  curves=dataStored[1];
-  totalPointsOnCurve=dataStored[2];
-  bPoints=dataStored[3];
-  oPoints=dataStored[4];
-  allVertices=dataStored[5];
-  triangulations=dataStored[6];
-  tColors=dataStored[7];
-  nPoints=dataStored[8];
-  currSetPt=dataStored[9];
+  allVertices=dataStored[0];
+  triangulations=dataStored[1];
+  tColors=dataStored[2];
 }
 function saveData(){
-  var currentData = [vertices.slice(),curves.slice(),totalPointsOnCurve.slice(),bPoints.slice(),oPoints.slice(),allVertices.slice(),triangulations.slice(),tColors.slice(),nPoints.slice(),currSetPt.slice()];
+  var currentData = [allVertices.slice(),triangulations.slice(),tColors.slice()];
   localStorage.setItem("art1",JSON.stringify(currentData));
 
 }
