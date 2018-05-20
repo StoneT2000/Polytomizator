@@ -45,7 +45,6 @@ function scanUD(data,degree,accuracy){
       var db = c1[2]-c2[2]
       var da = c1[3]-c2[3]
       if (dr*dr+dg*dg+db*db+da*da > degree || abs(dr)>10 || abs(dg)>10 || abs(db)>10){
-        nPoints.push([i,j]);
         allVertices.push([i,j]);
         if (flowing == true){
           for (ij=0;ij<2;ij++){
@@ -55,7 +54,6 @@ function scanUD(data,degree,accuracy){
           
             }
             else {
-              nPoints.push([i+cr1,j+cr2]);
               allVertices.push([i+cr1,j+cr2]);
             }
           }
@@ -75,7 +73,6 @@ function scanLR(data,degree,accuracy){
       var db = c1[2]-c2[2]
       var da = c1[3]-c2[3]
       if (dr*dr+dg*dg+db*db+da*da > degree || abs(dr)>10 || abs(dg)>10 || abs(db)>10){
-        nPoints.push([i,j]);
         allVertices.push([i,j]);
         if (flowing == true){
           for (ij=0;ij<2;ij++){
@@ -85,7 +82,6 @@ function scanLR(data,degree,accuracy){
           
             }  
             else {
-              nPoints.push([i+cr1,j+cr2]);
               allVertices.push([i+cr1,j+cr2]);
             }
           }
@@ -94,6 +90,7 @@ function scanLR(data,degree,accuracy){
       }
     }
   }
+  generateHashSpace();
 }
 
 function lossFunction(manualData,data){
