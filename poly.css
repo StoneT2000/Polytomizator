@@ -1,6 +1,6 @@
 body{
   width:4000px;
-  height:
+  background-image:url('images/PolyBackground.jpg')
 }
 .main{
   margin:auto;
@@ -20,7 +20,6 @@ body{
 .container{
   padding:0px;
   margin:0px;
-  height:700px;
 
   width: 100%;
   text-align:center;
@@ -72,7 +71,7 @@ body{
 .brushes{
   position:fixed;
   width: 100px;
-  left: 20px;
+  left: -20px;
   top:40px;
 }
 .brushes li{
@@ -109,6 +108,7 @@ body{
   height:100px;
 }
 #loadThis{
+  font-size:15px;
 }
 #saveThis{
 
@@ -149,4 +149,15 @@ td:nth-child(odd){
 }
 th, td{
   border-bottom:solid black 1px;
+}
+#popUp{
+  background-color:RGB(230,230,230);
+  display:block;
+  border: 1px solid black;
+  border-radius:4px;
+  position:fixed;
+  padding:0 10 0 10;
+  max-width:100px;
+  font-size:10px;
+  left: 110px;
 }

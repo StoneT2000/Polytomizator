@@ -472,6 +472,7 @@ function triangulize(){
     displayCurves=false;
     displayPoints=false;
     displayAnchors=false;
+    displayTriangulation=false;
     image(img1,0,0,cWidth,cHeight)
     if (stepDelaunate == false){
       for (var i = 0; i < triangles.length; i += 3) {
@@ -491,6 +492,7 @@ function triangulize(){
     displayCurves=true;
     displayPoints=true;
     displayAnchors=true;
+    displayTriangulation=true;
     stepD = 0;
 }
 function fget(x,y){
