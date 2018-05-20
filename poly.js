@@ -96,14 +96,14 @@ function draw(){
     image(img1,0,0,cWidth,cHeight);
   }
   if (stepDelaunate == true && triangulations.length>0 && colorMap == true && finishedColoring== false){
-      if (workTriangles.length>0){
+      if (triangulations[triangulations.length-1].length>0 && stepD <=triangulations[triangulations.length-1].length-1){
         displayText=false;
         displayCurves=false;
         displayPoints=false;
         displayAnchors=false;
-        var tAC = averageColor(allVertices[workTriangles[stepD]][0],allVertices[workTriangles[stepD]][1],allVertices[workTriangles[stepD+1]][0],allVertices[workTriangles[stepD+1]][1],allVertices[workTriangles[stepD+2]][0],allVertices[workTriangles[stepD+2]][1],colorAccuracy)
+        var tAC = averageColor(allVertices[triangulations[triangulations.length-1][stepD]][0],allVertices[triangulations[triangulations.length-1][stepD]][1],allVertices[triangulations[triangulations.length-1][stepD+1]][0],allVertices[triangulations[triangulations.length-1][stepD+1]][1],allVertices[triangulations[triangulations.length-1][stepD+2]][0],allVertices[triangulations[triangulations.length-1][stepD+2]][1],colorAccuracy)
         tColors.push(tAC[0],tAC[1],tAC[2]);
-        workTriangles = workTriangles.slice(3,workTriangles.length);
+        stepD+=3;
 
       }
       else{
@@ -457,17 +457,18 @@ function expandImage(mvalue,save){
     }
   }
   if (save==true){
-    
+    n
     draw();
     saveCanvas(myCanvas, 'PolyArt', 'jpg');
   }
 }
 function triangulize(){
     var delaunay;
+    stepD=0;
     delaunay = (Delaunator.from(allVertices))
-    triangles = (delaunay.triangles)
+    var triangles = (delaunay.triangles)
     triangulations[0] = triangles;
-
+    
     displayText=false;
     displayCurves=false;
     displayPoints=false;
@@ -493,6 +494,8 @@ function triangulize(){
     displayPoints=true;
     displayAnchors=true;
     displayTriangulation=true;
+    $("#displayTriangulation").html("Hide <br>Triangles<br>")
+    $("#displayTriangulation").css("background-color","RGB(40,40,40)");
     stepD = 0;
 }
 function fget(x,y){
