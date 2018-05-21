@@ -29,6 +29,7 @@ var workTriangles=[];
 var verticesHashTable = [];
 var verticesHashTableFlat = [];
 var pointDensity = 2;
+
 function preload(){
 }
 var myCanvas;
@@ -101,9 +102,11 @@ function draw(){
         displayCurves=false;
         displayPoints=false;
         displayAnchors=false;
+
         var tAC=[0,0,0];
         tAC = averageColor(verticesHashTableFlat[triangulations[triangulations.length-1][stepD]][0],verticesHashTableFlat[triangulations[triangulations.length-1][stepD]][1],verticesHashTableFlat[triangulations[triangulations.length-1][stepD+1]][0],verticesHashTableFlat[triangulations[triangulations.length-1][stepD+1]][1],verticesHashTableFlat[triangulations[triangulations.length-1][stepD+2]][0],verticesHashTableFlat[triangulations[triangulations.length-1][stepD+2]][1],colorAccuracy)
         tColors.push(tAC[0],tAC[1],tAC[2]);
+
         stepD+=3;
 
       }
@@ -168,6 +171,7 @@ function draw(){
         oldX=mouseX;
         oldY=mouseY;
         allVertices.push([round(mouseX),round(mouseY)]);
+
         updateHashSpace(round(mouseX),round(mouseY),true)
 
         for (i=0;i<pointDensity;i++){
@@ -177,6 +181,7 @@ function draw(){
           }
           else{
             allVertices.push([round(mouseX+r1),round(mouseY+r2)]);
+
             updateHashSpace(round(mouseX+r1),round(mouseY+r2),true)
           }
         }
@@ -273,7 +278,6 @@ function keyPressed(){
   if (keyCode === 32) {
     downloading = true;
     draw();
-    
     saveCanvas(myCanvas, 'myCanvas', 'jpg');
     downloading = false;
   }
@@ -281,6 +285,7 @@ function keyPressed(){
     triangulize();
     finishedColoring = false;
     image(img1,0,0,cWidth,cHeight);
+
     loadPixels();
     tColors=[];
     sTime = millis();
@@ -292,7 +297,6 @@ function keyPressed(){
     $("#displayPoints").css("background-color","RGB(100,100,100)");
     $("#displayCurves").html("Show<br>Curves<br>");
     $("#displayCurves").css("background-color","RGB(100,100,100)");
-    workTriangles =triangulations[triangulations.length-1];
   }
   else if (keyCode===220){
 
@@ -364,6 +368,7 @@ function mouseClicked(){
 
       if (mode == 1){
         allVertices.push([round(mouseX),round(mouseY)]);
+
         updateHashSpace(round(mouseX),round(mouseY),true)
       }
       if (mode==2){
@@ -478,7 +483,7 @@ function triangulize(){
     verticesHashTableFlat = verticesHashTable.reduce((acc,curr)=> acc.concat(curr));
     delaunay = (Delaunator.from(verticesHashTableFlat))
     stepD=0;
-    
+      
     var triangles = (delaunay.triangles)
     triangulations[0] = triangles;
     
@@ -569,4 +574,33 @@ function findStuff(){
   for (k=3;k<pixels.length;k+=4){
     console.log(pixels[k]);
   }
+}
+function incidenceOf(vertex){
+  var indexOfVertex = -1;
+  for (i=0;i<verticesHashTableFlat.length;i++){
+    if (verticesHashTableFlat[i][0] === vertex[0] && verticesHashTableFlat[i][1] === vertex[1]){
+      indexOfVertex = i;
+    }
+  }
+  incidentIndices = [];
+  for (i=0;i<triangulations[0].length;i++){
+    if (indexOfVertex === triangulations[0][i]){
+      console.log(indexOfVertex)
+      if (i%3 === 0){
+        incidentIndices.push(indexOfVertex,triangulations[0][i+1],triangulations[0][i+2])
+      }
+      else if (i%3 === 1){
+        incidentIndices.push(triangulations[0][i-1],indexOfVertex,triangulations[0][i+1])
+      }
+      else if (i%3 === 2){
+        incidentIndices.push(triangulations[0][i-2],triangulations[0][i-1],indexOfVertex)
+        
+      }
+      
+      
+    }
+  }
+  return incidentIndices;
+  
+  
 }
