@@ -10,21 +10,21 @@ $(document).on('ready',function(){
     
   }
   $("#pointBrush").mouseenter(function(){
-    hoverEnterText('#pointbrush','50','Point Brush: Click to add individual points');
+    hoverEnterText('#pointbrush','50','Point Brush (P): Click to add individual points');
   })
   $("#pointBrush").mouseleave(function(){
     noPopUp();
    
   })
   $("#lineBrush").mouseenter(function(){
-    hoverEnterText('#lineBrush','100','Line Brush: Click or drag to add scattered points at the current brush size');
+    hoverEnterText('#lineBrush','100','Line Brush (B): Click or drag to add scattered points at the current brush size');
   })
   $("#lineBrush").mouseleave(function(){
     noPopUp();
    
   })
   $("#eraser").mouseenter(function(){
-    hoverEnterText('#eraser','175','Erase what you don\'t want');
+    hoverEnterText('#eraser','175','Eraser (E): Erase what you don\'t want');
   })
   $("#eraser").mouseleave(function(){
     noPopUp();

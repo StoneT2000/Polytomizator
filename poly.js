@@ -338,10 +338,23 @@ function keyPressed(){
     
   }
   else if (keyCode===80){
+    mode = 1;
+    $("#pointBrush").css("background-color","RGB(140,140,140)")
+    $("#lineBrush").css("background-color","")
+    $("#eraser").css("background-color","")
     
-      console.log(mouseX,mouseY)
-    
-    
+  }
+  else if (keyCode ===69){
+    mode = 3;
+    $("#eraser").css("background-color","RGB(140,140,140)")
+    $("#pointBrush").css("background-color","")
+    $("#lineBrush").css("background-color","")
+  }
+  else if (keyCode === 66){
+    mode = 2;
+    $("#lineBrush").css("background-color","RGB(140,140,140)")
+    $("#pointBrush").css("background-color","")
+    $("#eraser").css("background-color","")
   }
 }
 function mouseClicked(){

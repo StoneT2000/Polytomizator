@@ -1,6 +1,7 @@
 body{
   width:4000px;
-  background-image:url('images/PolyBackground.jpg')
+  background-image:url('images/PolyBackground.jpg');
+  cursor:crosshair;
 }
 .main{
   margin:auto;
@@ -92,6 +93,7 @@ body{
 }
 .brushes #sizing{
   height:100px;
+  cursor:default;
 }
 .brushes #eraser{
   cursor:pointer;
@@ -161,7 +163,7 @@ th, td{
   border-radius:4px;
   position:fixed;
   padding:0 10 0 10;
-  max-width:100px;
-  font-size:10px;
+  max-width:140px;
+  font-size:13px;
   left: 110px;
 }
