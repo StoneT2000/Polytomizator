@@ -29,6 +29,7 @@ var workTriangles=[];
 var verticesHashTable = [];
 var verticesHashTableFlat = [];
 var pointDensity = 2;
+var exportSVG = false;
 
 function preload(){
 }
@@ -55,10 +56,10 @@ function setup(){
     var tempv = i*80+round(random(0,30));
     var tempv2 = i*80+round(random(0,30));
     if (inCanvas(tempv,cHeight)){
-      allVertices.push([i*80+round(random(0,30)),cHeight])
+      allVertices.push([tempv,cHeight])
     }
-    if (inCanvas(tempv,cHeight)){
-      allVertices.push([i*80+round(random(0,30)),0])
+    if (inCanvas(tempv2,0)){
+      allVertices.push([tempv2,0])
     }
         
         
@@ -67,10 +68,10 @@ function setup(){
     var tempv = i*80+round(random(0,30));
     var tempv2 = i*80+round(random(0,30));
     if (inCanvas(cWidth,tempv)){
-      allVertices.push([cWidth,i*80+round(random(0,30))])
+      allVertices.push([cWidth,tempv])
     }
     if (inCanvas(0,tempv2)){
-      allVertices.push([0,i*80+round(random(0,30))])
+      allVertices.push([0,tempv2])
     }
 
 
@@ -92,6 +93,7 @@ var critDist = 10;
 var stepD = 0;
 var iterStep = 1;
 function draw(){
+
   background("#FFFFFF")
   if (displayImage == true){
     image(img1,0,0,cWidth,cHeight);
@@ -248,12 +250,15 @@ function findIndexFromHash(hash){
 }
 function generateHashSpace(){
   verticesHashTable=[];
+
   for (i=0;i<ceil(cWidth/50)*ceil(cHeight/50);i++){
     verticesHashTable.push([]);
   }
   for (i=0;i<allVertices.length;i++){
+
     var hashVal = hashCoordinate(allVertices[i][0],allVertices[i][1]);
     var index = findIndexFromHash(hashVal);
+
     verticesHashTable[index].push([allVertices[i][0],allVertices[i][1]])
   }
 }
@@ -274,6 +279,7 @@ function updateHashSpace(x,y,add){
     }
   }
 }
+
 function keyPressed(){
   if (keyCode === 32) {
     downloading = true;
@@ -434,8 +440,8 @@ function expandVertex(vertex,expandValue){
   else{
     expandValue--;
   }
-  var cx=1;
-  var ch=1;
+  var cx=0;
+  var ch=0;
   var dx=vertex[0]-cx;
   var dy=vertex[1]-ch;
   return [vertex[0]+dx*(expandValue),vertex[1]+dy*(expandValue)];
@@ -466,7 +472,6 @@ function expandImage(mvalue,save){
     for (l=0;l<verticesHashTable[p].length;l++){
       var tempV = expandVertex(verticesHashTable[p][l],mvalue);
       verticesHashTable[p][l] = tempV;
-      console.log(tempV)
       
     }
   }

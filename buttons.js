@@ -195,20 +195,21 @@ $(document).on('ready',function(){
       dataPos = 0;
       d = pixelDensity();
        
-  
+      cWidth--;
+      cHeight--;
       allVertices.push([0,0]);
-      allVertices.push([cWidth-1,0]);
-      allVertices.push([0,cHeight-1]);
-      allVertices.push([cWidth-1,cHeight-1]);
-
+      allVertices.push([cWidth,0]);
+      allVertices.push([0,cHeight]);
+      allVertices.push([cWidth,cHeight]);
+      
       for(i=0;i<cWidth/80;i++){
         var tempv = i*80+round(random(0,30));
         var tempv2 = i*80+round(random(0,30));
-        if (inCanvas(tempv,cHeight-1)){
-          allVertices.push([i*80+round(random(0,30))-1,cHeight-1])
+        if (inCanvas(tempv,cHeight)){
+          allVertices.push([tempv,cHeight])
         }
-        if (inCanvas(tempv,cHeight-1)){
-          allVertices.push([i*80+round(random(0,30))-1,0])
+        if (inCanvas(tempv2,cHeight)){
+          allVertices.push([tempv2,0])
         }
 
 
@@ -216,15 +217,19 @@ $(document).on('ready',function(){
       for(i=0;i<cHeight/80;i++){
         var tempv = i*80+round(random(0,30));
         var tempv2 = i*80+round(random(0,30));
-        if (inCanvas(cWidth-1,tempv)){
-          allVertices.push([cWidth-1,i*80+round(random(0,30))-1])
+        if (inCanvas(cWidth,tempv)){
+          allVertices.push([cWidth,tempv])
         }
         if (inCanvas(0,tempv2)){
-          allVertices.push([0,i*80+round(random(0,30))-1])
+          allVertices.push([0,tempv2])
         }
 
       }
+
+      cWidth++;
+      cHeight++;
       generateHashSpace();
+      
         
       previousData.push([allVertices.slice(),triangulations.slice(),tColors.slice(),verticesHashTable.slice(),verticesHashTableFlat.slice()]);
     });
@@ -236,7 +241,14 @@ $(document).on('ready',function(){
     }
     else {
       if (window.confirm("Are you sure you want to do this? You cannot go back and edit this work again.")){
-        var factor = 6000/cWidth;
+        var factor = 2;
+        if (cWidth>cHeight){
+          factor = ceil(6000/cWidth);
+        }
+        else {
+          factor = ceil(6000/cHeight);
+        }
+        
         expandImage(factor,true);
       }
     }
