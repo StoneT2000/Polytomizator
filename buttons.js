@@ -149,6 +149,14 @@ $(document).on('ready',function(){
     }
     console.log(brushSize);
   });
+  $("#brushDensity").on("focusout",function(){
+
+    pointDensity = parseInt(document.querySelector('#brushDensity').value);
+    if (isNaN(pointDensity) === true || pointDensity <1){
+      alert("Type in a number larger than 0 for brush density");
+    }
+    console.log(brushSize);
+  });
   $("#pointBrush").on("click",function(){
     mode=1;
     $("#pointBrush").css("background-color","RGB(140,140,140)")
@@ -269,7 +277,7 @@ $(document).on('ready',function(){
     window.setTimeout(function(){
       $("#loadThis").text("Load last saved");
     },2000)
-  })
+  });
   
 
 })
