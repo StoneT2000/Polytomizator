@@ -25,12 +25,12 @@ var sTime = 0;
 var fTime = 0;
 var squares = false;
 var colorAccuracy = 1;
-var workTriangles=[];
+var newVertices = [];
 var verticesHashTable = [];
 var verticesHashTableFlat = [];
 var pointDensity = 2;
 var exportSVG = false;
-
+var dTriangles = [];
 function preload(){
 }
 var myCanvas;
@@ -92,23 +92,26 @@ var oldY=0;
 var critDist = 10;
 var stepD = 0;
 var iterStep = 1;
+var colorTime = 0;
 function draw(){
 
   background("#FFFFFF")
   if (displayImage == true){
     image(img1,0,0,cWidth,cHeight);
   }
+  
   if (stepDelaunate == true && triangulations.length>0 && colorMap == true && finishedColoring== false){
       if (triangulations[triangulations.length-1].length>0 && stepD <=triangulations[triangulations.length-1].length-1){
         displayText=false;
         displayCurves=false;
         displayPoints=false;
         displayAnchors=false;
-
+        
         var tAC=[0,0,0];
         tAC = averageColor(verticesHashTableFlat[triangulations[triangulations.length-1][stepD]][0],verticesHashTableFlat[triangulations[triangulations.length-1][stepD]][1],verticesHashTableFlat[triangulations[triangulations.length-1][stepD+1]][0],verticesHashTableFlat[triangulations[triangulations.length-1][stepD+1]][1],verticesHashTableFlat[triangulations[triangulations.length-1][stepD+2]][0],verticesHashTableFlat[triangulations[triangulations.length-1][stepD+2]][1],colorAccuracy)
         tColors.push(tAC[0],tAC[1],tAC[2]);
-
+        //dTriangles.push(new dTriangle(verticesHashTableFlat[triangulations[triangulations.length-1][stepD]][0],verticesHashTableFlat[triangulations[triangulations.length-1][stepD]][1],verticesHashTableFlat[triangulations[triangulations.length-1][stepD+1]][0],verticesHashTableFlat[triangulations[triangulations.length-1][stepD+1]][1],verticesHashTableFlat[triangulations[triangulations.length-1][stepD+2]][0],verticesHashTableFlat[triangulations[triangulations.length-1][stepD+2]][1],[tAC[0],tAC[1],tAC[2]]));
+        
         stepD+=3;
 
       }
@@ -128,6 +131,7 @@ function draw(){
       delaunayDisplay(triangulations[j]);
       
     }
+
   }
   fill(256,256,256)
   stroke(0,0,0)
@@ -374,7 +378,7 @@ function mouseClicked(){
 
       if (mode == 1){
         allVertices.push([round(mouseX),round(mouseY)]);
-
+        newVertices.push([round(mouseX),round(mouseY)]);
         updateHashSpace(round(mouseX),round(mouseY),true)
       }
       if (mode==2){
@@ -535,7 +539,6 @@ function pointInTriangle(x1,y1,x2,y2,x3,y3,x4,y4){
 function averageColor(x1,y1,x2,y2,x3,y3,accuracy){
   var xs =[x1,x2,x3];
   var ys=[y1,y2,y3];
-  
   var bx1 =  xs.reduce((acc,curr)=>curr <=acc ?curr : acc)
   var bx2 =  xs.reduce((acc,curr)=>curr >=acc ?curr : acc)
   var by1 =  ys.reduce((acc,curr)=>curr <=acc ?curr : acc)
@@ -608,4 +611,36 @@ function incidenceOf(vertex){
   return incidentIndices;
   
   
+}
+function triangleHashFromIndices(i1,i2,i3){
+  var sx = verticesHashTableFlat[i1][0]+verticesHashTableFlat[i2][0]+verticesHashTableFlat[i3][0];
+  var sy = verticesHashTableFlat[i1][1]+verticesHashTableFlat[i2][1]+verticesHashTableFlat[i3][1];
+  return floor(100*(sx)/150) + floor(sy/150);
+}
+function removeDTriangles(){
+  for (i=0;i<newVertices.length;i++){
+    var cv = incidenceOf(newVertices[i]);
+    for (k=0;k<cv.length;k+=3){
+      for (j=0;j<dTriangles.length;j++){
+        if (triangleHashFromIndices(cv[k],cv[k+1],cv[k+2]) == dTriangles[j].hash){
+          console.log(dTriangles[j]);
+        }
+      }
+    }
+  }
+}
+/*Coloring composes like 90% of runtime*/
+function benchMarkColor(trials){
+  var benchMarkSTime = millis();
+  for (ij=0;ij<trials;ij++){
+    averageColor(0,0,100,100,random(0,100),random(0,100))
+  };
+  return "Total time for " + trials + " trials: " + (millis()-benchMarkSTime)/1000;
+}
+function benchMarkTriangle(trials){
+  var benchMarkSTime = millis();
+  for (ij=0;ij<trials;ij++){
+    averageColor(0,ij,100,100,150,150,1)
+  };
+  return "Total time for " + trials + " trials: " + (millis()-benchMarkSTime)/1000;
 }
