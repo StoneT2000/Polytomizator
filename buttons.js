@@ -151,7 +151,7 @@ $(document).on('ready',function(){
   });
   $("#brushDensity").on("focusout",function(){
 
-    pointDensity = parseInt(document.querySelector('#brushDensity').value);
+    pointDensity = parseInt(document.querySelector('#brushDensity').value)-1;
     if (isNaN(pointDensity) === true || pointDensity <1){
       alert("Type in a number larger than 0 for brush density");
     }
