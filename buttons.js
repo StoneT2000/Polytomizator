@@ -263,6 +263,20 @@ $(document).on('ready',function(){
   });
   $("#polytomize").on("click",function(){
     triangulize();
+    finishedColoring = false;
+    image(img1,0,0,cWidth,cHeight);
+
+    loadPixels();
+    tColors=[];
+    sTime = millis();
+    $("#displayText").html("Show<br>Text<br>");
+    $("#displayText").css("background-color","RGB(100,100,100)");
+    $("#displayAnchors").html("Show<br>Anchors<br>");
+    $("#displayAnchors").css("background-color","RGB(100,100,100)");
+    $("#displayPoints").html("Show<br>Points<br>");
+    $("#displayPoints").css("background-color","RGB(100,100,100)");
+    $("#displayCurves").html("Show<br>Curves<br>");
+    $("#displayCurves").css("background-color","RGB(100,100,100)");
   })
   $("#saveThis").on("click",function(){
     saveData();

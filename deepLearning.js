@@ -72,7 +72,7 @@ function scanLR(data,degree,accuracy){
       var dg = c1[1]-c2[1]
       var db = c1[2]-c2[2]
       var da = c1[3]-c2[3]
-      if (dr*dr+dg*dg+db*db+da*da > degree || abs(dr)>10 || abs(dg)>10 || abs(db)>10){
+      if (dr*dr+dg*dg+db*db+da*da > degree || abs(dr)>100 || abs(dg)>100 || abs(db)>100){
         allVertices.push([i,j]);
         if (flowing == true){
           for (ij=0;ij<2;ij++){
