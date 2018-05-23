@@ -1,18 +1,6 @@
 $(document).on('ready',function(){
     $("#pointBrush").css("background-color","RGB(140,140,140)")
   console.log("Let's make computer generated art that looks pretty cool...v6")
-  $("#displayText").on("click",function(){
-    if (displayText == false){
-      displayText = true;
-      $("#displayText").html("Hide<br>Text<br>");
-      $("#displayText").css("background-color","RGB(40,40,40)");
-    }
-    else {
-      displayText = false;
-      $("#displayText").html("Show<br>Text<br>");
-      $("#displayText").css("background-color","RGB(100,100,100)");
-    }
-  });
   $("#displayColor").on("click",function(){
     if (noColors==true){
       noColors = false;
@@ -25,19 +13,7 @@ $(document).on('ready',function(){
       $("#displayColor").css("background-color","RGB(100,100,100)");
     }
   })
-  $("#displayAnchors").on("click",function(){
-    if (displayAnchors == false){
-      displayAnchors = true;
-      $("#displayAnchors").html("Hide<br>Anchors<br>");
-      $("#displayAnchors").css("background-color","RGB(40,40,40)");
-      
-    }
-    else {
-      displayAnchors = false;
-      $("#displayAnchors").html("Show<br>Anchors<br>");
-      $("#displayAnchors").css("background-color","RGB(100,100,100)");
-    }
-  });
+
   $("#displayPoints").on("click",function(){
     if (displayPoints == false){
       displayPoints = true;
@@ -51,19 +27,7 @@ $(document).on('ready',function(){
       $("#displayPoints").css("background-color","RGB(100,100,100)");
     }
   });
-  $("#displayCurves").on("click",function(){
-    if (displayCurves == false){
-      displayCurves = true;
-      $("#displayCurves").html("Hide<br>Curves<br>");
-      $("#displayCurves").css("background-color","RGB(40,40,40)");
-      
-    }
-    else {
-      displayCurves = false;
-      $("#displayCurves").html("Show<br>Curves<br>");
-      $("#displayCurves").css("background-color","RGB(100,100,100)");
-    }
-  });
+
   $("#displayTriangulation").on("click",function(){
     if (displayTriangulation == false){
       displayTriangulation = true;
@@ -91,42 +55,22 @@ $(document).on('ready',function(){
     }
   });
   $("#displayAll").on("click",function(){
-    if (displayText==false&&
-    displayCurves==false&&
-    displayPoints==false&&
-    displayAnchors==false&&
+    if (displayPoints==false&&
     displayImage ==false){
-      displayText=true;
-      displayCurves=true;
       displayPoints=true;
-      displayAnchors=true;
       displayImage =true;
-      $("#displayText").html("Hide<br>Text<br>");
-      $("#displayText").css("background-color","RGB(40,40,40)");
-      $("#displayAnchors").html("Hide<br>Anchors<br>");
-      $("#displayAnchors").css("background-color","RGB(40,40,40)");
-            $("#displayPoints").html("Hide<br>Points<br>");
+      $("#displayPoints").html("Hide<br>Points<br>");
       $("#displayPoints").css("background-color","RGB(40,40,40)");
-            $("#displayCurves").html("Hide<br>Curves<br>");
-      $("#displayCurves").css("background-color","RGB(40,40,40)");
 
       $("#displayImage").html("Hide<br>Image<br>");
       $("#displayImage").css("background-color","RGB(40,40,40)");
     }
     else {
-      displayText=false;
-      displayCurves=false;
       displayPoints=false;
-      displayAnchors=false;
       displayImage =false;
-      $("#displayText").html("Show<br>Text<br>");
-      $("#displayText").css("background-color","RGB(100,100,100)");
-      $("#displayAnchors").html("Show<br>Anchors<br>");
-      $("#displayAnchors").css("background-color","RGB(100,100,100)");
+
       $("#displayPoints").html("Show<br>Points<br>");
       $("#displayPoints").css("background-color","RGB(100,100,100)");
-      $("#displayCurves").html("Show<br>Curves<br>");
-      $("#displayCurves").css("background-color","RGB(100,100,100)");
       $("#displayImage").html("Show<br>Image<br>");
       $("#displayImage").css("background-color","RGB(100,100,100)");
     }
@@ -147,7 +91,6 @@ $(document).on('ready',function(){
     if (isNaN(brushSize) === true || brushSize <1){
       alert("Type in a number larger than 0 for brush size");
     }
-    console.log(brushSize);
   });
   $("#brushDensity").on("focusout",function(){
 
@@ -155,26 +98,35 @@ $(document).on('ready',function(){
     if (isNaN(pointDensity) === true || pointDensity <1){
       alert("Type in a number larger than 0 for brush density");
     }
-    console.log(brushSize);
   });
   $("#pointBrush").on("click",function(){
     mode=1;
     $("#pointBrush").css("background-color","RGB(140,140,140)")
     $("#lineBrush").css("background-color","")
     $("#eraser").css("background-color","")
+    $("#triangleMover").css("background-color","")
   })
   $("#lineBrush").on("click",function(){
     mode = 2;
     $("#lineBrush").css("background-color","RGB(140,140,140)")
     $("#pointBrush").css("background-color","")
     $("#eraser").css("background-color","")
+    $("#triangleMover").css("background-color","")
   })
   $("#eraser").on("click",function(){
     mode =3;
     $("#eraser").css("background-color","RGB(140,140,140)")
     $("#pointBrush").css("background-color","")
     $("#lineBrush").css("background-color","")
+    $("#triangleMover").css("background-color","")
   })
+  $("#triangleMover").on("click",function(){
+    mode = 4;
+    $("#triangleMover").css("background-color","RGB(140,140,140)")
+    $("#pointBrush").css("background-color","")
+    $("#lineBrush").css("background-color","")
+    $("#eraser").css("background-color","")
+  });
   $("#file").on('change',function(){
     img1 = loadImage(window.URL.createObjectURL(document.getElementById("file").files[0]),function(){
       if (img1.width*img1.height>800000){
@@ -237,7 +189,8 @@ $(document).on('ready',function(){
       cWidth++;
       cHeight++;
       generateHashSpace();
-      
+      image(img1,0,0,cWidth,cHeight);
+      loadPixels();
         
       previousData.push([allVertices.slice(),triangulations.slice(),tColors.slice(),verticesHashTable.slice(),verticesHashTableFlat.slice()]);
     });
@@ -269,14 +222,8 @@ $(document).on('ready',function(){
     loadPixels();
     tColors=[];
     sTime = millis();
-    $("#displayText").html("Show<br>Text<br>");
-    $("#displayText").css("background-color","RGB(100,100,100)");
-    $("#displayAnchors").html("Show<br>Anchors<br>");
-    $("#displayAnchors").css("background-color","RGB(100,100,100)");
     $("#displayPoints").html("Show<br>Points<br>");
     $("#displayPoints").css("background-color","RGB(100,100,100)");
-    $("#displayCurves").html("Show<br>Curves<br>");
-    $("#displayCurves").css("background-color","RGB(100,100,100)");
   })
   $("#saveThis").on("click",function(){
     saveData();

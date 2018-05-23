@@ -91,7 +91,7 @@ body{
   line-height:20px;
   margin-top:10px;
 }
-.brushes #sizing{
+.brushes #sizing1,#sizing2{
   height:100px;
   cursor:default;
 }

@@ -12,46 +12,33 @@ $(document).on('ready',function(){
   $("#pointBrush").mouseenter(function(){
     hoverEnterText('#pointbrush','50','Point Brush (P): Click to add individual points');
   })
-  $("#pointBrush").mouseleave(function(){
+  $("#pointBrush,#lineBrush,#eraser,#expandImage,#saveThis,#loadThis,#triangleMover,#sizing2,#sizing1").mouseleave(function(){
     noPopUp();
-   
   })
   $("#lineBrush").mouseenter(function(){
-    hoverEnterText('#lineBrush','100','Line Brush (B): Click or drag to add scattered points at the current brush size');
-  })
-  $("#lineBrush").mouseleave(function(){
-    noPopUp();
-   
+    hoverEnterText('#lineBrush','110','Line Brush (B): Click or drag to add scattered points at the current brush size');
   })
   $("#eraser").mouseenter(function(){
-    hoverEnterText('#eraser','175','Eraser (E): Erase what you don\'t want');
+    hoverEnterText('#eraser','170','Eraser (E): Erase what you don\'t want');
   })
-  $("#eraser").mouseleave(function(){
-    noPopUp();
+  $("#triangleMover").mouseenter(function(){
+    hoverEnterText('#eraser','230','Triangle Flipper (T): Remove or re-add triangles');
   })
-  $("#sizing").mouseenter(function(){
-    hoverEnterText('#sizing','250','Adjust radius of line brush');
+  $("#sizing1").mouseenter(function(){
+    hoverEnterText('#sizing','290','Adjust radius of line brush');
   })
-  $("#sizing").mouseleave(function(){
-    noPopUp();
+  $("#sizing2").mouseenter(function(){
+    hoverEnterText('#sizing','400','Adjust density of brush');
   })
+
   $("#expandImage").mouseenter(function(){
-    hoverEnterText('#expandImage','350','Download the current image at a higher resolution');
-  })
-  $("#expandImage").mouseleave(function(){
-    noPopUp();
+    hoverEnterText('#expandImage','510','Download the current image at a higher resolution');
   })
   $("#saveThis").mouseenter(function(){
-    hoverEnterText('#saveThis','450','Save the set of points drawn');
-  })
-  $("#saveThis").mouseleave(function(){
-    noPopUp();
+    hoverEnterText('#saveThis','620','Save the canvas for next time');
   })
   $("#loadThis").mouseenter(function(){
-    hoverEnterText('#loadThis','500','Load the last set of points saved');
-  })
-  $("#loadThis").mouseleave(function(){
-    noPopUp();
+    hoverEnterText('#loadThis','680','Load the last canvas saved');
   })
   
 

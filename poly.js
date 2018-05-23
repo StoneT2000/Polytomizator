@@ -6,10 +6,7 @@ var mode = 1;
 var previousData =[];
 var colorOfSquares =[];
 var dataPos = 0;
-var displayText = true;
 var displayTriangulation = true;
-var displayCurves =true;
-var displayAnchors = true;
 var displayPoints = true;
 var displayImage = true;
 var stepDelaunate = true;
@@ -102,10 +99,6 @@ function draw(){
   
   if (stepDelaunate == true && triangulations.length>0 && colorMap == true && finishedColoring== false){
       if (triangulations[triangulations.length-1].length>0 && stepD <=triangulations[triangulations.length-1].length-1){
-        displayText=false;
-        displayCurves=false;
-        displayPoints=false;
-        displayAnchors=false;
         
         var tAC=[0,0,0];
         tAC = averageColor(verticesHashTableFlat[triangulations[triangulations.length-1][stepD]][0],verticesHashTableFlat[triangulations[triangulations.length-1][stepD]][1],verticesHashTableFlat[triangulations[triangulations.length-1][stepD+1]][0],verticesHashTableFlat[triangulations[triangulations.length-1][stepD+1]][1],verticesHashTableFlat[triangulations[triangulations.length-1][stepD+2]][0],verticesHashTableFlat[triangulations[triangulations.length-1][stepD+2]][1],colorAccuracy)
@@ -242,6 +235,7 @@ function draw(){
       
     }
   }
+  
 }
 function hashCoordinate(x,y){
   return floor(x/50)*100+floor(y/50);
@@ -298,14 +292,9 @@ function keyPressed(){
     loadPixels();
     tColors=[];
     sTime = millis();
-    $("#displayText").html("Show<br>Text<br>");
-    $("#displayText").css("background-color","RGB(100,100,100)");
-    $("#displayAnchors").html("Show<br>Anchors<br>");
-    $("#displayAnchors").css("background-color","RGB(100,100,100)");
     $("#displayPoints").html("Show<br>Points<br>");
     $("#displayPoints").css("background-color","RGB(100,100,100)");
-    $("#displayCurves").html("Show<br>Curves<br>");
-    $("#displayCurves").css("background-color","RGB(100,100,100)");
+    displayPoints=false;
   }
   else if (keyCode===220){
 
@@ -325,10 +314,14 @@ function keyPressed(){
   else if (keyCode===67){
     if (noColors == false){
       noColors = true;
+      $("#displayColor").html("Show<br>Colors<br>");
+      $("#displayColor").css("background-color","RGB(40,40,40)");
       
     }
     else {
       noColors = false;
+      $("#displayColor").html("Hide<br>Colors<br>");
+      $("#displayColor").css("background-color","RGB(100,100,100)");
     }
   }
   else if (keyCode===77){
@@ -369,6 +362,13 @@ function keyPressed(){
     $("#pointBrush").css("background-color","")
     $("#eraser").css("background-color","")
   }
+  else if (keyCode === 84){
+    mode = 4;
+    $("#triangleMover").css("background-color","RGB(140,140,140)")
+    $("#pointBrush").css("background-color","")
+    $("#lineBrush").css("background-color","")
+    $("#eraser").css("background-color","")
+  }
 }
 function mouseClicked(){
 
@@ -381,15 +381,27 @@ function mouseClicked(){
         updateHashSpace(round(mouseX),round(mouseY),true)
       }
       if (mode==2){
+      }
+      if (mode ===4){
         
+        var tng = triangulations[0];
+        for (k=0;k<tng.length;k+=3){ 
+          if (pointInTriangle(verticesHashTableFlat[tng[k]][0],verticesHashTableFlat[tng[k]][1],verticesHashTableFlat[tng[k+1]][0],verticesHashTableFlat[tng[k+1]][1],verticesHashTableFlat[tng[k+2]][0],verticesHashTableFlat[tng[k+2]][1],mouseX,mouseY)){
+            if (tColors[k] >=0){
+              tColors[k] = -1;
+            }
+            else if (tColors[k] ==-1){
+              var tAC=[0,0,0];
+              tAC = averageColor(verticesHashTableFlat[tng[k]][0],verticesHashTableFlat[tng[k]][1],verticesHashTableFlat[tng[k+1]][0],verticesHashTableFlat[tng[k+1]][1],verticesHashTableFlat[tng[k+2]][0],verticesHashTableFlat[tng[k+2]][1],colorAccuracy)
+              tColors[k]=tAC[0];
+              tColors[k+1]=tAC[1];
+              tColors[k+2]=tAC[2];
+            }
+          }
+        };
+
       }
-      if (dataPos < previousData.length-1){
-        previousData.splice(dataPos+1,previousData.length-1-dataPos);
-      }
-      previousData.push([allVertices.slice(),triangulations.slice(),tColors.slice(),verticesHashTable.slice(),verticesHashTableFlat.slice()]);
-      
-      
-      dataPos=previousData.length-1;
+
       
     }
   }
@@ -398,7 +410,6 @@ function mouseClicked(){
 }
 function delaunayDisplay(tng){
   for (var i = 0; i < tng.length; i += 3) {
-
     if (tColors[i]>=0 && noColors == false){
       
       fill(tColors[i],tColors[i+1],tColors[i+2]);
@@ -409,11 +420,18 @@ function delaunayDisplay(tng){
       fill(256,256,256);
       stroke(10,10,10);
     }
+    else if (tColors[i]==-1){
+      noFill();
+      noStroke();
+
+    }
     else {
       fill(256,256,256);
       stroke(10,10,10);
     }
+    
     if (verticesHashTableFlat.length > 0){
+
       triangle(verticesHashTableFlat[tng[i]][0],verticesHashTableFlat[tng[i]][1],verticesHashTableFlat[tng[i+1]][0],verticesHashTableFlat[tng[i+1]][1],verticesHashTableFlat[tng[i+2]][0],verticesHashTableFlat[tng[i+2]][1]);
     }
     
@@ -428,6 +446,10 @@ function loadData(dataStored){
   tColors=dataStored[2];
   verticesHashTable=dataStored[3];
   verticesHashTableFlat=dataStored[4];
+  triangulize();
+  displayPoints=false;
+  $("#displayPoints").html("Show<br>Points<br>");
+  $("#displayPoints").css("background-color","RGB(100,100,100)");
 }
 function saveData(){
   var currentData = [allVertices.slice(),triangulations.slice(),tColors.slice(),verticesHashTable.slice(),verticesHashTableFlat.slice()];
@@ -495,19 +517,13 @@ function triangulize(){
     var triangles = (delaunay.triangles)
     triangulations[0] = triangles;
     
-    displayText=false;
-    displayCurves=false;
     displayPoints=false;
-    displayAnchors=false;
     displayTriangulation=false;
     image(img1,0,0,cWidth,cHeight)
 
-    displayText=true;
-    displayCurves=true;
     displayPoints=true;
-    displayAnchors=true;
     displayTriangulation=true;
-    $("#displayTriangulation").html("Hide <br>Triangles<br>")
+    $("#displayTriangulation").html("Hide <br>Triangles<br>");
     $("#displayTriangulation").css("background-color","RGB(40,40,40)");
     stepD = 0;
 }
