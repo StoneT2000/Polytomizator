@@ -99,7 +99,9 @@ function draw(){
   
   if (stepDelaunate == true && triangulations.length>0 && colorMap == true && finishedColoring== false){
       if (triangulations[triangulations.length-1].length>0 && stepD <=triangulations[triangulations.length-1].length-1){
-        
+        if (stepD === 0){
+          sTime = millis();
+        }
         var tAC=[0,0,0];
         tAC = averageColor(verticesHashTableFlat[triangulations[triangulations.length-1][stepD]][0],verticesHashTableFlat[triangulations[triangulations.length-1][stepD]][1],verticesHashTableFlat[triangulations[triangulations.length-1][stepD+1]][0],verticesHashTableFlat[triangulations[triangulations.length-1][stepD+1]][1],verticesHashTableFlat[triangulations[triangulations.length-1][stepD+2]][0],verticesHashTableFlat[triangulations[triangulations.length-1][stepD+2]][1],colorAccuracy)
         tColors.push(tAC[0],tAC[1],tAC[2]);
@@ -116,7 +118,14 @@ function draw(){
   }
   
   stroke(2);
-
+  if (colorOfSquares.length>0 && squares==true){
+    noStroke();
+    for (i=0;i<colorOfSquares.length;i++){
+      var tempSquareColor = colorOfSquares[i];
+      fill(tempSquareColor[0],tempSquareColor[1],tempSquareColor[2])
+      rect(tempSquareColor[3],tempSquareColor[4],20,20)
+    }
+  }
   fill(256,256,256)
   if (displayTriangulation == true){
     for (j=0;j<triangulations.length;j++){
@@ -135,14 +144,7 @@ function draw(){
     }
   }
   
-  if (colorOfSquares.length>0 && squares==true){
-    noStroke();
-    for (i=0;i<colorOfSquares.length;i++){
-      var tempSquareColor = colorOfSquares[i];
-      fill(tempSquareColor[0],tempSquareColor[1],tempSquareColor[2])
-      rect(tempSquareColor[3],tempSquareColor[4],20,20)
-    }
-  }
+  
   $("#numberPoints").text(allVertices.length +" points")
   $("#numberTriangles").text(triangulations[triangulations.length-1].length +" triangles")
   if (finishedColoring ==true){

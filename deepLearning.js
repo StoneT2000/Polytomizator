@@ -35,6 +35,85 @@ function averageColorSquare(x1,y1,sw,sl,accuracy){
   }
   return [tr/totalSample,tg/totalSample,tb/totalSample]
 }
+function scanSquareLR(accuracy,degree,degree2){
+  var deg2 = 800;
+  if (degree2){
+    deg2 = degree2;
+  }
+  for (k=0;k<colorOfSquares.length-1;k++){
+    var tsc = colorOfSquares[k];
+    var tsc2 = colorOfSquares[k+1];
+    var dr = tsc[0]-tsc2[0];
+    var dg = tsc[1]-tsc2[1];
+    var db = tsc[2]-tsc2[2];
+    if (dr*dr+dg*dg+db*db > degree || dr*dr > deg2 || dg*dg>deg2 || db*db > deg2){
+      if (flowing == true){
+        var cr1=round(random(-10,10));
+        var cr2=round(random(-10,10));
+        if (inCanvas(tsc[3]+cr1+accuracy,tsc[4]+cr2)){
+          allVertices.push([tsc[3]+cr1+accuracy/2,tsc[4]+cr2]);
+        }
+      }
+      else{
+        if (inCanvas(tsc[3] +accuracy/2,tsc[4])){
+          allVertices.push([tsc[3] +accuracy/2,tsc[4]]);
+        }
+      }
+    }
+  }
+  generateHashSpace();
+}
+function scanSquareUD(accuracy,degree,degree2){
+  var deg2 = 800;
+  if (degree2){
+    deg2 = degree2;
+  }
+  for (k=0;k<colorOfSquares.length-ceil(cWidth/accuracy);k++){
+    var tsc = colorOfSquares[k];
+    var tsc2 = colorOfSquares[k+ceil(cWidth/accuracy)];
+    var dr = tsc[0]-tsc2[0];
+    var dg = tsc[1]-tsc2[1];
+    var db = tsc[2]-tsc2[2];
+    if (dr*dr+dg*dg+db*db > degree || dr*dr > deg2 || dg*dg>deg2 || db*db > deg2){
+      if (flowing == true){
+        var cr1=round(random(-10,10));
+        var cr2=round(random(-10,10));
+        if (inCanvas(tsc[3]+cr1,tsc[4]+cr2+accuracy/2)){
+          allVertices.push([tsc[3]+cr1,tsc[4]+cr2+accuracy/2]);
+        }
+      }
+      else{
+        if (inCanvas(tsc[3],tsc[4]+accuracy/2)){
+          allVertices.push([tsc[3],tsc[4]+accuracy/2]);
+        }
+      }
+    }
+  }
+  generateHashSpace();
+}
+function generateRandomSquares(accuracy,density){
+  for (k=0;k<colorOfSquares.length;k++){
+    var tsc= colorOfSquares[k];
+    if (random(0,1)<=density){
+      if (flowing == true){
+        var cr1=round(random(-10,10));
+        var cr2=round(random(-10,10));
+        if (inCanvas(tsc[3]+cr1,tsc[4]+cr2)){
+          allVertices.push([tsc[3]+cr1,tsc[4]+cr2]);
+        }
+      }
+      else {
+        if (inCanvas(tsc[3]+accuracy/2,tsc[4])){
+          allVertices.push([tsc[3]+accuracy/2,tsc[4]]);
+        }
+      }
+      
+      
+    }
+    
+  }
+  generateHashSpace();
+}
 function scanUD(data,degree,accuracy){
   for (j=0;j<cWidth-accuracy;j+=accuracy){
     for (i=0;i<cHeight-accuracy;i+=accuracy){
