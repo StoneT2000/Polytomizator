@@ -88,8 +88,6 @@ var oldX=0;
 var oldY=0;
 var critDist = 10;
 var stepD = 0;
-var iterStep = 1;
-var colorTime = 0;
 function draw(){
 
   background("#FFFFFF")
@@ -112,7 +110,7 @@ function draw(){
       else{
         finishedColoring = true;
         fTime = millis();
-        console.log("Coloring took:" + (fTime-sTime)/1000 + " secs")
+        console.log("Coloring took:" + ((fTime-sTime)/1000).toFixed(3) + " secs")
       }
 
   }
@@ -148,7 +146,7 @@ function draw(){
   $("#numberPoints").text(allVertices.length +" points")
   $("#numberTriangles").text(triangulations[triangulations.length-1].length +" triangles")
   if (finishedColoring ==true){
-    $("#lastTiming").text((fTime-sTime)/1000 +" seconds")
+    $("#lastTiming").text(((fTime-sTime)/1000).toFixed(3) +" seconds")
   }
   var dx=oldX-mouseX;
   var dy=oldY-mouseY;
@@ -449,9 +447,9 @@ function loadData(dataStored){
   verticesHashTable=dataStored[3];
   verticesHashTableFlat=dataStored[4];
   triangulize();
-  displayPoints=false;
-  $("#displayPoints").html("Show<br>Points<br>");
-  $("#displayPoints").css("background-color","RGB(100,100,100)");
+  displayPoints=true;
+  $("#displayPoints").html("Hide<br>Points<br>");
+  $("#displayPoints").css("background-color","RGB(40,40,40)");
 }
 function saveData(){
   var currentData = [allVertices.slice(),triangulations.slice(),tColors.slice(),verticesHashTable.slice(),verticesHashTableFlat.slice()];
@@ -502,7 +500,7 @@ function expandImage(mvalue,save){
       
     }
   }
-  verticesHashTableFlat = verticesHashTable.reduce((acc,curr)=> acc.concat(curr));
+  verticesHashTableFlat = verticesHashTable.reduce(function(acc,curr){return acc.concat(curr)});
   if (save==true){
     downloading = true;
     draw();
@@ -512,7 +510,8 @@ function expandImage(mvalue,save){
 }
 function triangulize(){
     var delaunay;
-    verticesHashTableFlat = verticesHashTable.reduce((acc,curr)=> acc.concat(curr));
+    console.log(verticesHashTable)
+    verticesHashTableFlat = verticesHashTable.reduce(function(acc,curr){return acc.concat(curr)});
     delaunay = (Delaunator.from(verticesHashTableFlat))
     stepD=0;
       
@@ -556,10 +555,10 @@ function pointInTriangle(x1,y1,x2,y2,x3,y3,x4,y4){
 function averageColor(x1,y1,x2,y2,x3,y3,accuracy){
   var xs =[x1,x2,x3];
   var ys=[y1,y2,y3];
-  var bx1 =  xs.reduce((acc,curr)=>curr <=acc ?curr : acc)
-  var bx2 =  xs.reduce((acc,curr)=>curr >=acc ?curr : acc)
-  var by1 =  ys.reduce((acc,curr)=>curr <=acc ?curr : acc)
-  var by2 =  ys.reduce((acc,curr)=>curr >=acc ?curr : acc)
+  var bx1 =  xs.reduce(function(acc,curr){return curr <=acc ?curr : acc})
+  var bx2 =  xs.reduce(function(acc,curr){return curr >=acc ?curr : acc})
+  var by1 =  ys.reduce(function(acc,curr){return curr <=acc ?curr : acc})
+  var by2 =  ys.reduce(function(acc,curr){return curr >=acc ?curr : acc})
   if (quickColor == true){
     return quickAverageColor(x1,y1,x2,y2,x3,y3);
   }

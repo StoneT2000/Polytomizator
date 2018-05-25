@@ -2,9 +2,10 @@ function splitSquare(accuracy){
   colorOfSquares = [];
   image(img1,0,0);
   loadPixels();
-  for (ik=0;ik<cHeight/accuracy;ik++){
-    console.log("Chekcing row", ik,cWidth,cHeight)
-    for (jk=0;jk<cWidth/accuracy;jk++){
+  var cha = cHeight/accuracy;
+  var cwa = cWidth/accuracy;
+  for (ik=0;ik<(cha);ik++){
+    for (jk=0;jk<(cwa);jk++){
       var tempSquareColor = averageColorSquare(jk*accuracy,ik*accuracy,accuracy,accuracy,1)
       tempSquareColor.push(jk*accuracy,ik*accuracy)
       colorOfSquares.push(tempSquareColor)
