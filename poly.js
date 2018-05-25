@@ -16,7 +16,7 @@ var flowing = true;
 var brushSize = 10;
 var downloading = false;
 var magnification = 1;
-var finishedColoring = false;
+var finishedColoring = true;
 var quickColor = false;
 var sTime = 0;
 var fTime = 0;
@@ -28,6 +28,7 @@ var verticesHashTableFlat = [];
 var pointDensity = 2;
 var exportSVG = false;
 var dTriangles = [];
+var flowerEffect = false;
 function preload(){
 }
 var myCanvas;
@@ -75,7 +76,7 @@ function setup(){
   }
   loadPixels();
   generateHashSpace();
-  
+  frameRate(60);
   $("#gamedisplay").css("right",(cWidth/2).toString()+"px")
   $("body").css("width",(cWidth+500).toString()+"px")
   $("body").css("height",(cHeight+400).toString()+"px")
@@ -88,31 +89,65 @@ var oldX=0;
 var oldY=0;
 var critDist = 10;
 var stepD = 0;
+function colorIn(){
+  sTime =millis();
+  for (stepD1=0;stepD1<triangulations[0].length-1;stepD1+=3){
+    
+    var tAC=[0,0,0];
+    tAC = averageColor(verticesHashTableFlat[triangulations[triangulations.length-1][stepD1]][0],verticesHashTableFlat[triangulations[triangulations.length-1][stepD1]][1],verticesHashTableFlat[triangulations[triangulations.length-1][stepD1+1]][0],verticesHashTableFlat[triangulations[triangulations.length-1][stepD1+1]][1],verticesHashTableFlat[triangulations[triangulations.length-1][stepD1+2]][0],verticesHashTableFlat[triangulations[triangulations.length-1][stepD1+2]][1],colorAccuracy)
+    tColors.push(tAC[0],tAC[1],tAC[2]);
+        
+  }
+  finishedColoring = true;
+  fTime = millis();
+  console.log("Coloring took:" + ((fTime-sTime)/1000).toFixed(3) + " secs")
+}
+var iterStep = 4;
+var fs = 0;
+var ff = 0;
+var fr = 0;
+var fc = 0;
+var flowerEffectTime=10;
 function draw(){
-
+  if (fc===0){
+    fs = millis();
+  }
+  
   background("#FFFFFF")
   if (displayImage == true){
     image(img1,0,0,cWidth,cHeight);
   }
   
-  if (stepDelaunate == true && triangulations.length>0 && colorMap == true && finishedColoring== false){
-      if (triangulations[triangulations.length-1].length>0 && stepD <=triangulations[triangulations.length-1].length-1){
-        if (stepD === 0){
-          sTime = millis();
+  if (flowerEffect === true){
+    iterStep = ceil(((triangulations[triangulations.length-1].length)/(fr))/flowerEffectTime);
+    for (iter=0;iter<iterStep;iter++){
+
+      if (stepDelaunate == true && triangulations.length>0 && colorMap == true && finishedColoring== false){
+        if (triangulations[triangulations.length-1].length>0 && stepD <=triangulations[triangulations.length-1].length-1){
+          if (stepD === 0){
+            sTime = millis();
+          }
+          var tAC=[0,0,0];
+          tAC = averageColor(verticesHashTableFlat[triangulations[triangulations.length-1][stepD]][0],verticesHashTableFlat[triangulations[triangulations.length-1][stepD]][1],verticesHashTableFlat[triangulations[triangulations.length-1][stepD+1]][0],verticesHashTableFlat[triangulations[triangulations.length-1][stepD+1]][1],verticesHashTableFlat[triangulations[triangulations.length-1][stepD+2]][0],verticesHashTableFlat[triangulations[triangulations.length-1][stepD+2]][1],colorAccuracy)
+          tColors.push(tAC[0],tAC[1],tAC[2]);
+
+          stepD+=3;
+
         }
-        var tAC=[0,0,0];
-        tAC = averageColor(verticesHashTableFlat[triangulations[triangulations.length-1][stepD]][0],verticesHashTableFlat[triangulations[triangulations.length-1][stepD]][1],verticesHashTableFlat[triangulations[triangulations.length-1][stepD+1]][0],verticesHashTableFlat[triangulations[triangulations.length-1][stepD+1]][1],verticesHashTableFlat[triangulations[triangulations.length-1][stepD+2]][0],verticesHashTableFlat[triangulations[triangulations.length-1][stepD+2]][1],colorAccuracy)
-        tColors.push(tAC[0],tAC[1],tAC[2]);
-        
-        stepD+=3;
+        else{
+          finishedColoring = true;
+          fTime = millis();
+          console.log("Coloring took:" + ((fTime-sTime)/1000).toFixed(3) + " secs")
+        }
 
       }
-      else{
-        finishedColoring = true;
-        fTime = millis();
-        console.log("Coloring took:" + ((fTime-sTime)/1000).toFixed(3) + " secs")
-      }
-
+    }
+  }
+  else {
+    if (finishedColoring == false && colorMap == true){
+      colorIn();
+      finishedColoring = true;
+    }
   }
   
   stroke(2);
@@ -236,6 +271,13 @@ function draw(){
     }
   }
   
+  
+  fc++;
+  if (fc === 5){
+    ff = millis();
+    fr = ceil(4/((ff-fs)/1000));
+    fc = 0; 
+  }
 }
 function hashCoordinate(x,y){
   return floor(x/50)*100+floor(y/50);
@@ -286,6 +328,7 @@ function keyPressed(){
   }
   else if (keyCode===68){
     triangulize();
+    
     finishedColoring = false;
     image(img1,0,0,cWidth,cHeight);
 
@@ -312,7 +355,7 @@ function keyPressed(){
     }
   }
   else if (keyCode===67){
-    if (noColors == false){
+    if (noColors === false){
       noColors = true;
       $("#displayColor").html("Show<br>Colors<br>");
       $("#displayColor").css("background-color","RGB(40,40,40)");

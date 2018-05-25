@@ -12,7 +12,7 @@ $(document).on('ready',function(){
   $("#pointBrush").mouseenter(function(){
     hoverEnterText('#pointbrush','50','Point Brush (P): Click to add individual points');
   })
-  $("#pointBrush,#lineBrush,#eraser,#expandImage,#saveThis,#loadThis,#triangleMover,#sizing2,#sizing1").mouseleave(function(){
+  $("#pointBrush,#lineBrush,#eraser,#expandImage,#saveThis,#loadThis,#triangleMover,#sizing2,#sizing1,#flowerEffect").mouseleave(function(){
     noPopUp();
   })
   $("#lineBrush").mouseenter(function(){
@@ -40,7 +40,22 @@ $(document).on('ready',function(){
   $("#loadThis").mouseenter(function(){
     hoverEnterText('#loadThis','680','Load the last canvas saved');
   })
-  
+  $("#flowerEffect").mouseenter(function(){
+    hovertime = window.setTimeout(function(){
+      $("#popUp2").css("display","block");
+    },300)
+  })
+  $("#durationOfFlowerEffect").mouseenter(function(){
+    hovertime = window.setTimeout(function(){
+      $("#flowerEffectTimePopUp").css("display","block");
+    },300)
+  })
+  $("#flowerEffect").mouseleave(function(){
+    $("#popUp2").css("display","none");
+  })
+  $("#durationOfFlowerEffect").mouseleave(function(){
+      $("#flowerEffectTimePopUp").css("display","none");
+  })
 
   function noPopUp(){
      $("#popUp").css("display","none");

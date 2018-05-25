@@ -2,7 +2,7 @@ $(document).on('ready',function(){
     $("#pointBrush").css("background-color","RGB(140,140,140)")
   console.log("Let's make computer generated art that looks pretty cool...v6")
   $("#displayColor").on("click",function(){
-    if (noColors==true){
+    if (noColors===true){
       noColors = false;
       $("#displayColor").html("Hide <br>Colors<br>")
       $("#displayColor").css("background-color","RGB(40,40,40)");
@@ -96,9 +96,33 @@ $(document).on('ready',function(){
 
     pointDensity = parseInt(document.querySelector('#brushDensity').value)-1;
     if (isNaN(pointDensity) === true || pointDensity <1){
-      alert("Type in a number larger than 0 for brush density");
+      alert("Type in a number larger than 1 for brush density");
     }
   });
+  $("#durationOfFlowerEffect").on("focusout",function(){
+    flowerEffectTime = parseInt(document.querySelector('#durationOfFlowerEffect').value);
+    if (isNaN(flowerEffectTime) === true || flowerEffectTime <1){
+      alert("Type in a number larger than 1 for effect duration");
+    }
+  })
+  $("#flowerEffect").on("click",function(){
+    if (flowerEffect === false){
+      flowerEffect = true;
+      $("#flowerEffect").text("Instant Coloring: Off")
+      $("#durationOfFlowerEffect").css("z-index","1");
+      $("#flowerEffectTime").css("transform","translate(0,0)");
+      $("#durationOfFlowerEffect").css("transform","translate(0,0)");
+    }
+    else {
+      flowerEffect = false;
+      $("#flowerEffect").text("Instant Coloring: On")
+      
+      $("#flowerEffectTime").css("transform","translate(0,-39px)");
+      $("#durationOfFlowerEffect").css("z-index","-5");
+      $("#durationOfFlowerEffect").css("transform","translate(0,-75px)");
+    }
+    
+  })
   $("#pointBrush").on("click",function(){
     mode=1;
     $("#pointBrush").css("background-color","RGB(140,140,140)")
@@ -185,6 +209,7 @@ $(document).on('ready',function(){
         }
 
       }
+      finishedColoring=true;
 
       cWidth++;
       cHeight++;
@@ -224,6 +249,7 @@ $(document).on('ready',function(){
     sTime = millis();
     $("#displayPoints").html("Show<br>Points<br>");
     $("#displayPoints").css("background-color","RGB(100,100,100)");
+    displayPoints=false;
   })
   $("#saveThis").on("click",function(){
     saveData();
