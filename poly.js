@@ -510,7 +510,6 @@ function expandImage(mvalue,save){
 }
 function triangulize(){
     var delaunay;
-    console.log(verticesHashTable)
     verticesHashTableFlat = verticesHashTable.reduce(function(acc,curr){return acc.concat(curr)});
     delaunay = (Delaunator.from(verticesHashTableFlat))
     stepD=0;
