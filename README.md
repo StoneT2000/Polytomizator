@@ -35,4 +35,4 @@ Simply download the repository's zip file, open it, and then open polytomize.htm
 
 ## Acknowledgements
 Many thanks to ... for helping make this better
-And some other people who wish to not be named
+and some other people who wish to not be named
