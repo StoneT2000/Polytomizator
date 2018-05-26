@@ -26,4 +26,4 @@ Simply download the repository's zip file, open it, and then open polytomize.htm
 <img src ="https://github.com/StoneT2000/StoneT2000.github.io/blob/master/images/NasaShuttle.jpg" width="300" height="452.7"></img>
 <img src ="https://github.com/StoneT2000/StoneT2000.github.io/blob/master/images/NasaShuttlePoly.jpg" width="300" height="452.7"></img>
 <img src ="https://github.com/StoneT2000/StoneT2000.github.io/blob/master/images/BlurryMountain.jpg"></img>
-<img src ="https://github.com/StoneT2000/StoneT2000.github.io/blob/master/images/BlurryMountainPoly.jpg" width="598" height="336"></img>
+<img src ="https://github.com/StoneT2000/StoneT2000.github.io/blob/master/images/BlurryMountainPoly2.jpg" width="598" height="336"></img>
