@@ -23,3 +23,5 @@ Simply download the repository's zip file, open it, and then open polytomize.htm
 - Exporting the canvas to a .svg file
 
 ## Some poly art made by this program
+![Nasa Shuttle](https://github.com/StoneT2000/StoneT2000.github.io/blob/master/images/NasaShuttle.jpg)
+![Nasa Shuttle](https://github.com/StoneT2000/StoneT2000.github.io/blob/master/images/NasaShuttlePoly.jpg)
