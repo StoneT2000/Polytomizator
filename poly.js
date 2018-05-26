@@ -1,4 +1,3 @@
-console.log("hello github user!")
 var allVertices=[];
 var triangulations = [0];
 var tColors = [];
