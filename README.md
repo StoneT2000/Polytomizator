@@ -16,6 +16,7 @@ Simply download the repository's zip file, open it, and then open polytomize.htm
 - Different brushes, brush sizes, and densities to play around with to add or remove points onto the canvas
 - Triangulizes the points using delaunay triangulization. Algorithm used provided by https://github.com/mapbox/delaunator
 - Creates poly art from triangulization and can be downloaded at high resolutions
+- Save created points and colors in between browsing sessions
 - Poly art can be created instantly or with a "flowering effect" as the colors are added to the triangles starting from the center and expanding outwards
 
 ## Planned Features
