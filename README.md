@@ -12,12 +12,16 @@ Simply download the repository's zip file, open it, and then open polytomize.htm
 
 
 ## Features
+### Making Poly Art
 - Upload local image files to the page to make poly art with
 - Different brushes, brush sizes, and densities to play around with to add or remove points onto the canvas
+- Can custom remove specific triangles if needed
 - Triangulizes the points using delaunay triangulization. Algorithm used provided by https://github.com/mapbox/delaunator
+- Poly art can be created instantly or with a "flowering effect" with the colors being added to the triangles starting from the center and radially expanding outwards
+### Downloading and Loading Work
 - Creates poly art from triangulization and can be downloaded at high resolutions
 - Save created points and colors in between browsing sessions
-- Poly art can be created instantly or with a "flowering effect" as the colors are added to the triangles starting from the center and expanding outwards
+
 
 ## Planned Features
 - Algorithm to have computer make the art by itself through edge detection algorithms etc.
