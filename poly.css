@@ -183,8 +183,8 @@ th, td{
   display: inline-block;
   color:white;
   background-color:RGB(40,40,40);
-  width:500px;
-  height:30px;
+  width:515px;
+  height:32px;
   z-index:5;
   cursor: pointer;
 }
