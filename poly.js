@@ -77,7 +77,7 @@ function setup(){
   generateHashSpace();
   frameRate(60);
   $("#gamedisplay").css("right",(cWidth/2).toString()+"px")
-  $("body").css("width",(cWidth+500).toString()+"px")
+  //$("body").css("width",(cWidth+100).toString()+"px")
   $("body").css("height",(cHeight+400).toString()+"px")
   myCanvas.parent('gamedisplay');
   angleMode(DEGREES)
@@ -178,7 +178,7 @@ function draw(){
   
   
   $("#numberPoints").text(allVertices.length +" points")
-  $("#numberTriangles").text(triangulations[triangulations.length-1].length +" triangles")
+  $("#numberTriangles").text(parseInt(triangulations[triangulations.length-1].length/3) +" triangles")
   if (finishedColoring ==true){
     $("#lastTiming").text(((fTime-sTime)/1000).toFixed(3) +" seconds")
   }
@@ -530,6 +530,7 @@ function expandImage(mvalue,save){
   myCanvas =createCanvas(cWidth*mvalue,cHeight*mvalue);
   cWidth = cWidth*mvalue;
   cHeight = cHeight*mvalue;
+  
   $("#gamedisplay").css("right",(cWidth/2).toString()+"px")
   $("body").css("width",(cWidth+500).toString()+"px")
   $("body").css("height",(cHeight+400).toString()+"px")

@@ -166,7 +166,7 @@ $(document).on('ready',function(){
         cHeight = img1.height;
       }
       $("#gamedisplay").css("right",(cWidth/2).toString()+"px")
-      $("body").css("width",(cWidth+500).toString()+"px")
+      //$("body").css("width",(cWidth+500).toString()+"px")
       $("body").css("height",(cHeight+400).toString()+"px")
       myCanvas.parent('gamedisplay');
 

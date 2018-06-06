@@ -1,7 +1,8 @@
 body{
-  width:4000px;
+  width:100%;
   background-image:url('images/PolyBackground.jpg');
   cursor:crosshair;
+  
 }
 .main{
   margin:auto;
@@ -115,6 +116,7 @@ body{
 }
 
 #loadThis{
+  
   font-size:15px;
 }
 #saveThis{
