@@ -134,7 +134,6 @@ th{
   width: 50%;
   font-size: 34px;
   padding-bottom: 20px;
-  text-decoration: 
 }
 tr{
   font-size: 25px;
@@ -152,7 +151,6 @@ td:nth-child(even){
   text-align: center;
 }
 td:nth-child(odd){
-  text-align:;
 }
 th, td{
   border-bottom:solid black 1px;

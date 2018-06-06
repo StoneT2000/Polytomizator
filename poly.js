@@ -42,7 +42,7 @@ function setup(){
   loadPixels();
   cWidth = img1.width;
   cHeight = img1.height;
-  myCanvas =createCanvas(cWidth,cHeight);
+  myCanvas = createCanvas(cWidth,cHeight);
   
   allVertices.push([0,0]);
   allVertices.push([cWidth,0]);
