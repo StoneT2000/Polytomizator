@@ -109,7 +109,7 @@ $(document).on('ready',function(){
     if (flowerEffect === false){
       flowerEffect = true;
       $("#flowerEffect").text("Instant Coloring: Off")
-      $("#durationOfFlowerEffect").css("z-index","1");
+      $("#durationOfFlowerEffect").css("z-index","0");
       $("#flowerEffectTime").css("transform","translate(0,0)");
       $("#durationOfFlowerEffect").css("transform","translate(0,0)");
     }

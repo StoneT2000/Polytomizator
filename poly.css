@@ -179,25 +179,46 @@ th, td{
   margin-bottom:20px;
 }
 #flowerEffect{
+  position: relative;
   display: inline-block;
   color:white;
   background-color:RGB(40,40,40);
   width:500px;
   height:30px;
+  z-index:5;
   cursor: pointer;
 }
 #flowerEffectTime{
+  position: relative;
   transform:translate(0,-39px);
+  -webkit-transform:translate(0,-39px);
+  -moz-transform:translate(0,-39px);
+  -ms-transform:translate(0,-39px);
+  -o-transform:translate(0,-39px);
   transition:transform 1s;
-  z-index:-5;
+  -webkit-transition:transform 1s;
+  -moz-transition:transform 1s;
+  -ms-transition:transform 1s;
+  -o-transition:transform 1s;
+  z-index:0;
   font-size:25px;
 }
 #durationOfFlowerEffect{
+  position: relative;
+
   transform:translate(0,-75px);
-  z-index:-5;
+  -webkit-transform:translate(0,-75px);
+  -moz-transform:translate(0,-75px);
+  -ms-transform:translate(0,-75px);
+  -o-transform:translate(0,-75px);
+  z-index:0;
   height:30px;
   font-size:20px;
   transition:transform 1s,z-index 1s;
+  -webkit-transition:transform 1s,z-index 1s;
+  -moz-transition:transform 1s,z-index 1s;
+  -ms-transition:transform 1s,z-index 1s;
+  -o-transition:transform 1s,z-index 1s;
 }
 #popUp2,#flowerEffectTimePopUp{
   
