@@ -32,7 +32,7 @@ Simply download the repository's zip file, open it, and then open polytomize.htm
 <img src ="https://github.com/StoneT2000/StoneT2000.github.io/blob/master/images/NasaShuttlePoly.jpg" width="300" height="452.7"></img>
 <img src ="https://github.com/StoneT2000/StoneT2000.github.io/blob/master/images/BlurryMountain.jpg" width="604" height="339"></img>
 <img src ="https://github.com/StoneT2000/StoneT2000.github.io/blob/master/images/BlurryMountainPoly2.jpg" width="604" height="339"></img>
-<img src ="https://github.com/StoneT2000/StoneT2000.github.io/blob/master/images/PolytomizationFlowerEffect.gif" width="600" height="auto"></img>
+<img src ="https://github.com/StoneT2000/StoneT2000.github.io/blob/master/images/PolytomizationFlowerEffect.gif" width="800" height="auto"></img>
 ## Acknowledgements
 Many thanks to ... for helping make this better
 and some other people who wish to not be named
