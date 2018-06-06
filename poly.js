@@ -572,7 +572,7 @@ function triangulize(){
 }
 function fget(x,y){
   y=parseInt(y.toFixed(0));
-  var off = ((y*cWidth + x)*d*4);
+  var off = ((y*d*cWidth + x)*d*4);
   var components = [ pixels[off], pixels[off + 1], pixels[off + 2], pixels[off + 3] ]
   return components;
 }

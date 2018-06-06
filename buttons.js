@@ -157,7 +157,7 @@ $(document).on('ready',function(){
         var factor = sqrt(img1.width*img1.height/800000);
         cWidth = round(img1.width/factor);
         cHeight = round(img1.height/factor);
-        myCanvas =createCanvas(cWidth,cHeight);
+        myCanvas = createCanvas(cWidth,cHeight);
         
       }
       else {
