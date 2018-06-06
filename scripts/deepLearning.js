@@ -172,7 +172,16 @@ function scanLR(data,degree,accuracy){
   }
   generateHashSpace();
 }
-
+function autoGenPoints(accuracy,density){
+  pDensity=0.1
+  if (density){
+    pDensity = density
+  }
+  splitSquare(accuracy);
+  scanSquareLR(accuracy,100000000);
+  scanSquareUD(accuracy,100000000);
+  generateRandomSquares(accuracy,pDensity)
+}
 function lossFunction(manualData,data){
   
 }
