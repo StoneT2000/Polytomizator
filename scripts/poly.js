@@ -301,12 +301,13 @@ function generateHashSpace(){
   //50x50 squares in grid
   for (i=0;i<ceil(cWidth/50)*ceil(cHeight/50);i++){
     verticesHashTable.push([]);
+    
   }
   for (i=0;i<allVertices.length;i++){
 
     var hashVal = hashCoordinate(allVertices[i][0],allVertices[i][1]);
     var index = findIndexFromHash(hashVal);
-
+    console.log(hashVal,index)
     verticesHashTable[index].push([allVertices[i][0],allVertices[i][1]])
   }
 }

@@ -214,18 +214,24 @@ $(document).on('ready',function(){
   $("#file").on('change',function(){
     completedFilters=false;
     img1 = loadImage(window.URL.createObjectURL(document.getElementById("file").files[0]),function(){
-      if (img1.width*img1.height>800000){
-        var factor = sqrt(img1.width*img1.height/800000);
+      //make image have height 600
+        var factor = img1.height/620;
         cWidth = round(img1.width/factor);
         cHeight = round(img1.height/factor);
+      //makes sure we have proper hashing for those images that have perfect grid alignments
+        var iterations = 0;
+        while (cWidth % 50 == 0){
+          factor = img1.height/(620+iterations);
+          cWidth = round(img1.width/factor);
+          cHeight = round(img1.height/factor);
+          iterations ++;
+          if (iterations >10){
+            alert("Please select a different image of slightly different dimensions, this one can't work")
+            break;
+          }
+        }
         myCanvas = createCanvas(cWidth,cHeight);
-        
-      }
-      else {
-        myCanvas =createCanvas(img1.width,img1.height);
-        cWidth = img1.width;
-        cHeight = img1.height;
-      }
+
       $("#gamedisplay").css("right",(cWidth/2).toString()+"px")
       //$("body").css("width",(cWidth+500).toString()+"px")
       $("body").css("height",(cHeight+400).toString()+"px")

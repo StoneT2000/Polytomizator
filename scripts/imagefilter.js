@@ -54,7 +54,10 @@ function ind(x,y){
 }
 
 function changePixels3(filter){
-  image(img1,0,0);
+  displayImage=true;
+  displayTriangulation=false;
+  displayPoints=false;
+  draw();
   loadPixels();
   edgePoints = [];
   if (!filter){
@@ -75,6 +78,8 @@ function changePixels3(filter){
   }
   copyTo(pixelsCopy,pixels)
   updatePixels();
+  displayTriangulation=true;
+  displayPoints=true;
 }
 function smoothAvg3(x,y,data,filter){
   var loc =  [ind(x-1,y-1),ind(x,y-1),ind(x+1,y-1),ind(x-1,y),ind(x,y),ind(x+1,y),ind(x-1,y+1),ind(x,y+1),ind(x+1,y+1)];
