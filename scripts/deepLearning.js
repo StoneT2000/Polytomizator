@@ -1,6 +1,56 @@
+function generateCubicPoly(accuracy,density,overlay){
+  var thisdensity = 0.5;
+  if (density){
+    thisdensity=density;
+  }
+  if (!overlay){
+    allVertices = [];
+
+  }
+  
+  allVertices.push([0,0]);
+  allVertices.push([cWidth,0]);
+  allVertices.push([0,cHeight]);
+  allVertices.push([cWidth,cHeight]);
+  
+  for(i=0;i<cWidth/80;i++){
+    var tempv = i*80+round(random(0,2))*accuracy;
+    var tempv2 = i*80+round(random(0,2))*accuracy;
+    if (inCanvas(tempv,cHeight)){
+      allVertices.push([tempv,cHeight])
+    }
+    if (inCanvas(tempv2,0)){
+      allVertices.push([tempv2,0])
+    }
+        
+        
+  }
+  for(i=0;i<cHeight/80;i++){
+    var tempv = i*80+round(random(0,2))*accuracy;
+    var tempv2 = i*80+round(random(0,2))*accuracy;
+    if (inCanvas(cWidth,tempv)){
+      allVertices.push([cWidth,tempv])
+    }
+    if (inCanvas(0,tempv2)){
+      allVertices.push([0,tempv2])
+    }
+
+
+  }
+  flowing=false;
+  image(img1,0,0,cWidth,cHeight);
+  loadPixels();
+  splitSquare(accuracy);
+  scanSquareLR(accuracy,100000000);
+  image(img1,0,0,cWidth,cHeight);
+  loadPixels();
+  scanSquareUD(accuracy,100000000);
+  generateRandomSquares(accuracy,thisdensity)
+  
+}
 function splitSquare(accuracy){
   colorOfSquares = [];
-  image(img1,0,0);
+  image(img1,0,0,cWidth,cHeight);
   loadPixels();
   var cha = cHeight/accuracy;
   var cwa = cWidth/accuracy;

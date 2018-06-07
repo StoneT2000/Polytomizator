@@ -1,5 +1,6 @@
+var completedFilters = false;
 $(document).on('ready',function(){
-  var completedFilters = false;
+  
     $("#pointBrush").css("background-color","RGB(140,140,140)")
   console.log("Let's make computer generated art that looks pretty cool...v6")
   $("#displayColor").on("click",function(){
@@ -88,81 +89,45 @@ $(document).on('ready',function(){
   })
   $("#brushSize").on("focusout",function(){
 
-    brushSize = parseInt(document.querySelector('#brushSize').value);
-    if (isNaN(brushSize) === true || brushSize <1){
+    var brushSizeTemp = parseInt(document.querySelector('#brushSize').value);
+    if (isNaN(brushSizeTemp) === true || brushSizeTemp <1){
       alert("Type in a number larger than 0 for brush size");
+    }
+    else {
+      brushSize = brushSizeTemp
     }
   });
   $("#brushDensity").on("focusout",function(){
 
-    pointDensity = parseInt(document.querySelector('#brushDensity').value)-1;
-    if (isNaN(pointDensity) === true || pointDensity <1){
+    var pointDensityTemp = parseInt(document.querySelector('#brushDensity').value)-1;
+    if (isNaN(pointDensityTemp) === true || pointDensityTemp <1){
       alert("Type in a number larger than 1 for brush density");
+    }
+    else{
+      pointDensity = pointDensityTemp;
     }
   });
   $("#autoGen").on("click",function(){
-    if (completedFilters == false){
-      completedFilters=true;
-      image(img1,0,0);
-      filter(GRAY);
-      loadPixels();
-      console.log(pixels);
-      changePixels3('smooth');
-      changePixels3('edge');
-    }
-    allVertices = [];
-    allVertices.push([0,0]);
-    allVertices.push([cWidth,0]);
-    allVertices.push([0,cHeight]);
-    allVertices.push([cWidth,cHeight]);
-      
-    for(i=0;i<cWidth/80;i++){
-      var tempv = i*80+round(random(0,30));
-      var tempv2 = i*80+round(random(0,30));
-      if (inCanvas(tempv,cHeight)){
-        allVertices.push([tempv,cHeight])
-      }
-      if (inCanvas(tempv2,cHeight)){
-        allVertices.push([tempv2,0])
-      }
-
-
-    }
-    for(i=0;i<cHeight/80;i++){
-      var tempv = i*80+round(random(0,30));
-      var tempv2 = i*80+round(random(0,30));
-      if (inCanvas(cWidth,tempv)){
-        allVertices.push([cWidth,tempv])
-      }
-      if (inCanvas(0,tempv2)){
-        allVertices.push([0,tempv2])
-      }
-
-    }
-    splitSquare(20)
-    generateRandomSquares(20,0.4)
-    pushEdgePointsToAll();
-    triangulize();
-    
-    finishedColoring = false;
-    image(img1,0,0,cWidth,cHeight);
-
-    loadPixels();
-    tColors=[];
-    sTime = millis();
-    $("#displayPoints").html("Show<br>Points<br>");
-    $("#displayPoints").css("background-color","RGB(100,100,100)");
-    displayPoints=false;
+    autoGenerateArt();
     
     
   })
   $("#colorThreshold").on("focusout",function(){
-    colorThreshold = parseInt(document.querySelector('#colorThreshold').value);
+    var colorThresholdTemp = parseInt(document.querySelector('#colorThreshold').value);
+    if (isNaN(colorThresholdTemp) === true || colorThresholdTemp <1){
+      alert("Type in a number larger than 1 for color threshold");
+    }
+    else{
+      colorThreshold = colorThresholdTemp;
+    }
   })
   $("#durationOfFlowerEffect").on("focusout",function(){
-    flowerEffectTime = parseInt(document.querySelector('#durationOfFlowerEffect').value);
-    if (isNaN(flowerEffectTime) === true || flowerEffectTime <1){
+    var flowerEffectTimeTemp = parseInt(document.querySelector('#durationOfFlowerEffect').value);
+    if (isNaN(flowerEffectTimeTemp) === true || flowerEffectTimeTemp <1){
       alert("Type in a number larger than 1 for effect duration");
+    }
+    else{
+      flowerEffectTime = flowerEffectTimeTemp;
     }
   })
   $("#flowerEffect").on("click",function(){

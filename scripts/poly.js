@@ -42,8 +42,9 @@ function setup(){
   
   d = pixelDensity();
   loadPixels();
-  cWidth = img1.width;
-  cHeight = img1.height;
+  var factor = img1.height/620;
+  cWidth = round(img1.width/factor);
+  cHeight = round(img1.height/factor);
   myCanvas = createCanvas(cWidth,cHeight);
   
   allVertices.push([0,0]);
@@ -307,7 +308,6 @@ function generateHashSpace(){
 
     var hashVal = hashCoordinate(allVertices[i][0],allVertices[i][1]);
     var index = findIndexFromHash(hashVal);
-    console.log(hashVal,index)
     verticesHashTable[index].push([allVertices[i][0],allVertices[i][1]])
   }
 }
@@ -658,69 +658,57 @@ function quickAverageColor(x1,y1,x2,y2,x3,y3){
 function squaredist(x1,y1,x2,y2){
   return (x2-x1)*(x2-x1)+(y2-y1)*(y2-y1)
 }
-function findStuff(){
-  for (k=3;k<pixels.length;k+=4){
-    console.log(pixels[k]);
+function autoGenerateArt(){
+  if (completedFilters == false){
+    //checks if a filter has already been done
+      completedFilters=true;
+      image(img1,0,0);
+      filter(GRAY);
+      loadPixels();
+      console.log(pixels);
+      changePixels3('smooth');
+      changePixels3('edge');
   }
-}
-function incidenceOf(vertex){
-  var indexOfVertex = -1;
-  for (i=0;i<verticesHashTableFlat.length;i++){
-    if (verticesHashTableFlat[i][0] === vertex[0] && verticesHashTableFlat[i][1] === vertex[1]){
-      indexOfVertex = i;
+  allVertices = [];
+  allVertices.push([0,0]);
+  allVertices.push([cWidth,0]);
+  allVertices.push([0,cHeight]);
+  allVertices.push([cWidth,cHeight]);
+
+  for(i=0;i<cWidth/80;i++){
+    var tempv = i*80+round(random(0,30));
+    var tempv2 = i*80+round(random(0,30));
+    if (inCanvas(tempv,cHeight)){
+      allVertices.push([tempv,cHeight])
     }
-  }
-  incidentIndices = [];
-  for (i=0;i<triangulations[0].length;i++){
-    if (indexOfVertex === triangulations[0][i]){
-      console.log(indexOfVertex)
-      if (i%3 === 0){
-        incidentIndices.push(indexOfVertex,triangulations[0][i+1],triangulations[0][i+2])
-      }
-      else if (i%3 === 1){
-        incidentIndices.push(triangulations[0][i-1],indexOfVertex,triangulations[0][i+1])
-      }
-      else if (i%3 === 2){
-        incidentIndices.push(triangulations[0][i-2],triangulations[0][i-1],indexOfVertex)
-        
-      }
-      
-      
+    if (inCanvas(tempv2,cHeight)){
+      allVertices.push([tempv2,0])
     }
+
+
   }
-  return incidentIndices;
-  
-  
-}
-function triangleHashFromIndices(i1,i2,i3){
-  var sx = verticesHashTableFlat[i1][0]+verticesHashTableFlat[i2][0]+verticesHashTableFlat[i3][0];
-  var sy = verticesHashTableFlat[i1][1]+verticesHashTableFlat[i2][1]+verticesHashTableFlat[i3][1];
-  return floor(100*(sx)/150) + floor(sy/150);
-}
-function removeDTriangles(){
-  for (i=0;i<newVertices.length;i++){
-    var cv = incidenceOf(newVertices[i]);
-    for (k=0;k<cv.length;k+=3){
-      for (j=0;j<dTriangles.length;j++){
-        if (triangleHashFromIndices(cv[k],cv[k+1],cv[k+2]) == dTriangles[j].hash){
-          console.log(dTriangles[j]);
-        }
-      }
+  for(i=0;i<cHeight/80;i++){
+    var tempv = i*80+round(random(0,30));
+    var tempv2 = i*80+round(random(0,30));
+    if (inCanvas(cWidth,tempv)){
+      allVertices.push([cWidth,tempv])
     }
+    if (inCanvas(0,tempv2)){
+      allVertices.push([0,tempv2])
+    }
+
   }
-}
-/*Coloring composes like 90% of runtime*/
-function benchMarkColor(trials){
-  var benchMarkSTime = millis();
-  for (ij=0;ij<trials;ij++){
-    averageColor(0,0,100,100,random(0,100),random(0,100))
-  };
-  return "Total time for " + trials + " trials: " + (millis()-benchMarkSTime)/1000;
-}
-function benchMarkTriangle(trials){
-  var benchMarkSTime = millis();
-  for (ij=0;ij<trials;ij++){
-    averageColor(0,ij,100,100,150,150,1)
-  };
-  return "Total time for " + trials + " trials: " + (millis()-benchMarkSTime)/1000;
+  splitSquare(20)
+  generateRandomSquares(20,0.4)
+  pushEdgePointsToAll();
+  triangulize();
+
+  finishedColoring = false;
+  image(img1,0,0,cWidth,cHeight);
+
+  loadPixels();
+  tColors=[];
+  $("#displayPoints").html("Show<br>Points<br>");
+  $("#displayPoints").css("background-color","RGB(100,100,100)");
+  displayPoints=false;
 }
