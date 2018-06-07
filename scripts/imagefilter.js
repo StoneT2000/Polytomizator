@@ -86,7 +86,9 @@ function smoothAvg3(x,y,data,filter){
   var totalWeight = 1;
   
   if (operator3[filter].type == 'blur'){
-    totalWeight = weight.reduce((acc,curr)=> acc+abs(curr));
+    for (ic=0;ic<weight.length;ic++){
+      totalWeight+=abs(weight[ic]);
+    }
   }
   for (i=0;i<loc.length;i++){
     colors[0]+=data[loc[i]]*weight[i]
