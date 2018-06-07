@@ -46,6 +46,7 @@ function generateCubicPoly(accuracy,density,overlay){
   loadPixels();
   scanSquareUD(accuracy,100000000);
   generateRandomSquares(accuracy,thisdensity)
+  flowing = true;
   
 }
 function splitSquare(accuracy){
