@@ -180,7 +180,7 @@ th, td{
 #otherOptionsHeader{
   margin-bottom:20px;
 }
-#flowerEffect{
+#flowerEffect, #autoGen{
   position: relative;
   display: inline-block;
   color:white;

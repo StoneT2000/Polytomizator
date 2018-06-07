@@ -12,7 +12,7 @@ var stepDelaunate = true;
 var noColors = false;
 var colorMap = true;
 var flowing = true;
-var brushSize = 10;
+var brushSize = 100;
 var downloading = false;
 var magnification = 1;
 var finishedColoring = true;
@@ -24,10 +24,12 @@ var colorAccuracy = 1;
 var newVertices = [];
 var verticesHashTable = [];
 var verticesHashTableFlat = [];
-var pointDensity = 2;
+var pointDensity = 4;
 var exportSVG = false;
 var dTriangles = [];
 var flowerEffect = false;
+var filteringView = false;
+var displayEdgePoints = false;
 function preload(){
 }
 var myCanvas;
@@ -174,6 +176,11 @@ function draw(){
         ellipse(verticesHashTable[j][k][0],verticesHashTable[j][k][1],5,5)
       }
     }
+    for (j=0;j<edgePoints.length;j++){
+      if (edgePoints[j][2]>colorThreshold && displayEdgePoints == true){
+        ellipse(edgePoints[j][0],edgePoints[j][1],5)
+      }
+    }
   }
   
   
@@ -277,6 +284,9 @@ function draw(){
     fr = ceil(4/((ff-fs)/1000));
     fc = 0; 
   }
+  if (filteringView == true){
+    updatePixels();
+  }
 }
 function hashCoordinate(x,y){
   return floor(x/50)*100+floor(y/50);
@@ -288,7 +298,7 @@ function findIndexFromHash(hash){
 }
 function generateHashSpace(){
   verticesHashTable=[];
-
+  //50x50 squares in grid
   for (i=0;i<ceil(cWidth/50)*ceil(cHeight/50);i++){
     verticesHashTable.push([]);
   }
@@ -309,6 +319,17 @@ function updateHashSpace(x,y,add){
     verticesHashTable[index].push([x,y])
   }
   if (add==false){
+    /*
+    var currIndex = 0;
+    while(currIndex<verticesHashTable[index].length){
+      if (verticesHashTable[index][i][0] == x && verticesHashTable[index][i][1] == y){
+        verticesHashTable[index].splice(i,1)
+      }
+      else {
+        currIndex++;
+      }
+    }
+    */
     for (i=0;i<verticesHashTable[index].length;i++){
 
       if (verticesHashTable[index][i][0] == x && verticesHashTable[index][i][1] == y){

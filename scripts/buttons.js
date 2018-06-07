@@ -1,4 +1,5 @@
 $(document).on('ready',function(){
+  var completedFilters = false;
     $("#pointBrush").css("background-color","RGB(140,140,140)")
   console.log("Let's make computer generated art that looks pretty cool...v6")
   $("#displayColor").on("click",function(){
@@ -99,6 +100,65 @@ $(document).on('ready',function(){
       alert("Type in a number larger than 1 for brush density");
     }
   });
+  $("#autoGen").on("click",function(){
+    if (completedFilters == false){
+      completedFilters=true;
+      image(img1,0,0);
+      filter(GRAY);
+      loadPixels();
+      console.log(pixels);
+      changePixels3('smooth');
+      changePixels3('edge');
+    }
+    allVertices = [];
+    allVertices.push([0,0]);
+    allVertices.push([cWidth,0]);
+    allVertices.push([0,cHeight]);
+    allVertices.push([cWidth,cHeight]);
+      
+    for(i=0;i<cWidth/80;i++){
+      var tempv = i*80+round(random(0,30));
+      var tempv2 = i*80+round(random(0,30));
+      if (inCanvas(tempv,cHeight)){
+        allVertices.push([tempv,cHeight])
+      }
+      if (inCanvas(tempv2,cHeight)){
+        allVertices.push([tempv2,0])
+      }
+
+
+    }
+    for(i=0;i<cHeight/80;i++){
+      var tempv = i*80+round(random(0,30));
+      var tempv2 = i*80+round(random(0,30));
+      if (inCanvas(cWidth,tempv)){
+        allVertices.push([cWidth,tempv])
+      }
+      if (inCanvas(0,tempv2)){
+        allVertices.push([0,tempv2])
+      }
+
+    }
+    splitSquare(20)
+    generateRandomSquares(20,0.4)
+    pushEdgePointsToAll();
+    triangulize();
+    
+    finishedColoring = false;
+    image(img1,0,0,cWidth,cHeight);
+
+    loadPixels();
+    tColors=[];
+    sTime = millis();
+    $("#displayPoints").html("Show<br>Points<br>");
+    $("#displayPoints").css("background-color","RGB(100,100,100)");
+    displayPoints=false;
+    
+    
+  })
+  $("#colorThreshold").on("focusout",function(){
+    colorThreshold = parseInt(document.querySelector('#colorThreshold').value);
+  })
   $("#durationOfFlowerEffect").on("focusout",function(){
     flowerEffectTime = parseInt(document.querySelector('#durationOfFlowerEffect').value);
     if (isNaN(flowerEffectTime) === true || flowerEffectTime <1){
@@ -152,6 +212,7 @@ $(document).on('ready',function(){
     $("#eraser").css("background-color","")
   });
   $("#file").on('change',function(){
+    completedFilters=false;
     img1 = loadImage(window.URL.createObjectURL(document.getElementById("file").files[0]),function(){
       if (img1.width*img1.height>800000){
         var factor = sqrt(img1.width*img1.height/800000);
@@ -178,9 +239,6 @@ $(document).on('ready',function(){
       previousData =[];
       dataPos = 0;
       d = pixelDensity();
-       
-      cWidth--;
-      cHeight--;
       allVertices.push([0,0]);
       allVertices.push([cWidth,0]);
       allVertices.push([0,cHeight]);
@@ -211,8 +269,6 @@ $(document).on('ready',function(){
       }
       finishedColoring=true;
 
-      cWidth++;
-      cHeight++;
       generateHashSpace();
       image(img1,0,0,cWidth,cHeight);
       loadPixels();
