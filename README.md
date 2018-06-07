@@ -35,6 +35,13 @@ Simply download the repository's zip file, open it, and then open polytomize.htm
   <img src ="https://github.com/StoneT2000/StoneT2000.github.io/blob/master/images/BlurryMountainPoly2.jpg" width="800" height="auto"></img>
   <img src ="https://github.com/StoneT2000/StoneT2000.github.io/blob/master/images/PolytomizationFlowerEffect.gif" width="800" height="auto"></img>
 </p>
+## Further Technical Details
+
+Algorithms Used:
+Delaunay Triangulization Algorithm
+Edge detection algorithms through the use of a 3x3 smoothing kernel and 3x3 edge detection kernel (For auto generating poly art)
+Vertices stored in a hash map
+
 
 ## Acknowledgements
 Many thanks to ... for helping make this better
