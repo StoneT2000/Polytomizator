@@ -12,10 +12,11 @@
   </script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
   <script language="javascript" type="text/javascript" src="scripts/poly.js?version=21"></script>
-  <script language="javascript" type="text/javascript" src="scripts/buttons.js?version=21"></script>
-  <script language="javascript" type="text/javascript" src="scripts/deepLearning.js?version=21"></script>
-  <script language="javascript" type="text/javascript" src="scripts/buttonHover.js?version=21"></script>
-  <script language="javascript" type="text/javascript" src="scripts/triangle.js?version=21"></script>
+  <script language="javascript" type="text/javascript" src="scripts/buttons.js?version=22"></script>
+  <script language="javascript" type="text/javascript" src="scripts/deepLearning.js?version=22"></script>
+  <script language="javascript" type="text/javascript" src="scripts/buttonHover.js?version=22"></script>
+  <script language="javascript" type="text/javascript" src="scripts/triangle.js?version=22"></script>
+  <script language="javascript" type="text/javascript" src="scripts/imagefilter.js?version=22"></script>
   <!--Remember to increment version for all local js files in order to force users to reload scripts-->
   <link rel ="stylesheet" href="poly.css?version=20">
   <script src="https://unpkg.com/delaunator@2.0.0/delaunator.min.js"></script>
@@ -53,8 +54,8 @@
         <li id="lineBrush"><img src="brushIcon.png" width="50px"></li>
         <li id="eraser"><img src="EraserIcon.png" width="50px"></li>
         <li id="triangleMover"><img src="triangleMover.png" width="50px"></li>
-        <li id="sizing1">Brush Size<input id="brushSize" type="text" placeholder="10"></li>
-        <li id="sizing2">Brush Density<input id="brushDensity" type="text" placeholder="3"></li>
+        <li id="sizing1">Brush Size<input id="brushSize" type="text" placeholder="100"></li>
+        <li id="sizing2">Brush Density<input id="brushDensity" type="text" placeholder="5"></li>
         <li id="expandImage">Enlarge Image and Download</li>
 
         <li id="saveThis">Save this canvas</li>
@@ -87,6 +88,8 @@
   </div>
   <div class="otherOptions" >
     <h3 id="otherOptionsHeader">Advanced Options</h3>
+    <a href="#gamedisplay"><h4 id="autoGen">Auto Generate Art</h4></a>
+    <h5>Color Threshold: <input id="colorThreshold" type="text" placeholder="40"></h5>
     <h4 id="flowerEffect">Instant Coloring: On</h4>
     <div id=popUp2>Turn on or off instant coloring of triangles. When off, the canvas will be colored under a set time with a flowering effect</div>
     <h4 id="flowerEffectTime">Approximate max duration of flowering effect</h4>
