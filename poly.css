@@ -1,8 +1,10 @@
-body{
+body,html{
   width:100%;
   background-image:url('images/PolyBackground.jpg');
   cursor:crosshair;
-  
+
+  position:relative;
+  height:auto;
 }
 .main{
   margin:auto;
@@ -30,9 +32,9 @@ body{
 
   position: fixed;
   bottom:15px;
-  width:600px;
-  margin-left:-300px;
-  left:50%;
+  width:100px;
+  top:40px;
+  right:60px;
   text-align:center;
   height:70px;
   z-index:100;
@@ -170,12 +172,12 @@ th, td{
 }
 .otherOptions{
   position:relative;
-  display:inline-block;
+  display:block;
   width:800px;
-  margin-left:-400px;
-  left:50%;
   text-align:center;
   margin-bottom:20px;
+  margin-left:50%;
+  transform: translate(-400px,0);
 }
 #otherOptionsHeader{
   margin-bottom:20px;
@@ -188,6 +190,7 @@ th, td{
   width:515px;
   height:32px;
   z-index:5;
+  marg
   cursor: pointer;
 }
 #flowerEffectTime{
@@ -252,4 +255,32 @@ th, td{
   margin-left:-200px;
   left:50%;
   padding-bottom:200px;
+}
+.footer{
+  position: absolute;
+  width:100%;
+  height:100px;
+  bottom: 0px;
+  margin:none;
+  text-align: center;
+  background-color:RGB(50,50,50);
+  color:white;
+}
+.footer a{
+  color: white;
+  font-size:30px;
+  margin-left: 5px;
+}
+.footer h6{
+  display: inline-block;
+  line-height: 90px;
+  margin-bottom: 0px;
+  margin-top:0px;
+  font-size: 20px;
+  font-weight: 300;
+  transform: translate(0,-3px);
+}
+.footer a:hover{
+  border-radius: 50%;
+  color: #0275d8;
 }

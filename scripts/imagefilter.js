@@ -254,9 +254,9 @@ function neighborhoodIndices(x,y,r){
   }
   return positions;
 }
-function reduceDensity(){
+function reduceDensity(limit){
   //iterate through all points in edgepoints within decreasing brightness order
-  for (bright = 256;bright>=0;bright--){
+  for (bright = 256;bright>=limit;bright--){
     var setOfPoints = edgePoints.filter(function(value){
       if (value[2] == bright){
         return true;
@@ -293,5 +293,15 @@ function reduceDensity(){
     }
     
     //Hash function
+  }
+}
+function basicReduceDensity(){
+  for (bright = 256;bright>=0;bright--){
+    var setOfPoints = edgePoints.filter(function(value){
+      if (value[2] == bright){
+        return true;
+      }
+    });
+    
   }
 }

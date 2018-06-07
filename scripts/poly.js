@@ -10,7 +10,7 @@ var displayPoints = true;
 var displayImage = true;
 var stepDelaunate = true;
 var noColors = false;
-var colorMap = true;
+
 var flowing = true;
 var brushSize = 100;
 var downloading = false;
@@ -81,7 +81,6 @@ function setup(){
   frameRate(60);
   $("#gamedisplay").css("right",(cWidth/2).toString()+"px")
   //$("body").css("width",(cWidth+100).toString()+"px")
-  $("body").css("height",(cHeight+400).toString()+"px")
   myCanvas.parent('gamedisplay');
   angleMode(DEGREES)
   previousData.push([allVertices.slice(),triangulations.slice(),tColors.slice(),verticesHashTable.slice(),verticesHashTableFlat.slice()]);
@@ -124,7 +123,7 @@ function draw(){
     iterStep = ceil(((triangulations[triangulations.length-1].length)/(fr))/flowerEffectTime);
     for (iter=0;iter<iterStep;iter++){
 
-      if (stepDelaunate == true && triangulations.length>0 && colorMap == true && finishedColoring== false){
+      if (stepDelaunate == true && triangulations.length>0 && finishedColoring== false){
         if (triangulations[triangulations.length-1].length>0 && stepD <=triangulations[triangulations.length-1].length-1){
           if (stepD === 0){
             sTime = millis();
@@ -146,7 +145,7 @@ function draw(){
     }
   }
   else {
-    if (finishedColoring == false && colorMap == true){
+    if (finishedColoring == false){
       colorIn();
       finishedColoring = true;
     }
@@ -352,7 +351,9 @@ function keyPressed(){
     
     finishedColoring = false;
     image(img1,0,0,cWidth,cHeight);
-
+    noColors=false;
+    $("#displayColor").html("Hide<br>Colors<br>");
+    $("#displayColor").css("background-color","RGB(40,40,40)");
     loadPixels();
     tColors=[];
     sTime = millis();
@@ -379,24 +380,13 @@ function keyPressed(){
     if (noColors === false){
       noColors = true;
       $("#displayColor").html("Show<br>Colors<br>");
-      $("#displayColor").css("background-color","RGB(40,40,40)");
+      $("#displayColor").css("background-color","RGB(100,100,100)");
       
     }
     else {
       noColors = false;
       $("#displayColor").html("Hide<br>Colors<br>");
-      $("#displayColor").css("background-color","RGB(100,100,100)");
-    }
-  }
-  else if (keyCode===77){
-    
-    if (colorMap == false){
-      colorMap = true;
-      $("#colorMap").text("Coloring Map: On (Press M to switch)")
-    }
-    else {
-      colorMap = false;
-      $("#colorMap").text("Coloring Map: Off (Press M to switch)")
+      $("#displayColor").css("background-color","RGB(40,40,40)");
     }
   }
   else if (keyCode===90){
