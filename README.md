@@ -28,10 +28,13 @@ Simply download the repository's zip file, open it, and then open polytomize.htm
 - Exporting the canvas to a .svg file
 
 ## Some poly art made by this program
-<img src ="https://github.com/StoneT2000/StoneT2000.github.io/blob/master/images/NasaShuttle.jpg" width="300" height="452.7"></img>
-<img src ="https://github.com/StoneT2000/StoneT2000.github.io/blob/master/images/NasaShuttlePoly.jpg" width="300" height="452.7"></img>
-<img src ="https://github.com/StoneT2000/StoneT2000.github.io/blob/master/images/BlurryMountain.jpg" width="604" height="339"></img>
-<img src ="https://github.com/StoneT2000/StoneT2000.github.io/blob/master/images/BlurryMountainPoly2.jpg" width="604" height="339"></img>
+<p align="center">
+  <img src ="https://github.com/StoneT2000/StoneT2000.github.io/blob/master/images/NasaShuttle.jpg" width="399" height="auto"></img>
+  <img src ="https://github.com/StoneT2000/StoneT2000.github.io/blob/master/images/NasaShuttlePoly.jpg" width="399" height="auto"></img>
+  <img src ="https://github.com/StoneT2000/StoneT2000.github.io/blob/master/images/BlurryMountain.jpg" width="800" height="auto"></img>
+  <img src ="https://github.com/StoneT2000/StoneT2000.github.io/blob/master/images/BlurryMountainPoly2.jpg" width="800" height="auto"></img>
+  <img src ="https://github.com/StoneT2000/StoneT2000.github.io/blob/master/images/PolytomizationFlowerEffect.gif" width="800" height="auto"></img>
+</p>
 
 ## Acknowledgements
 Many thanks to ... for helping make this better
