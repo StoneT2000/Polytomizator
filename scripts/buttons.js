@@ -1,7 +1,8 @@
 var completedFilters = false;
 $(document).on('ready',function(){
-  
-    $("#pointBrush").css("background-color","RGB(140,140,140)")
+  $("#downloadSVG").on("click",downloadSVG(cWidth,cHeight));
+
+  $("#pointBrush").css("background-color","RGB(140,140,140)")
   console.log("Let's make computer generated art that looks pretty cool...v6")
   $("#displayColor").on("click",function(){
     if (noColors===true){
