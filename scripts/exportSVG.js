@@ -14,14 +14,28 @@ function storeTrianglesToString(){
       verticesHashTableFlat[tng[tInd+2]][0]+","+
       verticesHashTableFlat[tng[tInd+2]][1]+"\" ";
     //color
+    hexcolors = rgbToHex(tColors[tInd].toFixed(0),tColors[tInd+1].toFixed(0),tColors[tInd+2].toFixed(0));
     data+=
-      "style=\"fill:RGB(" + tColors[tInd].toFixed(0) + "," + tColors[tInd+1].toFixed(0) +","+tColors[tInd+2].toFixed(0)+
-      ");stroke:RGB("+tColors[tInd].toFixed(0) + "," + tColors[tInd+1].toFixed(0) +","+tColors[tInd+2].toFixed(0)+");\"";
+      "style=\"fill:"+ hexcolors + 
+      ";stroke:"+ hexcolors + ";\"";
     data+="/>"
   }
   return data;
 }
-
+var hexletters = ['0','1','2','3','4','5','6','7',
+                  '8','9','A','B','C','D','E','F']
+function rgbToHex(r,g,b){
+  var r1 = r % 16;
+  var g1 = g % 16;
+  var b1 = b % 16;
+  var rt = (r-r1)/16;
+  var gt = (g-g1)/16;
+  var bt = (b-b1)/16;
+  var d1 = hexletters[rt]+hexletters[r1];
+  var d2 = hexletters[gt]+hexletters[g1];
+  var d3 = hexletters[bt]+hexletters[b1];
+  return "#"+d1+d2+d3;
+}
 function generateSVGFile(data,svgW,svgH){
   var part1 = "<?xml version=\"1.0\" encoding=\"iso-8859-1\"?>"
   

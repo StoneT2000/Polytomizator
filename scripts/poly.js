@@ -84,6 +84,17 @@ function setup(){
   myCanvas.parent('gamedisplay');
   angleMode(DEGREES)
   previousData.push([allVertices.slice(),triangulations.slice(),tColors.slice(),verticesHashTable.slice(),verticesHashTableFlat.slice()]);
+  $("#downloadSVG").on("click",function(){
+    if (finishedColoring == false){
+      alert("Please wait until the coloring is finished before enlargining the work and downloading it")
+    }
+    else if (triangulations[triangulations.length-1].length > 0){
+      downloadSVG(cWidth,cHeight);
+    }
+    else{
+      alert("Make some poly art first")
+    }
+  });
 }
 var accDist = 0;
 var oldX=0;
