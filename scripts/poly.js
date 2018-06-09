@@ -100,7 +100,7 @@ function setup(){
   window.setTimeout(function(){
     $("#loadingScreen").css("display","none");
     
-    $("#loadingText").html("Be patient...we are making art <img src=\"images/loadingSymbol.gif\" style=\"margin-left: 10px\" width=\"32px\" height=\"auto\">");
+    $("#loadingText").html("Patience, we are making art <img src=\"images/loadingSymbol.gif\" style=\"margin-left: 10px\" width=\"32px\" height=\"auto\">");
   },1500)
   $("#brushSize")[0].value = brushSize;
   $("#brushDensity")[0].value = pointDensity+1;
