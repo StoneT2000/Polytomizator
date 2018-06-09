@@ -102,7 +102,9 @@ function setup(){
     
     $("#loadingText").html("Be patient...we are making art <img src=\"images/loadingSymbol.gif\" style=\"margin-left: 10px\" width=\"32px\" height=\"auto\">");
   },1500)
-  
+  $("#brushSize")[0].value = brushSize;
+  $("#brushDensity")[0].value = pointDensity+1;
+  $("#colorThreshold")[0].value = colorThreshold;
 }
 var accDist = 0;
 var oldX=0;

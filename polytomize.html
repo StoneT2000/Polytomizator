@@ -39,12 +39,11 @@
     <h1 style="margin-top:10px">Make Poly ART! (Beta)</h1>
     <p>By Stone Tao</p>
     <h5 style="font-size:20px;margin-bottom: 30px;width:80%;margin-left:50%;transform:translate(-50%,0)">It is <b>highly highly</b> suggested to use Firefox for maximum experience</h5>
-    <h3>Add points with the brushes on the sidebar. Then click polytomize to make art!</h3>
-    <h3 style="margin-bottom:25px;">Download image with the button on the left or download the SVG file below</h3>
+    <h3 style="width:70%;margin-left:50%;transform:translate(-50%,0);margin-bottom:50px;padding-bottom: 50px; border-bottom: 2px solid RGB(40,40,40)">Add points with the brushes on the sidebar. Then click polytomize to make art! Then download the poly art as an image or SVG.</h3>
     <div><h4 style="margin: auto;margin-bottom:20px;" id="polytomize">Polytomize (D)</h4></div>
     <a><h4 id="autoGen" style="margin: auto;margin-bottom: 10px;">Auto Generate Art</h4></a>
     <h5>Level of detail of auto generated art: <input id="colorThreshold" type="text" placeholder="10~255"></h5>
-    <input type="button" id="downloadSVG" value="Download poly art in SVG format"/>
+    <input type="button" id="downloadSVG" value="Download poly art as an SVG file"/><input type="button" id="expandImage" value="Download poly art as an image (png)"/>
     <div class="main">
       <div id="gamedisplay"></div>
     </div>
@@ -55,7 +54,6 @@
         <li id="displayColor">Hide <br>Colors<br></li>
         <li id="displayTriangulation">Hide <br>Triangles<br></li>
         <li id="displayImage">Hide <br>Background<br></li>
-        <li id="displayAll">Hide <br>Everything<br></li>
       </ul>
     </div>
     <div class="brushes">
@@ -66,8 +64,6 @@
         <li id="triangleMover"><img src="triangleMover.png" width="50px"></li>
         <li id="sizing1">Brush Size<input id="brushSize" type="text" placeholder="100"></li>
         <li id="sizing2">Brush Density<input id="brushDensity" type="text" placeholder="5"></li>
-        <li id="expandImage">Enlarge Image and Download</li>
-
         <li id="saveThis">Save this canvas</li>
         <li id="loadThis">Load last saved data</li>
       </ul>

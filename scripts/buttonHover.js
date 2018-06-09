@@ -12,7 +12,7 @@ $(document).on('ready',function(){
   $("#pointBrush").mouseenter(function(){
     hoverEnterText('#pointbrush','50','Point Brush (P): Click to add individual points');
   })
-  $("#pointBrush,#lineBrush,#eraser,#expandImage,#saveThis,#loadThis,#triangleMover,#sizing2,#sizing1,#flowerEffect").mouseleave(function(){
+  $("#pointBrush,#lineBrush,#eraser,#expandImage,#saveThis,#loadThis,#triangleMover,#sizing2,#sizing1,#flowerEffect,#duration").mouseleave(function(){
     noPopUp();
   })
   $("#lineBrush").mouseenter(function(){
@@ -30,10 +30,6 @@ $(document).on('ready',function(){
   $("#sizing2").mouseenter(function(){
     hoverEnterText('#sizing','400','Adjust density of brush');
   })
-
-  $("#expandImage").mouseenter(function(){
-    hoverEnterText('#expandImage','510','Download the current image at a higher resolution');
-  })
   $("#saveThis").mouseenter(function(){
     hoverEnterText('#saveThis','620','Save the canvas for next time');
   })
@@ -45,18 +41,9 @@ $(document).on('ready',function(){
       $("#popUp2").css("display","block");
     },300)
   })
-  $("#durationOfFlowerEffect").mouseenter(function(){
-    hovertime = window.setTimeout(function(){
-      $("#flowerEffectTimePopUp").css("display","block");
-    },300)
-  })
   $("#flowerEffect").mouseleave(function(){
     $("#popUp2").css("display","none");
   })
-  $("#durationOfFlowerEffect").mouseleave(function(){
-      $("#flowerEffectTimePopUp").css("display","none");
-  })
-
   function noPopUp(){
      $("#popUp").css("display","none");
      clearTimeout(hovertime);

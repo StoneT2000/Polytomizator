@@ -56,42 +56,12 @@ $(document).on('ready',function(){
       $("#displayImage").css("background-color","RGB(100,100,100)");
     }
   });
-  $("#displayAll").on("click",function(){
-    if (displayPoints==false&&
-    displayImage ==false){
-      displayPoints=true;
-      displayImage =true;
-      $("#displayPoints").html("Hide<br>Points<br>");
-      $("#displayPoints").css("background-color","RGB(40,40,40)");
-
-      $("#displayImage").html("Hide<br>Image<br>");
-      $("#displayImage").css("background-color","RGB(40,40,40)");
-    }
-    else {
-      displayPoints=false;
-      displayImage =false;
-
-      $("#displayPoints").html("Show<br>Points<br>");
-      $("#displayPoints").css("background-color","RGB(100,100,100)");
-      $("#displayImage").html("Show<br>Image<br>");
-      $("#displayImage").css("background-color","RGB(100,100,100)");
-    }
-  });
-  $("#colorMap").on("click",function(){
-    if (colorMap == false){
-      colorMap= true;
-      $("#colorMap").text("Coloring Map: On (M)")
-    }
-    else {
-      colorMap = false;
-      $("#colorMap").text("Coloring Map: Off (M)")
-    }
-  })
   $("#brushSize").on("focusout",function(){
 
     var brushSizeTemp = parseInt(document.querySelector('#brushSize').value);
     if (isNaN(brushSizeTemp) === true || brushSizeTemp <1){
       alert("Type in a number larger than 0 for brush size");
+      $("#brushSize")[0].value = brushSize;
     }
     else {
       brushSize = brushSizeTemp
@@ -102,6 +72,7 @@ $(document).on('ready',function(){
     var pointDensityTemp = parseInt(document.querySelector('#brushDensity').value)-1;
     if (isNaN(pointDensityTemp) === true || pointDensityTemp <1){
       alert("Type in a number larger than 1 for brush density");
+      $("#brushDensity")[0].value = pointDensity+1;
     }
     else{
       pointDensity = pointDensityTemp;
@@ -112,6 +83,7 @@ $(document).on('ready',function(){
     var colorThresholdTemp = parseInt(document.querySelector('#colorThreshold').value);
     if (isNaN(colorThresholdTemp) === true || colorThresholdTemp <1){
       alert("Type in a number larger than 1 for color threshold");
+      $("#colorThreshold")[0].value = colorThreshold;
     }
     else{
       colorThreshold = colorThresholdTemp;

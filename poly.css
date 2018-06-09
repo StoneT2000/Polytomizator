@@ -38,14 +38,15 @@ body,html{
   -ms-transition:top 2.5s,opacity 1.5s;
   -o-transition:top 2.5s,opacity 1.5s;
 }
-#downloadSVG{
+#downloadSVG, #expandImage{
   background-color: RGB(40,40,40);
   color:white;
   border:none;
-  width: 400px;
+  width: 350px;
   font-size:20px;
   cursor:pointer;
   font-weight: 400;
+  margin: 10px;
 }
 #gamedisplay{
   margin:auto;
@@ -66,7 +67,7 @@ body,html{
 
   position: fixed;
   bottom:15px;
-  width:100px;
+  width:90px;
   top:40px;
   right:60px;
   text-align:center;
@@ -80,31 +81,23 @@ body,html{
   
 }
 .buttonRow li{
+  font-size:15px;
   display:inline-block;
   background-color:RGB(40,40,40);
   border:1px solid RGB(100,100,100);
   border-radius:5px;
   margin-top:10px;
   color:white;
-  width: 100px;
+  width: 90px;
   height:50px;
   cursor:pointer;
-}
-#colorMap{
-  color:white;
-  background-color:RGB(40,40,40);
-  cursor: pointer;
-  width:400px;
-  margin:auto;
-  margin-right:50px;
-  display: inline-block;
 }
 #polytomize{
   display: inline-block;
   color:white;
   margin-left:50px;
   background-color:RGB(40,40,40);
-  width:400px;
+  width:350px;
   cursor: pointer;
   font-weight: 400;
   height:32px;
@@ -123,9 +116,10 @@ body,html{
   border-radius:5px;
   margin-top:10px;
   color:white;
-  width: 80px;
+  width: 90px;
   height:50px;
   cursor:pointer;
+  font-size:15px;
 }
 .brushes input{
   width: 50px;
@@ -150,13 +144,8 @@ body,html{
   position:relative;
   margin-top:60px;
 }
-#expandImage{
-  height:100px;
-}
-
 #loadThis{
   
-  font-size:15px;
 }
 #saveThis{
 
