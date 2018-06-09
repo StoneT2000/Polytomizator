@@ -61,5 +61,5 @@ Rest of the points are just filler vertices placed randomly on the canvas, but w
 Once scanned and filtered with edges detected, it doesn't need to be run again unless a new image is put up.
 
 ## Acknowledgements
-Many thanks to Vincent and Tom for helping make this better
-and some other people who wish to not be named
+Many thanks to Vincent for helping make this better
+and many others as well
