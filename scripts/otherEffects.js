@@ -47,6 +47,16 @@ function generateCubicPoly(accuracy,density,overlay){
   scanSquareUD(accuracy,100000000);
   generateRandomSquares(accuracy,thisdensity)
   flowing = true;
+  triangulize();
+  finishedColoring = false;
+  image(img1,0,0,cWidth,cHeight);
+
+  loadPixels();
+  tColors=[];
+  sTime = millis();
+  $("#displayPoints").html("Show<br>Points<br>");
+  $("#displayPoints").css("background-color","RGB(100,100,100)");
+  displayPoints=false;
   
 }
 function splitSquare(accuracy){
@@ -63,7 +73,6 @@ function splitSquare(accuracy){
     }
     
   }
-  console.log(colorOfSquares);
 }
 function averageColorSquare(x1,y1,sw,sl,accuracy){
   if (x1+sl >cWidth){

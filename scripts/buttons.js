@@ -1,7 +1,7 @@
 var completedFilters = false;
 $(document).on('ready',function(){
   $("#pointBrush").css("background-color","RGB(140,140,140)")
-  console.log("Let's make computer generated art that looks pretty cool...v6")
+  console.log("Let's make computer generated art that looks pretty cool...v31")
   $("#displayColor").on("click",function(){
     if (noColors===true){
       noColors = false;
@@ -106,11 +106,7 @@ $(document).on('ready',function(){
       pointDensity = pointDensityTemp;
     }
   });
-  $("#autoGen").on("click",function(){
-    autoGenerateArt();
-    
-    
-  })
+  
   $("#colorThreshold").on("focusout",function(){
     var colorThresholdTemp = parseInt(document.querySelector('#colorThreshold').value);
     if (isNaN(colorThresholdTemp) === true || colorThresholdTemp <1){
@@ -118,6 +114,7 @@ $(document).on('ready',function(){
     }
     else{
       colorThreshold = colorThresholdTemp;
+      resetAutoGenListener([cWidth,cHeight,completedFilters,d,colorThreshold]);
     }
   })
   $("#durationOfFlowerEffect").on("focusout",function(){
@@ -206,8 +203,6 @@ $(document).on('ready',function(){
       tColors = [];
       verticesHashTable=[];
       verticesHashTableFlat=[];
-      previousData =[];
-      dataPos = 0;
       d = pixelDensity();
       allVertices.push([0,0]);
       allVertices.push([cWidth,0]);
@@ -242,8 +237,8 @@ $(document).on('ready',function(){
       generateHashSpace();
       image(img1,0,0,cWidth,cHeight);
       loadPixels();
-        
-      previousData.push([allVertices.slice(),triangulations.slice(),tColors.slice(),verticesHashTable.slice(),verticesHashTableFlat.slice()]);
+      filteredPixels=[];
+      resetAutoGenListener([cWidth,cHeight,completedFilters,d,colorThreshold]);
     });
     
   });

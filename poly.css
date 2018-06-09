@@ -13,6 +13,15 @@ body,html{
   
 
 }
+#loadingText{
+  background-color:RGBA(40,40,40,0.6);
+  height:100%;
+  width:100%;
+  top:0px;
+  position: fixed;
+  z-index:1000;
+  display:none;
+}
 #downloadSVG{
   background-color: RGB(40,40,40);
   color:white;

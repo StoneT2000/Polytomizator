@@ -53,22 +53,20 @@ function ind(x,y){
   return (y*d*cWidth + x)*d*4;
 }
 
-function changePixels3(filter){
+function changePixels3(filter,storedPixelData){
   displayImage=true;
   displayTriangulation=false;
   displayPoints=false;
-  draw();
-  loadPixels();
   edgePoints = [];
   if (!filter){
     filter = "smooth"
   }
-  var pixelsCopy = JSON.parse(JSON.stringify(pixels));
+  var pixelsCopy = JSON.parse(JSON.stringify(storedPixelData));
   for (k=0;k<=cWidth;k+=1){
     for (j=0;j<=cHeight;j+=1){
       //var loc = [ind(k,j-1),ind(k-1,j),ind(k,j),ind(k+1,j),ind(k,j+1)];
       var loc = [ind(k-1,j-1),ind(k,j-1),ind(k+1,j-1),ind(k-1,j),ind(k,j),ind(k+1,j),ind(k-1,j+1),ind(k,j+1),ind(k+1,j+1)];
-      var rgb = smoothAvg3(k,j,pixels,filter)
+      var rgb = smoothAvg3(k,j,storedPixelData,filter)
       pixelsCopy[loc[4]]= rgb[0];
       pixelsCopy[loc[4]+1]= rgb[1]
       pixelsCopy[loc[4]+2]= rgb[2]
@@ -76,10 +74,11 @@ function changePixels3(filter){
       
     }
   }
-  copyTo(pixelsCopy,pixels)
-  updatePixels();
-  displayTriangulation=true;
-  displayPoints=true;
+  //copyTo(pixelsCopy,pixels)
+  //updatePixels();
+  //displayTriangulation=true;
+  //displayPoints=true;
+  return pixelsCopy;
 }
 function smoothAvg3(x,y,data,filter){
   var loc =  [ind(x-1,y-1),ind(x,y-1),ind(x+1,y-1),ind(x-1,y),ind(x,y),ind(x+1,y),ind(x-1,y+1),ind(x,y+1),ind(x+1,y+1)];
@@ -92,7 +91,7 @@ function smoothAvg3(x,y,data,filter){
   
   if (operator3[filter].type == 'blur'){
     for (ic=0;ic<weight.length;ic++){
-      totalWeight+=abs(weight[ic]);
+      totalWeight+=Math.abs(weight[ic]);
     }
   }
   for (i=0;i<loc.length;i++){
@@ -104,7 +103,7 @@ function smoothAvg3(x,y,data,filter){
   colors[0]/=totalWeight;
   colors[1]/=totalWeight;
   colors[2]/=totalWeight;
-  if (filter == "edge" && colors[0]>=10 && random(0,1) < 0.2){
+  if (filter == "edge" && colors[0]>=10 && Math.random(0,1) < 0.2){
     edgePoints.push([x,y,colors[0]]);
   }
   return colors;
@@ -116,6 +115,7 @@ function pushEdgePointsToAll(){
     }
     
   }
+  //Pushes to allVertices as well
   generateHashSpace();
 }
 function changePixels5(filter){
@@ -168,9 +168,17 @@ function smoothAvg5(x,y,data,filter){
   colors[2]/=totalWeight;
   return colors;
 }
-function copyTo(arr1,arr2){
-  for (index=0;index<arr2.length;index++){
-    arr2[index] =  arr1[index];
+function copyTo(arr1,arr2,initialize){
+  //copies array 1 to array 2
+  if (initialize){
+    for (index=0;index<arr2.length;index++){
+      arr2.push(arr1[index]);
+    }
+  }
+  else{
+    for (index=0;index<arr2.length;index++){
+      arr2[index] =  arr1[index];
+    }
   }
 }
 
