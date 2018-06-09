@@ -31,10 +31,10 @@ $(document).on('ready',function(){
     hoverEnterText('#sizing','400','Adjust density of brush');
   })
   $("#saveThis").mouseenter(function(){
-    hoverEnterText('#saveThis','620','Save the canvas for next time');
+    hoverEnterText('#saveThis','510','Save the canvas for next time');
   })
   $("#loadThis").mouseenter(function(){
-    hoverEnterText('#loadThis','680','Load the last canvas saved');
+    hoverEnterText('#loadThis','570','Load the last canvas saved');
   })
   $("#flowerEffect").mouseenter(function(){
     hovertime = window.setTimeout(function(){
