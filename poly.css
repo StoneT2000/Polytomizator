@@ -13,14 +13,30 @@ body,html{
   
 
 }
-#loadingText{
+#loadingScreen{
   background-color:RGBA(40,40,40,0.6);
   height:100%;
   width:100%;
-  top:0px;
+  bottom:0px;
   position: fixed;
   z-index:1000;
-  display:none;
+  display:block;
+  opacity:1;
+  transition:top 2s,opacity 1.5s;
+  -webkit-transition:top 2s,opacity 1.5s;
+  -moz-transition:top 2s,opacity 1.5s;
+  -ms-transition:top 2s,opacity 1.5s;
+  -o-transition:top 2s,opacity 1.5s;
+}
+#loadingText{
+  top:50%;
+  color:RGBA(255,255,255,1);
+  opacity: 1;
+  transition:top 2.5s,opacity 1.5s;
+  -webkit-transition:top 2.5s,opacity 1.5s;
+  -moz-transition:top 2.5s,opacity 1.5s;
+  -ms-transition:top 2.5s,opacity 1.5s;
+  -o-transition:top 2.5s,opacity 1.5s;
 }
 #downloadSVG{
   background-color: RGB(40,40,40);

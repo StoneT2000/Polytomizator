@@ -93,6 +93,15 @@ function setup(){
     }
   });
   resetAutoGenListener([cWidth,cHeight,completedFilters,d,colorThreshold]);
+  console.log("Finished Setting Up!")
+  $("#loadingText").css("top","30%");
+  $("#loadingText").css("opacity","0");
+  $("#loadingScreen").css("opacity","0");
+  window.setTimeout(function(){
+    $("#loadingScreen").css("display","none");
+    
+    $("#loadingText").html("Be patient...we are making art <img src=\"images/loadingSymbol.gif\" style=\"margin-left: 10px\" width=\"32px\" height=\"auto\">");
+  },1500)
   
 }
 var accDist = 0;
@@ -305,7 +314,12 @@ var filteredPixels = [];
 function resetAutoGenListener(values){
   $("#autoGen").off("click")
   $("#autoGen").on("click",function(){
-    $("#loadingText").css("display","block");
+    $("#loadingScreen").css("display","block");
+    $("#loadingScreen").css("opacity","1");
+    window.setTimeout(function(){
+      $("#loadingText").css("top","50%");
+      $("#loadingText").css("opacity","1");
+    },0)
     if (filteredPixels.length>0){
       copyTo(filteredPixels,pixels);
     }
@@ -342,7 +356,15 @@ function resetAutoGenListener(values){
         displayPoints=false;
         completedFilters=true;
         resetAutoGenListener([cWidth,cHeight,completedFilters,d,colorThreshold]);
-        $("#loadingText").css("display","none");
+        window.setTimeout(function(){
+          $("#loadingScreen").css("opacity","0");
+          $("#loadingText").css("opacity","0");
+          $("#loadingText").css("top","30%");
+          window.setTimeout(function(){
+            $("#loadingScreen").css("display","none");
+          },1800);
+        },0)
+        
       }
     }
     else{
@@ -386,7 +408,12 @@ function resetAutoGenListener(values){
       $("#displayPoints").css("background-color","RGB(100,100,100)");
       displayPoints=false;
       completedFilters=true;
-      $("#loadingText").css("display","none");
+      $("#loadingScreen").css("opacity","0");
+      $("#loadingText").css("opacity","0");
+      $("#loadingText").css("top","30%");
+      window.setTimeout(function(){
+        $("#loadingScreen").css("display","none");
+      },1500);
     }
   });
 }
