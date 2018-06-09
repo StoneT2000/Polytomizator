@@ -285,8 +285,6 @@ function triangulize(){
     
     displayPoints=false;
     displayTriangulation=false;
-    image(img1,0,0,cWidth,cHeight)
-
     displayPoints=true;
     displayTriangulation=true;
     $("#displayTriangulation").html("Hide <br>Triangles<br>");

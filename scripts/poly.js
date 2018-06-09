@@ -144,7 +144,10 @@ function draw(){
   if (flowerEffect === true){
     iterStep = ceil(((triangulations[triangulations.length-1].length)/(fr))/flowerEffectTime);
     for (iter=0;iter<iterStep;iter++){
-
+      if (iter==0){
+        image(img1,0,0,cWidth,cHeight);
+        loadPixels();
+      }
       if (stepDelaunate == true && triangulations.length>0 && finishedColoring== false){
         if (triangulations[triangulations.length-1].length>0 && stepD <=triangulations[triangulations.length-1].length-1){
           if (stepD === 0){

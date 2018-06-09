@@ -2,7 +2,7 @@ var completedFilters = false;
 $(document).on('ready',function(){
   
   $("#pointBrush").css("background-color","RGB(140,140,140)")
-  console.log("Let's make computer generated art that looks pretty cool...v31")
+  console.log("Let's make computer generated art that looks pretty cool...v33")
   $("#displayColor").on("click",function(){
     if (noColors===true){
       noColors = false;
