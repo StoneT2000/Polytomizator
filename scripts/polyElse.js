@@ -1,4 +1,3 @@
-
 function hashCoordinate(x,y){
   return floor(x/50)*100+floor(y/50);
 }
@@ -141,14 +140,19 @@ function mouseClicked(){
     if(mouseY<=cHeight && mouseY>=0){
 
       if (mode == 1){
-        allVertices.push([round(mouseX),round(mouseY)]);
-        newVertices.push([round(mouseX),round(mouseY)]);
-        updateHashSpace(round(mouseX),round(mouseY),true)
+        var vpx = round(mouseX);
+        var vpy = round(mouseY);
+        if (snapping == true){
+          vpx = vpx-vpx%snappingAccuracy;
+          vpy = vpy-vpy%snappingAccuracy;
+        }
+        allVertices.push([vpx,vpy])
+        updateHashSpace(vpx,vpy,true)
       }
       if (mode==2){
       }
-      if (mode ===4){
-        
+      if (mode === 4){
+        //triangle flipper
         var tng = triangulations[0];
         for (k=0;k<tng.length;k+=3){ 
           if (pointInTriangle(verticesHashTableFlat[tng[k]][0],verticesHashTableFlat[tng[k]][1],verticesHashTableFlat[tng[k+1]][0],verticesHashTableFlat[tng[k+1]][1],verticesHashTableFlat[tng[k+2]][0],verticesHashTableFlat[tng[k+2]][1],mouseX,mouseY)){
@@ -173,33 +177,104 @@ function mouseClicked(){
   
   
 }
+function snapVertices(acc){
+  //acc is snapping accuracy
+  for (in1 = 0; in1 < verticesHashTable.length; in1++){
+    for (in2 = 0; in2 < verticesHashTable[in1].length; in2++){
+      if (verticesHashTable[in1][in2][0] % acc < acc/2){
+        verticesHashTable[in1][in2][0] = verticesHashTable[in1][in2][0]-(verticesHashTable[in1][in2][0] % acc)
+        
+      }
+      else {
+        verticesHashTable[in1][in2][0] = verticesHashTable[in1][in2][0]+20-(verticesHashTable[in1][in2][0] % acc)
+      }
+      if (verticesHashTable[in1][in2][1] % acc < acc/2){
+        verticesHashTable[in1][in2][1] = verticesHashTable[in1][in2][1]-(verticesHashTable[in1][in2][1] % acc)
+      }
+      else {
+        verticesHashTable[in1][in2][1] = verticesHashTable[in1][in2][1]+20-(verticesHashTable[in1][in2][1] % acc)
+      }
+    }
+  }
+}
 function delaunayDisplay(tng){
-  for (var i = 0; i < tng.length; i += 3) {
-    if (tColors[i]>=0 && noColors == false){
-      
-      fill(tColors[i],tColors[i+1],tColors[i+2]);
-      stroke(tColors[i],tColors[i+1],tColors[i+2]);
-      
-    }
-    else if (noColors == true){
-      fill(256,256,256);
-      stroke(10,10,10);
-    }
-    else if (tColors[i]==-1){
-      noFill();
-      noStroke();
+  if (displayMode == 0){
+    for (var i = 0; i < tng.length; i += 3) {
+      if (tColors[i]>=0 && noColors == false){
+
+        fill(tColors[i],tColors[i+1],tColors[i+2]);
+        stroke(tColors[i],tColors[i+1],tColors[i+2]);
+
+      }
+      else if (noColors == true){
+        fill(256,256,256);
+        stroke(10,10,10);
+      }
+      else if (tColors[i]==-1){
+        noFill();
+        noStroke();
+
+      }
+      else {
+        fill(256,256,256);
+        stroke(10,10,10);
+      }
+
+      if (verticesHashTableFlat.length > 0){
+
+        triangle(verticesHashTableFlat[tng[i]][0],verticesHashTableFlat[tng[i]][1],verticesHashTableFlat[tng[i+1]][0],verticesHashTableFlat[tng[i+1]][1],verticesHashTableFlat[tng[i+2]][0],verticesHashTableFlat[tng[i+2]][1]);
+      }
 
     }
-    else {
-      fill(256,256,256);
-      stroke(10,10,10);
-    }
-    
-    if (verticesHashTableFlat.length > 0){
+  }
+  else if (displayMode == 1){
+    for (var i = 0; i < tng.length; i += 3) {
+      if (tColors[i]>=0 && noColors == false){
 
-      triangle(verticesHashTableFlat[tng[i]][0],verticesHashTableFlat[tng[i]][1],verticesHashTableFlat[tng[i+1]][0],verticesHashTableFlat[tng[i+1]][1],verticesHashTableFlat[tng[i+2]][0],verticesHashTableFlat[tng[i+2]][1]);
+        fill(tColors[i],tColors[i+1],tColors[i+2]);
+        stroke(tColors[i],tColors[i+1],tColors[i+2]);
+
+      }
+      else if (noColors == true){
+        fill(256,256,256);
+        stroke(10,10,10);
+      }
+      else if (tColors[i]==-1){
+        noFill();
+        noStroke();
+
+      }
+      else {
+        fill(256,256,256);
+        stroke(10,10,10);
+      }
+
+      if (verticesHashTableFlat.length > 0){
+        var xcoords = [verticesHashTableFlat[tng[i]][0],verticesHashTableFlat[tng[i+1]][0],verticesHashTableFlat[tng[i+2]][0]]
+        var ycoords = [verticesHashTableFlat[tng[i]][1],verticesHashTableFlat[tng[i+1]][1],verticesHashTableFlat[tng[i+2]][1]]
+        var lowx = xcoords[0];
+        var lowy = ycoords[0];
+        var highx = -1;
+        var highy = -1;
+        //find top left and bottom right corners
+        for (xi = 0; xi< xcoords.length;xi++){
+          if (xcoords[xi] < lowx){
+            lowx = xcoords[xi];
+          }
+          if (xcoords[xi] > highx){
+            highx = xcoords[xi]; 
+          }
+          if (ycoords[xi] < lowy){
+            lowy = ycoords[xi];
+          }
+          if (ycoords[xi] > highy){
+            highy = ycoords[xi]; 
+          }
+        }
+        rect(lowx,lowy,highx-lowx,highy-lowy);
+      }
+
     }
-    
   }
 }
 function loadData(dataStored){

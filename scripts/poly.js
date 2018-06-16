@@ -19,7 +19,7 @@ var sTime = 0;
 var fTime = 0;
 var squares = false;
 var colorAccuracy = 1;
-var newVertices = [];
+
 var verticesHashTable = [];
 var verticesHashTableFlat = [];
 var pointDensity = 4;
@@ -28,6 +28,10 @@ var dTriangles = [];
 var flowerEffect = false;
 var filteringView = false;
 var displayEdgePoints = false;
+var snapping = false;
+var snappingAccuracy = 20;
+var displayMode = 0;
+var artstyle = 0; //0: Normal, 1: cubic, 2: ??
 function preload(){
 }
 var myCanvas;
@@ -92,7 +96,7 @@ function setup(){
       alert("Make some poly art first")
     }
   });
-  resetAutoGenListener([cWidth,cHeight,completedFilters,d,colorThreshold]);
+  resetAutoGenListener([cWidth,cHeight,completedFilters,d,colorThreshold],0);
   console.log("Finished Setting Up!")
   $("#loadingText").css("top","30%");
   $("#loadingText").css("opacity","0");
@@ -105,6 +109,17 @@ function setup(){
   $("#brushSize")[0].value = brushSize;
   $("#brushDensity")[0].value = pointDensity+1;
   $("#colorThreshold")[0].value = colorThreshold;
+  document.getElementById('normal').selected = true
+  $("#artstyles").on('change',function(){
+    console.log("changeStyle");
+    if (document.getElementById('normal').selected == true){
+      artstyle=0; //resetAutoGenListener([cWidth,cHeight,completedFilters,d,colorThreshold],artstyle);
+    }
+    else if (document.getElementById('cubic').selected == true){
+      artstyle = 1;
+      //resetAutoGenListener([cWidth,cHeight,completedFilters,d,colorThreshold],artstyle);
+    }
+  });
 }
 var accDist = 0;
 var oldX=0;
@@ -236,9 +251,14 @@ function draw(){
         critDist = random(15,20)
         oldX=mouseX;
         oldY=mouseY;
-        allVertices.push([round(mouseX),round(mouseY)]);
-
-        updateHashSpace(round(mouseX),round(mouseY),true)
+        var vpx = (round(mouseX));
+        var vpy = (round(mouseY));
+        if (snapping == true){
+          vpx = vpx-vpx%snappingAccuracy;
+          vpy = vpy-vpy%snappingAccuracy;
+        }
+        allVertices.push([vpx,vpy]);
+        updateHashSpace(vpx,vpy,true)
 
         for (i=0;i<pointDensity;i++){
           var r1=random(-brushSize,brushSize)
@@ -246,9 +266,15 @@ function draw(){
           if (mouseX+r1>cWidth-1 || mouseX+r1<1 || mouseY+r2 >cHeight-1 || mouseY+r2<1){
           }
           else{
-            allVertices.push([round(mouseX+r1),round(mouseY+r2)]);
+            var vpx = (round(mouseX+r1));
+            var vpy = (round(mouseY+r2));
+            if (snapping == true){
+              vpx = vpx-vpx%snappingAccuracy;
+              vpy = vpy-vpy%snappingAccuracy;
+            }
+            allVertices.push([vpx,vpy]);
 
-            updateHashSpace(round(mouseX+r1),round(mouseY+r2),true)
+            updateHashSpace(vpx,vpy,true)
           }
         }
       }
@@ -316,39 +342,97 @@ function draw(){
   }
 }
 var filteredPixels = [];
-function resetAutoGenListener(values){
+//Reset Auto Gen listner removes the old listener and adds the new one.
+function resetAutoGenListener(values,style){
   $("#autoGen").off("click")
+
   $("#autoGen").on("click",function(){
-    $("#loadingScreen").css("display","block");
-    $("#loadingScreen").css("opacity","1");
-    window.setTimeout(function(){
-      $("#loadingText").css("top","50%");
-      $("#loadingText").css("opacity","1");
-    },0)
-    if (filteredPixels.length>0){
-      copyTo(filteredPixels,pixels);
-    }
-    else{
-      image(img1,0,0,cWidth,cHeight);
-      filter(GRAY);
-      loadPixels();
-    }
-    var artWorker = new Worker('scripts/webworkerArtGen.js')
-    if (completedFilters== false){
-      
-      artWorker.postMessage([[values[0],values[1]],pixels,values[2],values[3],values[4]])
-      artWorker.onmessage = function(e) {
-        var artResult = e.data;
-        //console.log(artResult)
-        allVertices=artResult[0];
-        edgePoints=artResult[1];
-        //filteredPixels=artResult[2];
-        copyTo(artResult[2],pixels)
-        //console.log("Result:",artResult[2],"Pixels now",pixels)
-        for (km=0;km<pixels.length;km++){
-          filteredPixels.push(pixels[km]);
+    if (artstyle == 0){
+      noLoop();
+      $("#loadingScreen").css("display","block");
+      $("#loadingScreen").css("opacity","1");
+      window.setTimeout(function(){
+        $("#loadingText").css("top","50%");
+        $("#loadingText").css("opacity","1");
+      },0)
+      if (filteredPixels.length>0){
+        copyTo(filteredPixels,pixels);
+      }
+      else{
+        image(img1,0,0,cWidth,cHeight);
+        filter(GRAY);
+        loadPixels();
+      }
+      var artWorker = new Worker('scripts/webworkerArtGen.js')
+      if (completedFilters== false){
+
+        artWorker.postMessage([[values[0],values[1]],pixels,values[2],values[3],values[4]])
+        artWorker.onmessage = function(e) {
+          var artResult = e.data;
+          //console.log(artResult)
+          allVertices=artResult[0];
+          edgePoints=artResult[1];
+          //filteredPixels=artResult[2];
+          copyTo(artResult[2],pixels)
+          //console.log("Result:",artResult[2],"Pixels now",pixels)
+          for (km=0;km<pixels.length;km++){
+            filteredPixels.push(pixels[km]);
+          }
+          splitSquare(20)
+          generateRandomSquares(20,0.4)
+          pushEdgePointsToAll();
+          triangulize();
+          finishedColoring = false;
+
+          tColors=[];
+
+          $("#displayPoints").html("Show<br>Points<br>");
+          $("#displayPoints").css("background-color","RGB(100,100,100)");
+          displayPoints=false;
+          completedFilters=true;
+          resetAutoGenListener([cWidth,cHeight,completedFilters,d,colorThreshold],style);
+          window.setTimeout(function(){
+            $("#loadingScreen").css("opacity","0");
+            $("#loadingText").css("opacity","0");
+            $("#loadingText").css("top","30%");
+            window.setTimeout(function(){
+              $("#loadingScreen").css("display","none");
+            },1800);
+          },0)
+          loop();
+
         }
-        splitSquare(20)
+      }
+      else{
+        allVertices = [];
+        allVertices.push([0,0]);
+        allVertices.push([cWidth,0]);
+        allVertices.push([0,cHeight]);
+        allVertices.push([cWidth,cHeight]);
+
+        for(i=0;i<cWidth/80;i++){
+          var tempv = i*80+Math.round(Math.random(0,30));
+          var tempv2 = i*80+Math.round(Math.random(0,30));
+          if (inCanvas(tempv,cHeight)){
+            allVertices.push([tempv,cHeight])
+          }
+          if (inCanvas(tempv2,cHeight)){
+            allVertices.push([tempv2,0])
+          }
+
+
+        }
+        for(i=0;i<cHeight/80;i++){
+          var tempv = i*80+Math.round(Math.random(0,30));
+          var tempv2 = i*80+Math.round(Math.random(0,30));
+          if (inCanvas(cWidth,tempv)){
+            allVertices.push([cWidth,tempv])
+          }
+          if (inCanvas(0,tempv2)){
+            allVertices.push([0,tempv2])
+          }
+
+        }
         generateRandomSquares(20,0.4)
         pushEdgePointsToAll();
         triangulize();
@@ -360,65 +444,18 @@ function resetAutoGenListener(values){
         $("#displayPoints").css("background-color","RGB(100,100,100)");
         displayPoints=false;
         completedFilters=true;
-        resetAutoGenListener([cWidth,cHeight,completedFilters,d,colorThreshold]);
+        $("#loadingScreen").css("opacity","0");
+        $("#loadingText").css("opacity","0");
+        $("#loadingText").css("top","30%");
         window.setTimeout(function(){
-          $("#loadingScreen").css("opacity","0");
-          $("#loadingText").css("opacity","0");
-          $("#loadingText").css("top","30%");
-          window.setTimeout(function(){
-            $("#loadingScreen").css("display","none");
-          },1800);
-        },0)
+          $("#loadingScreen").css("display","none");
+        },1500);
+        loop();
         
       }
     }
-    else{
-      allVertices = [];
-      allVertices.push([0,0]);
-      allVertices.push([cWidth,0]);
-      allVertices.push([0,cHeight]);
-      allVertices.push([cWidth,cHeight]);
-
-      for(i=0;i<cWidth/80;i++){
-        var tempv = i*80+Math.round(Math.random(0,30));
-        var tempv2 = i*80+Math.round(Math.random(0,30));
-        if (inCanvas(tempv,cHeight)){
-          allVertices.push([tempv,cHeight])
-        }
-        if (inCanvas(tempv2,cHeight)){
-          allVertices.push([tempv2,0])
-        }
-
-
-      }
-      for(i=0;i<cHeight/80;i++){
-        var tempv = i*80+Math.round(Math.random(0,30));
-        var tempv2 = i*80+Math.round(Math.random(0,30));
-        if (inCanvas(cWidth,tempv)){
-          allVertices.push([cWidth,tempv])
-        }
-        if (inCanvas(0,tempv2)){
-          allVertices.push([0,tempv2])
-        }
-
-      }
-      generateRandomSquares(20,0.4)
-      pushEdgePointsToAll();
-      triangulize();
-      finishedColoring = false;
-
-      tColors=[];
-
-      $("#displayPoints").html("Show<br>Points<br>");
-      $("#displayPoints").css("background-color","RGB(100,100,100)");
-      displayPoints=false;
-      completedFilters=true;
-      $("#loadingScreen").css("opacity","0");
-      $("#loadingText").css("opacity","0");
-      $("#loadingText").css("top","30%");
-      window.setTimeout(function(){
-        $("#loadingScreen").css("display","none");
-      },1500);
+    else if (artstyle == 1){
+      generateCubicPoly(14,0.9);
     }
   });
 }

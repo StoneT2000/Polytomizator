@@ -87,7 +87,7 @@ $(document).on('ready',function(){
     }
     else{
       colorThreshold = colorThresholdTemp;
-      resetAutoGenListener([cWidth,cHeight,completedFilters,d,colorThreshold]);
+      resetAutoGenListener([cWidth,cHeight,completedFilters,d,colorThreshold],artstyle);
     }
   })
   $("#durationOfFlowerEffect").on("focusout",function(){
@@ -211,7 +211,7 @@ $(document).on('ready',function(){
       image(img1,0,0,cWidth,cHeight);
       loadPixels();
       filteredPixels=[];
-      resetAutoGenListener([cWidth,cHeight,completedFilters,d,colorThreshold]);
+      resetAutoGenListener([cWidth,cHeight,completedFilters,d,colorThreshold],artstyle);
     });
     
   });
