@@ -1,5 +1,5 @@
 # Polytomizator
-A small web applet that helps generate poly art using an uploaded background image.
+A web applet that helps generate poly art using an uploaded background image.
 
 This was made using JS and HTML. Library used was p5.js.
 
