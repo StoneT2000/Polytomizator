@@ -134,9 +134,11 @@ body,html{
   cursor:pointer;
 }
 #file{
+  margin:auto;
   margin-top:15px;
   margin-bottom:40px;
   font-size: 25px;
+  
   background-color: RGB(40,40,40);
   color:white;
 }
