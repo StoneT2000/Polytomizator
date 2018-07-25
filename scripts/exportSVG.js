@@ -41,7 +41,7 @@ function generateSVGFile(data,svgW,svgH){
   
   var part2 = "<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\" \"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\">"
   var part3 =
-      "<svg version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" width=\""+svgW+"\" height=\""+svgH+"\">"
+      "<svg version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" x=\"0px\" y=\"0px\" width=\""+svgW+"\" height=\""+svgH+"\" viewBox=\"0 0 " +svgW+" "+svgH+"\" enable-background=\"new 0 0 " +svgW+" "+svgH+"\" xml:space=\"preserve\">"
   var part4 = 
       "<g>"+data+"</g></svg>"
   return (part1+part2+part3+part4)
