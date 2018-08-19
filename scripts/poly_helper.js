@@ -6,6 +6,8 @@ function findIndexFromHash(hash){
   var yi = hash%100;
   return xi+yi*ceil(cWidth/50)
 }
+
+//Genearte verticesHashTable array, which is the array containing the coords of every vertice in a hashed array index.
 function generateHashSpace(){
   verticesHashTable=[];
   //50x50 squares in grid
@@ -20,6 +22,8 @@ function generateHashSpace(){
     verticesHashTable[index].push([allVertices[i][0],allVertices[i][1]])
   }
 }
+
+//Add or delete a vertex.
 function updateHashSpace(x,y,add){
   
   var hashVal = hashCoordinate(x,y);
@@ -29,17 +33,6 @@ function updateHashSpace(x,y,add){
     verticesHashTable[index].push([x,y])
   }
   if (add==false){
-    /*
-    var currIndex = 0;
-    while(currIndex<verticesHashTable[index].length){
-      if (verticesHashTable[index][i][0] == x && verticesHashTable[index][i][1] == y){
-        verticesHashTable[index].splice(i,1)
-      }
-      else {
-        currIndex++;
-      }
-    }
-    */
     for (i=0;i<verticesHashTable[index].length;i++){
 
       if (verticesHashTable[index][i][0] == x && verticesHashTable[index][i][1] == y){
