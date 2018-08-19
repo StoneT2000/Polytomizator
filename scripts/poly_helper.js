@@ -112,6 +112,7 @@ function keyPressed(){
     $("#pointBrush").css("background-color","RGB(140,140,140)")
     $("#lineBrush").css("background-color","")
     $("#eraser").css("background-color","")
+    $("#triangleMover").css("background-color","")
     
   }
   else if (keyCode ===69){
@@ -119,12 +120,14 @@ function keyPressed(){
     $("#eraser").css("background-color","RGB(140,140,140)")
     $("#pointBrush").css("background-color","")
     $("#lineBrush").css("background-color","")
+    $("#triangleMover").css("background-color","")
   }
   else if (keyCode === 66){
     mode = 2;
     $("#lineBrush").css("background-color","RGB(140,140,140)")
     $("#pointBrush").css("background-color","")
     $("#eraser").css("background-color","")
+    $("#triangleMover").css("background-color","")
   }
   else if (keyCode === 84){
     mode = 4;
