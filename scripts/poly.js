@@ -5,6 +5,8 @@ var triangulations = [0];
 
 //Colors of triangles
 var tColors = [];
+
+//Modes for different brushes
 var mode = 1;
 var colorOfSquares =[];
 
@@ -29,8 +31,14 @@ var squares = false;
 var colorAccuracy = 1;
 var tempVerticesHashTable = []; //Temp store unexpanded vertices
 var tempVerticesHashTableFlat = [];
+
+//verticesHashTable(flat) are global variables edited by a bunch of functions
+//Ultimately, verticesHashTableFlat (and triangulations) are used by delaunayDisplay to display triangles
+//verticesHashTable is used for quick calculations for things like erasers.
 var verticesHashTable = [];
 var verticesHashTableFlat = [];
+
+//Number of points drawn per stroke
 var pointDensity = 4;
 var exportSVG = false;
 
