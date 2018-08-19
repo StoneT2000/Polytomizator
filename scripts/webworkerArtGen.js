@@ -1,4 +1,4 @@
-importScripts('polyElse.js')
+importScripts('poly_helper.js')
 importScripts('otherEffects.js')
 importScripts('delaunatormin.js')
 importScripts('imagefilter.js')
