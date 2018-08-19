@@ -154,6 +154,7 @@ $(document).on('ready',function(){
         cHeight = round(img1.height/factor);
       //makes sure we have proper hashing for those images that have perfect grid alignments
         var iterations = 0;
+      //Temporary fix for when width is 0 mod 50, the hashmap doesn't work.
         while (cWidth % 50 == 0){
           factor = img1.height/(620+iterations);
           cWidth = round(img1.width/factor);
@@ -245,6 +246,8 @@ $(document).on('ready',function(){
     $("#displayPoints").css("background-color","RGB(100,100,100)");
     displayPoints=false;
   })
+  
+  //Save or load vertices
   $("#saveThis").on("click",function(){
     saveData();
     $("#saveThis").text("Saved data!");

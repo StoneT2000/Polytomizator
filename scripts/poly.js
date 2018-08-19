@@ -1,8 +1,13 @@
 var allVertices=[];
+
+//Triangulations variable stores the order of the triangles vertices
 var triangulations = [0];
+
+//Colors of triangles
 var tColors = [];
 var mode = 1;
 var colorOfSquares =[];
+
 var displayTriangulation = true;
 var displayPoints = true;
 var displayImage = true;
@@ -15,40 +20,49 @@ var downloading = false;
 var magnification = 1;
 var finishedColoring = true;
 var quickColor = false;
+
+//Calculating time stats
 var sTime = 0;
 var fTime = 0;
+
 var squares = false;
 var colorAccuracy = 1;
-
+var tempVerticesHashTable = []; //Temp store unexpanded vertices
+var tempVerticesHashTableFlat = [];
 var verticesHashTable = [];
 var verticesHashTableFlat = [];
 var pointDensity = 4;
 var exportSVG = false;
-var dTriangles = [];
-var flowerEffect = false;
-var filteringView = false;
-var displayEdgePoints = false;
-var snapping = false;
-var snappingAccuracy = 20;
-var displayMode = 0;
+
+var flowerEffect = false; //Whether or not to have the flower effect
+var filteringView = false; //Debugging purposes
+var displayEdgePoints = false; //Display points whenusing filters
+var snapping = false; //Snap points to a grid when using brushes
+var snappingAccuracy = 20; //How big squares in grid are
+//Testing different ways to display the information 
+//displayMode = 0 is normal, 1:rectangles 2:circles 3:animated triangles 4: animated rectangles
+var displayMode = 0; 
 var artstyle = 0; //0: Normal, 1: cubic, 2: ??
-function preload(){
-}
+
 var myCanvas;
 var img1;
 var d;
 function preload(){
+  //Load a default image
   img1=loadImage("images/m10.jpg");
 }
 function setup(){
-  
+  //pixel density is important for screens with different resolutions (e.g old vs new macbooks)
   d = pixelDensity();
   loadPixels();
+  
+  //Fix the height of the uploaded image based on height, it can't be too large
   var factor = img1.height/620;
   cWidth = round(img1.width/factor);
   cHeight = round(img1.height/factor);
   myCanvas = createCanvas(cWidth,cHeight);
   
+  //Initialize points on corners and sides
   allVertices.push([0,0]);
   allVertices.push([cWidth,0]);
   allVertices.push([0,cHeight]);
@@ -79,8 +93,10 @@ function setup(){
 
   }
   loadPixels();
+  
   generateHashSpace();
   frameRate(60);
+  
   $("#gamedisplay").css("right",(cWidth/2).toString()+"px")
   //$("body").css("width",(cWidth+100).toString()+"px")
   myCanvas.parent('gamedisplay');
@@ -282,6 +298,7 @@ function draw(){
     }
   }
 
+  //Erase points
   if (mode===3){
     if(downloading == false){
       noFill();

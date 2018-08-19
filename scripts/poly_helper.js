@@ -200,7 +200,7 @@ function snapVertices(acc){
 
 //Deviation of triangle coords for animated triangles
 var sd = 5;
-//Display all the triangles in tng.
+//Display all the triangles in tng. Displays them using the variable verticesHashTableFlat
 function delaunayDisplay(tng){
   for (var i = 0; i < tng.length; i += 3) {
     if (tColors[i]>=0 && noColors == false){
@@ -364,8 +364,12 @@ function lineAngle(x1,y1,x2,y2){
   }
   return -atan((y2-y1)/(x2-x1)) + angleconstant;
 }
+
+//Expand the vertices to download large scale image
 function expandImage(mvalue,save){
   myCanvas =createCanvas(cWidth*mvalue,cHeight*mvalue);
+  oldWidth = cWidth;
+  oldHeight = cHeight;
   cWidth = cWidth*mvalue;
   cHeight = cHeight*mvalue;
   
@@ -373,20 +377,35 @@ function expandImage(mvalue,save){
   $("body").css("width",(cWidth+500).toString()+"px")
   $("body").css("height",(cHeight+400).toString()+"px")
   myCanvas.parent('gamedisplay');
+  //tempVerticesHashTable = JSON.parse(JSON.stringify(verticesHashTable));
+  //Perform deep copy
   for (p=0;p<verticesHashTable.length;p++){
-    
+    //tempVerticesHashTable.push([]);
     for (l=0;l<verticesHashTable[p].length;l++){
       var tempV = expandVertex(verticesHashTable[p][l],mvalue);
+      //tempVerticesHashTable.push(verticesHashTable[p][l]);
       verticesHashTable[p][l] = tempV;
       
     }
   }
+  //tempVerticesHashTableFlat = tempVerticesHashTable.reduce(function(acc,curr){return acc.concat(curr)});
   verticesHashTableFlat = verticesHashTable.reduce(function(acc,curr){return acc.concat(curr)});
   if (save==true){
     downloading = true;
     draw();
     saveCanvas(myCanvas, 'PolyArt', 'jpg');
     downloading = false;
+    
+    //var cWidth = oldWidth;
+    //var cHeight = oldHeight;
+    //verticesHashTable = tempVerticesHashTable;
+    //verticesHashTableFlat = tempVerticesHashTableFlat;
+    //myCanvas = createCanvas(oldWidth,oldHeight);
+    //$("#gamedisplay").css("right",(cWidth/2).toString()+"px")
+    //$("body").css("width",(cWidth+500).toString()+"px")
+    //$("body").css("height",(cHeight+400).toString()+"px")
+    //myCanvas.parent('gamedisplay')
+    
   }
 }
 function triangulize(){
@@ -430,6 +449,7 @@ function pointInTriangle(x1,y1,x2,y2,x3,y3,x4,y4){
   bc3= sign(x4,y4,x3,y3,x1,y1)<0;
   return ((bc1==bc2)&&(bc2==bc3))
 }
+//Find average color in triangular region with accuracy as measured by pixels (best is accuracy=1)
 function averageColor(x1,y1,x2,y2,x3,y3,accuracy){
   var xs =[x1,x2,x3];
   var ys=[y1,y2,y3];
@@ -460,6 +480,7 @@ function averageColor(x1,y1,x2,y2,x3,y3,accuracy){
   }
   return [tr/totalSample,tg/totalSample,tb/totalSample]
 }
+//Takes color based on the color at the 3 vertices
 function quickAverageColor(x1,y1,x2,y2,x3,y3){
   var set1 = fget(x1,y1);
   var set2 = fget(x2,y2);
@@ -472,6 +493,8 @@ function quickAverageColor(x1,y1,x2,y2,x3,y3){
 function squaredist(x1,y1,x2,y2){
   return (x2-x1)*(x2-x1)+(y2-y1)*(y2-y1)
 }
+
+//Auto gen art based on filters
 function autoGenerateArt(){
   if (completedFilters == false){
     //checks if a filter has already been done
