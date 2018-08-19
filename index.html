@@ -23,10 +23,10 @@
   <script language="javascript" type="text/javascript" src="scripts/exportSVG.js?version=38"></script>
   <!--Remember to increment version for all local js files in order to force users to reload scripts-->
   <link rel ="stylesheet" href="poly.css?version=38">
-  <script src="https://unpkg.com/delaunator@2.0.0/delaunator.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.6.1/p5.js"></script>
   <script src="libraries/p5.svg.js"></script>
-  <!--<script src="scripts/delaunator/delaunatormin.js"></script>-->
+  <script src="scripts/delaunatormin.js"></script>
+  
   <!--When updating this html file, also update the index one-->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
@@ -36,7 +36,7 @@
   <div id="loadingScreen">
     <h1 id="loadingText" style="position: fixed;text-align: center;width: 100%;">Loading Content<img src="images/loadingSymbol.gif" style="margin-left: 10px" width="32px" height="auto"></h1>
   </div>
-  <div class='container'>
+  <div class='container' style="width:10000px;">
     <h1 style="margin-top:10px">Make Poly ART! (Beta)</h1>
     <p>By Stone Tao</p>
     <h5 style="font-size:20px;margin-bottom: 30px;width:80%;margin-left:50%;transform:translate(-50%,0)">It is <b>highly highly</b> suggested to use Firefox for maximum experience. Cannot download art on Safari at the moment.</h5>
@@ -50,13 +50,29 @@
     </select>
     
     <h5>Level of detail of auto generated art: <input id="colorThreshold" type="text" placeholder="10~255"></h5>
-    <input type="button" id="downloadSVG" value="Download poly art as an SVG file"/><input type="button" id="expandImage" value="Download poly art as an image (png)"/>
+    <div id="download_elements">
+      <input type="button" id="downloadSVG" value="Download poly art as an SVG file"/><input type="button" id="expandImage" value="Download poly art as an image (png)"/>
+    </div>
     <div class="main">
       <div id="gamedisplay"></div>
     </div>
-    <h3 id="uploadText">Upload your own image to work with here:</h3>
-    <input style="display:block" id = "file" type="file">
-    <div class="buttonRow">
+    <div class="brushes">
+      <ul style="padding:0px;">
+        <li id="pointBrush"><img src="icons/pointIcon.png" width="50px"></li>
+        <li id="lineBrush"><img src="icons/brushIcon.png" width="50px"></li>
+        <li id="eraser"><img src="icons/EraserIcon.png" width="50px"></li>
+        
+        <li id="triangleMover"><img src="icons/triangleMover.png" width="50px"></li>
+        <li id="sizing1">Brush Size<input id="brushSize" type="text" placeholder="100"></li>
+        
+        <li id="sizing2">Brush Density<input id="brushDensity" type="text" placeholder="5"></li>
+        <li id="saveThis" style="vertical-align: middle;line-height: 25px;margin: 0px;">Save this canvas</li>
+        <li id="loadThis" style="vertical-align: middle;line-height: 25px;margin: 0px;">Load last canvas</li>
+        
+      </ul>
+    </div>
+    <div class="buttonRow" style="display:inline-block;">
+      <div class="buttonRow">
       <ul id ="buttonList" style="padding:0;">
         <li id="displayPoints">Hide <br>Points<br></li>
         <li id="displayColor">Hide <br>Colors<br></li>
@@ -64,18 +80,12 @@
         <li id="displayImage">Hide <br>Background<br></li>
       </ul>
     </div>
-    <div class="brushes">
-      <ul>
-        <li id="pointBrush"><img src="icons/pointIcon.png" width="50px"></li>
-        <li id="lineBrush"><img src="icons/brushIcon.png" width="50px"></li>
-        <li id="eraser"><img src="icons/EraserIcon.png" width="50px"></li>
-        <li id="triangleMover"><img src="icons/triangleMover.png" width="50px"></li>
-        <li id="sizing1">Brush Size<input id="brushSize" type="text" placeholder="100"></li>
-        <li id="sizing2">Brush Density<input id="brushDensity" type="text" placeholder="5"></li>
-        <li id="saveThis">Save this canvas</li>
-        <li id="loadThis">Load last saved data</li>
-      </ul>
+
     </div>
+    <h3 id="uploadText">Upload your own image to work with here:</h3>
+    <input style="display:block" id = "file" type="file">
+    
+
     <div class="statistics">
       <h3 id="statsHeader"> Some stats for nerds</h3>
       <table id="statsTable">

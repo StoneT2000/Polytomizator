@@ -152,19 +152,20 @@ $(document).on('ready',function(){
         var factor = img1.height/620;
         cWidth = round(img1.width/factor);
         cHeight = round(img1.height/factor);
+      if (cWidth > window.innerWidth * 0.9){
+        var factor = img1.width/(window.innerWidth*0.9);
+        cWidth = round(img1.width/factor);
+        cHeight = round(img1.height/factor);
+      }
       //makes sure we have proper hashing for those images that have perfect grid alignments
         var iterations = 0;
       //Temporary fix for when width is 0 mod 50, the hashmap doesn't work.
-        while (cWidth % 50 == 0){
-          factor = img1.height/(620+iterations);
-          cWidth = round(img1.width/factor);
-          cHeight = round(img1.height/factor);
-          iterations ++;
-          if (iterations >10){
-            alert("Please select a different image of slightly different dimensions, this one can't work")
-            break;
-          }
+        if (cWidth % 50 == 0){
+          cWidth ++;
         }
+      if (cHeight % 50 == 0){
+        cHeight ++;
+      }
         myCanvas = createCanvas(cWidth,cHeight);
 
       $("#gamedisplay").css("right",(cWidth/2).toString()+"px")
