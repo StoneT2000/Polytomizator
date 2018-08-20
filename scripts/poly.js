@@ -119,6 +119,8 @@ function setup(){
   recordVertices();
   verticesHashTableFlat = verticesHashTable.reduce(function(acc,curr){return acc.concat(curr)});
   
+  
+  
   $("#gamedisplay").css("right",(cWidth/2).toString()+"px")
   //$("body").css("width",(cWidth+100).toString()+"px")
   myCanvas.parent('gamedisplay');
@@ -435,8 +437,7 @@ function resetAutoGenListener(values,style){
 
           tColors=[];
 
-          $("#displayPoints").html("Show<br>Points<br>");
-          $("#displayPoints").css("background-color","RGB(100,100,100)");
+          css_buttons.displayPoints(false);
           displayPoints=false;
           completedFilters=true;
           resetAutoGenListener([cWidth,cHeight,completedFilters,d,colorThreshold],style);
@@ -489,8 +490,7 @@ function resetAutoGenListener(values,style){
 
         tColors=[];
 
-        $("#displayPoints").html("Show<br>Points<br>");
-        $("#displayPoints").css("background-color","RGB(100,100,100)");
+        css_buttons.displayPoints(false);
         displayPoints=false;
         completedFilters=true;
         $("#loadingScreen").css("opacity","0");

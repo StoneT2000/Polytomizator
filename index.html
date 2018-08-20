@@ -58,7 +58,7 @@
     <div class="main">
       <div id="gamedisplay"></div>
     </div>
-    <div class="brushes">
+    <div class="brushes noselect">
       <ul style="padding:0px;">
         <li id="pointBrush"><img src="icons/pointIcon.png" width="50px"></li>
         <li id="lineBrush"><img src="icons/brushIcon.png" width="50px"></li>
@@ -68,18 +68,20 @@
         <li id="sizing1">Brush Size<input id="brushSize" type="text" placeholder="100"></li>
         
         <li id="sizing2">Brush Density<input id="brushDensity" type="text" placeholder="5"></li>
-        <li id="saveThis" style="vertical-align: middle;line-height: 25px;margin: 0px;">Save this canvas</li>
-        <li id="loadThis" style="vertical-align: middle;line-height: 25px;margin: 0px;">Load last canvas</li>
+        <li id="undo" style="vertical-align: top;line-height: 45px" onclick="undo()">Undo</li>
+        <li id="redo" style="vertical-align: top;line-height: 45px" onclick="redo()">Redo</li>
+        <li id="saveThis" style="vertical-align: top;line-height: 25px">Save this canvas</li>
+        <li id="loadThis" style="vertical-align: top;line-height: 25px">Load last canvas</li>
         
       </ul>
     </div>
-    <div class="buttonRow" style="display:inline-block;">
+    <div class="buttonRow noselect" style="display:inline-block;">
       <div class="buttonRow">
       <ul id ="buttonList" style="padding:0;">
-        <li id="displayPoints">Hide <br>Points<br></li>
-        <li id="displayColor">Hide <br>Colors<br></li>
-        <li id="displayTriangulation">Hide <br>Triangles<br></li>
-        <li id="displayImage">Hide <br>Background<br></li>
+        <li id="displayPoints">Hide<br>Points<br></li>
+        <li id="displayColor">Hide<br>Colors<br></li>
+        <li id="displayTriangulation">Hide<br>Triangles<br></li>
+        <li id="displayImage">Hide<br>Image<br></li>
       </ul>
     </div>
 

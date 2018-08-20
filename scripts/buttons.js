@@ -6,54 +6,46 @@ $(document).on('ready',function(){
   $("#displayColor").on("click",function(){
     if (noColors===true){
       noColors = false;
-      $("#displayColor").html("Hide <br>Colors<br>")
-      $("#displayColor").css("background-color","RGB(40,40,40)");
+      css_buttons.displayColor(true);
     }
     else {
-      $("#displayColor").html("Show <br>Colors<br>")
       noColors = true;
-      $("#displayColor").css("background-color","RGB(100,100,100)");
+      css_buttons.displayColor(false);
     }
   })
 
   $("#displayPoints").on("click",function(){
     if (displayPoints == false){
       displayPoints = true;
-            $("#displayPoints").html("Hide<br>Points<br>");
-      $("#displayPoints").css("background-color","RGB(40,40,40)");
+      css_buttons.displayPoints(true);
 
     }
     else {
       displayPoints = false;
-            $("#displayPoints").html("Show<br>Points<br>");
-      $("#displayPoints").css("background-color","RGB(100,100,100)");
+      css_buttons.displayPoints(false);
     }
   });
 
   $("#displayTriangulation").on("click",function(){
     if (displayTriangulation == false){
       displayTriangulation = true;
-      $("#displayTriangulation").html("Hide<br>Triangles<br>");
-      $("#displayTriangulation").css("background-color","RGB(40,40,40)");
+      css_buttons.displayTriangulation(true);
       
     }
     else {
       displayTriangulation = false;
-      $("#displayTriangulation").html("Show<br>Triangles<br>");
-      $("#displayTriangulation").css("background-color","RGB(100,100,100)");
+      css_buttons.displayTriangulation(false);
     }
   });
   $("#displayImage").on("click",function(){
     if (displayImage == false){
       displayImage = true;
-      $("#displayImage").html("Hide<br>Image<br>");
-      $("#displayImage").css("background-color","RGB(40,40,40)");
+      css_buttons.displayImage(true);
       
     }
     else {
       displayImage = false;
-      $("#displayImage").html("Show<br>Image<br>");
-      $("#displayImage").css("background-color","RGB(100,100,100)");
+      css_buttons.displayImage(false);
     }
   });
   $("#brushSize").on("focusout",function(){
@@ -251,8 +243,7 @@ $(document).on('ready',function(){
     loadPixels();
     tColors=[];
     sTime = millis();
-    $("#displayPoints").html("Show<br>Points<br>");
-    $("#displayPoints").css("background-color","RGB(100,100,100)");
+    css_buttons.displayPoints(false);
     displayPoints=false;
   })
   

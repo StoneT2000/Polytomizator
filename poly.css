@@ -1,7 +1,7 @@
 body,html{
   width:100%;
   background-image:url('images/PolyBackground.jpg');
-  cursor:crosshair;
+  
   position:relative;
   height:auto;
 }
@@ -9,6 +9,7 @@ body,html{
   position:relative;
   display: inline;
   margin: 0px;
+  cursor:crosshair;
   
 }
 .main .p5Canvas{
@@ -113,16 +114,18 @@ body,html{
   line-height:20px;
   cursor:pointer;
   font-size:15px;
+  vertical-align: top;
 }
 .brushes input{
   width: 50px;
   line-height:20px;
-  margin-top:10px;
+  vertical-align: middle;
   text-align: center;
   margin-left:10px;
 }
 .brushes #sizing1,#sizing2{
-  width:200px;
+  width:170px;
+  line-height: 45px;
   cursor:default;
 }
 .brushes #eraser{
@@ -332,4 +335,11 @@ h3, h4, h1, h2, p{
 .footer a:hover{
   border-radius: 50%;
   color: #0275d8;
+}
+
+.noselect {
+    -webkit-user-select: none; /* Safari */
+       -moz-user-select: none;
+        -ms-user-select: none;
+            user-select: none;
 }

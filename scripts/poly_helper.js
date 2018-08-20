@@ -62,27 +62,25 @@ function keyPressed(event){
     finishedColoring = false;
     image(img1,0,0,cWidth,cHeight);
     noColors=false;
-    $("#displayColor").html("Hide<br>Colors<br>");
-    $("#displayColor").css("background-color","RGB(40,40,40)");
+    css_buttons.displayColor(true);
+    
     loadPixels();
     tColors=[];
     sTime = millis();
-    $("#displayPoints").html("Show<br>Points<br>");
-    $("#displayPoints").css("background-color","RGB(100,100,100)");
+    
+    css_buttons.displayPoints(false);
     displayPoints=false;
   }
   //C
   else if (keyCode===67){
     if (noColors === false){
       noColors = true;
-      $("#displayColor").html("Show<br>Colors<br>");
-      $("#displayColor").css("background-color","RGB(100,100,100)");
+      css_buttons.displayColor(false);
       
     }
     else {
       noColors = false;
-      $("#displayColor").html("Hide<br>Colors<br>");
-      $("#displayColor").css("background-color","RGB(40,40,40)");
+      css_buttons.displayColor(true);
     }
   }
   //P
@@ -320,8 +318,7 @@ function loadData(dataStored){
   verticesHashTableFlat=dataStored[4];
   triangulize();
   displayPoints=true;
-  $("#displayPoints").html("Hide<br>Points<br>");
-  $("#displayPoints").css("background-color","RGB(40,40,40)");
+  css_buttons.displayPoints(true);
 }
 function saveData(){
   var currentData = [allVertices.slice(),triangulations.slice(),tColors.slice(),verticesHashTable.slice(),verticesHashTableFlat.slice()];
@@ -409,12 +406,11 @@ function triangulize(){
     var triangles = (delaunay.triangles)
     triangulations[0] = triangles;
     
-    displayPoints=false;
-    displayTriangulation=false;
-    displayPoints=true;
+    //displayPoints=false;
+    //displayTriangulation=false;
+    //displayPoints=true;
     displayTriangulation=true;
-    $("#displayTriangulation").html("Hide <br>Triangles<br>");
-    $("#displayTriangulation").css("background-color","RGB(40,40,40)");
+    css_buttons.displayTriangulation(true);
     stepD = 0;
 }
 function fget(x,y){
@@ -537,10 +533,65 @@ function autoGenerateArt(){
 
   loadPixels();
   tColors=[];
-  $("#displayPoints").html("Show<br>Points<br>");
-  $("#displayPoints").css("background-color","RGB(100,100,100)");
+  css_buttons.displayPoints(false);
   displayPoints=false;
 }
+
+//Constructor for buttons display functions
+function construct_css_buttons(){
+  this.displayPoints = function(a){
+    if (a === false){
+      $("#displayPoints").html("Show<br>Points<br>");
+      $("#displayPoints").css("color","black");
+      $("#displayPoints").css("background-color","RGB(255,255,255)");
+    }
+    else {
+      $("#displayPoints").html("Hide<br>Points<br>");
+      $("#displayPoints").css("color","white");
+      $("#displayPoints").css("background-color","RGB(40,40,40)");
+    }
+  }
+  this.displayColor = function(a){
+    if (a === false){
+      $("#displayColor").html("Show<br>Colors<br>");
+      $("#displayColor").css("color","black");
+      $("#displayColor").css("background-color","RGB(255,255,255)");
+
+    }
+    else {
+      $("#displayColor").html("Hide<br>Colors<br>");
+      $("#displayColor").css("color","white");
+      $("#displayColor").css("background-color","RGB(40,40,40)");
+    }
+  }
+  this.displayTriangulation = function(a){
+    if (a === true){
+      $("#displayTriangulation").html("Hide<br>Triangles<br>");
+      $("#displayTriangulation").css("color","white");
+      $("#displayTriangulation").css("background-color","RGB(40,40,40)");
+    }
+    else {
+      $("#displayTriangulation").html("Show<br>Triangles<br>");
+      $("#displayTriangulation").css("color","black");
+      $("#displayTriangulation").css("background-color","RGB(255,255,255)");
+    }
+  }
+  this.displayImage = function(a){
+    if (a === true){
+      $("#displayImage").html("Hide<br>Image<br>");
+      $("#displayImage").css("color","white");
+      $("#displayImage").css("background-color","RGB(40,40,40)");
+    }
+    else {
+      $("#displayImage").html("Show<br>Image<br>");
+      $("#displayImage").css("color","black");
+      $("#displayImage").css("background-color","RGB(255,255,255)");
+    }
+  }
+  
+}
+var css_buttons = new construct_css_buttons();
+
 
 
 var indexPos = -1;
