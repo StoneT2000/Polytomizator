@@ -214,6 +214,9 @@ $(document).on('ready',function(){
       loadPixels();
       filteredPixels=[];
       resetAutoGenListener([cWidth,cHeight,completedFilters,d,colorThreshold],artstyle);
+      
+      //Store initial vertices
+      recordVertices();
     });
     
   });

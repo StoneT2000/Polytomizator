@@ -1,4 +1,4 @@
-var allVertices=[];
+var allVertices=[]; //Store all vertices. NOTE, this does not record when vertices are removed
 
 //Triangulations variable stores the order of the triangles vertices
 var triangulations = [0];
@@ -34,7 +34,7 @@ var tempVerticesHashTableFlat = [];
 
 //verticesHashTable(flat) are global variables edited by a bunch of functions
 //Ultimately, verticesHashTableFlat (and triangulations) are used by delaunayDisplay to display triangles
-//verticesHashTable is used for quick calculations for things like erasers.
+//verticesHashTable is used for quick calculations for things like erasers. It is also a real reflection of all the vertices in a canvas.
 var verticesHashTable = [];
 var verticesHashTableFlat = [];
 
@@ -58,8 +58,7 @@ var myCanvas;
 var img1;
 var d;
 function preload(){
-  //Load a default image
-  img1=loadImage("images/m10.jpg");
+  img1 = loadImage('images/white.jpg')
 }
 function setup(){
   //pixel density is important for screens with different resolutions (e.g old vs new macbooks)
@@ -109,6 +108,7 @@ function setup(){
   
   //Store initial vertices
   recordVertices();
+  verticesHashTableFlat = verticesHashTable.reduce(function(acc,curr){return acc.concat(curr)});
   
   $("#gamedisplay").css("right",(cWidth/2).toString()+"px")
   //$("body").css("width",(cWidth+100).toString()+"px")
@@ -245,10 +245,14 @@ function draw(){
   stroke(0,0,0)
   if (displayPoints == true){
     for (j=0;j<verticesHashTable.length;j++){
+      //ellipse(verticesHashTableFlat[j][0], verticesHashTableFlat[j][1], 5, 5);
+      
       for (k=0;k<verticesHashTable[j].length;k++){
         ellipse(verticesHashTable[j][k][0],verticesHashTable[j][k][1],5,5)
       }
+      
     }
+    //Points detected by filters
     for (j=0;j<edgePoints.length;j++){
       if (edgePoints[j][2]>colorThreshold && displayEdgePoints == true){
         ellipse(edgePoints[j][0],edgePoints[j][1],5)
@@ -265,7 +269,7 @@ function draw(){
   var dx=oldX-mouseX;
   var dy=oldY-mouseY;
   accDist = sqrt(dx*dx+dy*dy)
-  if (mode===2){
+  if (mode === 2){
     if(downloading == false){
       noFill();
       stroke(2);
@@ -310,6 +314,10 @@ function draw(){
         }
       }
 
+    }
+    else if (!mouseIsPressed){
+      //Allows u to use brush on same spot by clicking multiple times
+      critDist = 0;
     }
   }
 

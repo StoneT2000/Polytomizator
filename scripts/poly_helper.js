@@ -14,7 +14,7 @@ function findIndexFromHash(hash){
 function generateHashSpace(){
   verticesHashTable=[];
   //50x50 squares in grid
-  for (i=0;i<ceil(cWidth/50)*ceil(cHeight/50);i++){
+  for (i=0;i<=ceil(cWidth/50)*ceil(cHeight/50);i++){
     verticesHashTable.push([]);
     
   }
@@ -158,6 +158,8 @@ function mouseClicked(){
       //Record past vertices sets for undoing
       recordVertices();
       
+      //verticesHashTableFlat = verticesHashTable.reduce(function(acc,curr){return acc.concat(curr)});
+
     }
     
     
@@ -553,9 +555,9 @@ function undo(){
     return;
   }
   undoState = 1;
-  allVertices = JSON.parse(JSON.stringify(storedVertices[indexPos - stepBackNum]));
-  generateHashSpace();
+  verticesHashTable = JSON.parse(JSON.stringify(storedVertices[indexPos - stepBackNum]));
   verticesHashTableFlat = verticesHashTable.reduce(function(acc,curr){return acc.concat(curr)});
+  
   console.log(storedVertices, indexPos, stepBackNum)
 
 }
@@ -565,15 +567,15 @@ function redo(){
     stepBackNum++;
     return;
   }
-  allVertices = JSON.parse(JSON.stringify(storedVertices[indexPos - stepBackNum]));
-  generateHashSpace();
+  verticesHashTable = JSON.parse(JSON.stringify(storedVertices[indexPos - stepBackNum]));
+
   verticesHashTableFlat = verticesHashTable.reduce(function(acc,curr){return acc.concat(curr)});
   console.log(storedVertices, indexPos, stepBackNum)
 }
 function recordVertices(){
   if (undoState == 0){
     indexPos++;
-    storedVertices.push(JSON.parse(JSON.stringify(allVertices)));
+    storedVertices.push(JSON.parse(JSON.stringify(verticesHashTable)));
   }
   else{
     storedVertices.splice(indexPos-stepBackNum+1);
@@ -581,7 +583,7 @@ function recordVertices(){
     stepBackNum = 0;
     undoState = 0;
     indexPos++;
-    storedVertices.push(JSON.parse(JSON.stringify(allVertices)));
+    storedVertices.push(JSON.parse(JSON.stringify(verticesHashTable)));
   }
   console.log(storedVertices, indexPos, stepBackNum)
 }
@@ -589,11 +591,9 @@ function recordVertices(){
 //Detect multiple presses
 document.addEventListener ("keydown", function (zEvent) {
     if (zEvent.metaKey  &&  zEvent.shiftKey  &&  zEvent.code === "KeyZ") {
-        // DO YOUR STUFF HERE
       redo();
     }
     if (zEvent.metaKey  &&  zEvent.shiftKey == false  &&  zEvent.code === "KeyZ") {
-        // DO YOUR STUFF HERE
       undo();
     }
 } );
