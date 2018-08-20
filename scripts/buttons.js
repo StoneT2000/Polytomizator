@@ -215,6 +215,11 @@ $(document).on('ready',function(){
       filteredPixels=[];
       resetAutoGenListener([cWidth,cHeight,completedFilters,d,colorThreshold],artstyle);
       
+      storedVertices = [];
+      for (var slot_index = 0; slot_index < max_undo; slot_index++){
+        storedVertices.push([]);
+      }
+      
       //Store initial vertices
       recordVertices();
     });
