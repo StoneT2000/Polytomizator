@@ -27,10 +27,9 @@ var quickColor = false;
 var sTime = 0;
 var fTime = 0;
 
+//Display squares created by generateCubicPoly.
 var squares = false;
 var colorAccuracy = 1;
-var tempVerticesHashTable = []; //Temp store unexpanded vertices
-var tempVerticesHashTableFlat = [];
 
 //verticesHashTable(flat) are global variables edited by a bunch of functions
 //Ultimately, verticesHashTableFlat (and triangulations) are used by delaunayDisplay to display triangles
@@ -52,7 +51,11 @@ var snappingAccuracy = 20; //How big squares in grid are
 var displayMode = 0; 
 var artstyle = 0; //0: Normal, 1: cubic, 2: ??
 
+
+//Store past vertices placement
 var storedVertices = [];
+//Max number of undos allowed.
+var max_undo = 50;
 
 var myCanvas;
 var img1;
@@ -105,6 +108,12 @@ function setup(){
   
   generateHashSpace();
   frameRate(60);
+  
+  
+  //Initialize storedVertices array with 50 empty slots
+  for (var slot_index = 0; slot_index < max_undo; slot_index++){
+    storedVertices.push([]);
+  }
   
   //Store initial vertices
   recordVertices();

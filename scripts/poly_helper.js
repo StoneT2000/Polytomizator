@@ -548,44 +548,59 @@ var stepBackNum = 0;
 var undoState = 0; 
 //Undostate = 0 means currently displaying an un-redoable layer
 //Undostate = 1 means there are redos available. Also implies that if a new path is taken, we must remove the stored veritces up to indexPos - stepBackNum
+//Store vertices up to 50 steps
 function undo(){
   stepBackNum++;
-  if (indexPos - stepBackNum < 0){
+  if (indexPos - stepBackNum < 0 || stepBackNum > max_undo - 1){
     stepBackNum--;
     return;
   }
   undoState = 1;
-  verticesHashTable = JSON.parse(JSON.stringify(storedVertices[indexPos - stepBackNum]));
+  verticesHashTable = JSON.parse(JSON.stringify(storedVertices[(indexPos - stepBackNum) % max_undo]));
   verticesHashTableFlat = verticesHashTable.reduce(function(acc,curr){return acc.concat(curr)});
   
-  console.log(storedVertices, indexPos, stepBackNum)
+  //console.log(storedVertices, indexPos, stepBackNum)
 
 }
 function redo(){
   stepBackNum--;
-  if (indexPos - stepBackNum > storedVertices.length-1){
+  if (stepBackNum < 0){
     stepBackNum++;
     return;
   }
-  verticesHashTable = JSON.parse(JSON.stringify(storedVertices[indexPos - stepBackNum]));
+  verticesHashTable = JSON.parse(JSON.stringify(storedVertices[(indexPos - stepBackNum) % max_undo]));
 
   verticesHashTableFlat = verticesHashTable.reduce(function(acc,curr){return acc.concat(curr)});
-  console.log(storedVertices, indexPos, stepBackNum)
+  //console.log(storedVertices, indexPos, stepBackNum)
 }
 function recordVertices(){
   if (undoState == 0){
     indexPos++;
-    storedVertices.push(JSON.parse(JSON.stringify(verticesHashTable)));
+
+    storedVertices[indexPos % max_undo] = JSON.parse(JSON.stringify(verticesHashTable));
+    
+    if (indexPos >= max_undo * 4){
+      //Don't let it get too big in case that one user spends forever (like very very long) time making poly art...
+      indexPos = indexPos % max_undo  + max_undo;
+    }
+    
   }
   else{
-    storedVertices.splice(indexPos-stepBackNum+1);
-    indexPos = indexPos - stepBackNum;
+    
+    //In the event that we start a new path during command z, the new vertice is at indexPos = 1 now
+    //With indexPos = 0 representing where we command z'd all the way to.
+    //Thus, we set storedVertices[0] = to the canvas where we command z'd all the way to
+    storedVertices[0] = JSON.parse(JSON.stringify(storedVertices[(indexPos - stepBackNum) % max_undo] ));
+    
+    //storedVertices.splice(indexPos-stepBackNum+1);
+    //indexPos = indexPos - stepBackNum;
+    indexPos = 0;
     stepBackNum = 0;
     undoState = 0;
     indexPos++;
-    storedVertices.push(JSON.parse(JSON.stringify(verticesHashTable)));
+    storedVertices[indexPos % max_undo] = JSON.parse(JSON.stringify(verticesHashTable));
   }
-  console.log(storedVertices, indexPos, stepBackNum)
+  //console.log(storedVertices, indexPos, stepBackNum)
 }
 
 //Detect multiple presses
