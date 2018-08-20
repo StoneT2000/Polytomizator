@@ -406,7 +406,7 @@ function expandImage(mvalue,save){
     var canvas = document.getElementById("downloadthiscanvas"), ctx = canvas.getContext("2d");
     // draw to canvas...
     canvas.toBlob(function(blob) {
-        saveAs(blob, "pretty image.png");
+        saveAs(blob, "PolyArt.png");
     });
     downloading = false;
     console.log("Finished downloading")
