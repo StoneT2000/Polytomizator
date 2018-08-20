@@ -1,59 +1,64 @@
 var completedFilters = false;
 $(document).on('ready',function(){
   
+  document.addEventListener ("keydown", function (zEvent) {
+      if (zEvent.metaKey  &&  zEvent.shiftKey  &&  zEvent.code === "KeyZ") {
+        redo();
+      }
+      if (zEvent.metaKey  &&  zEvent.shiftKey == false  &&  zEvent.code === "KeyZ") {
+        undo();
+      }
+  } );
   $("#pointBrush").css("background-color","RGB(140,140,140)")
   console.log("Let's make computer generated art that looks pretty cool...v33")
   $("#displayColor").on("click",function(){
     if (noColors===true){
       noColors = false;
-      $("#displayColor").html("Hide <br>Colors<br>")
-      $("#displayColor").css("background-color","RGB(40,40,40)");
+      css_buttons.displayColor(true);
+      
     }
     else {
-      $("#displayColor").html("Show <br>Colors<br>")
       noColors = true;
-      $("#displayColor").css("background-color","RGB(100,100,100)");
+      css_buttons.displayColor(false);
+    }
+    for (j=0;j<triangulations.length;j++){
+      delaunayDisplay(triangulations[j], triangleCanvasLayer);
+
     }
   })
 
   $("#displayPoints").on("click",function(){
     if (displayPoints == false){
       displayPoints = true;
-            $("#displayPoints").html("Hide<br>Points<br>");
-      $("#displayPoints").css("background-color","RGB(40,40,40)");
+      css_buttons.displayPoints(true);
 
     }
     else {
       displayPoints = false;
-            $("#displayPoints").html("Show<br>Points<br>");
-      $("#displayPoints").css("background-color","RGB(100,100,100)");
+      css_buttons.displayPoints(false);
     }
   });
 
   $("#displayTriangulation").on("click",function(){
     if (displayTriangulation == false){
       displayTriangulation = true;
-      $("#displayTriangulation").html("Hide<br>Triangles<br>");
-      $("#displayTriangulation").css("background-color","RGB(40,40,40)");
+      css_buttons.displayTriangulation(true);
       
     }
     else {
       displayTriangulation = false;
-      $("#displayTriangulation").html("Show<br>Triangles<br>");
-      $("#displayTriangulation").css("background-color","RGB(100,100,100)");
+      css_buttons.displayTriangulation(false);
     }
   });
   $("#displayImage").on("click",function(){
     if (displayImage == false){
       displayImage = true;
-      $("#displayImage").html("Hide<br>Image<br>");
-      $("#displayImage").css("background-color","RGB(40,40,40)");
+      css_buttons.displayImage(true);
       
     }
     else {
       displayImage = false;
-      $("#displayImage").html("Show<br>Image<br>");
-      $("#displayImage").css("background-color","RGB(100,100,100)");
+      css_buttons.displayImage(false);
     }
   });
   $("#brushSize").on("focusout",function(){
@@ -214,6 +219,16 @@ $(document).on('ready',function(){
       loadPixels();
       filteredPixels=[];
       resetAutoGenListener([cWidth,cHeight,completedFilters,d,colorThreshold],artstyle);
+      
+      storedVertices = [];
+      for (var slot_index = 0; slot_index < max_undo; slot_index++){
+        storedVertices.push([]);
+      }
+      
+      triangleCanvasLayer = createGraphics(cWidth,cHeight)
+      
+      //Store initial vertices
+      recordVertices();
     });
     
   });
@@ -243,8 +258,7 @@ $(document).on('ready',function(){
     loadPixels();
     tColors=[];
     sTime = millis();
-    $("#displayPoints").html("Show<br>Points<br>");
-    $("#displayPoints").css("background-color","RGB(100,100,100)");
+    css_buttons.displayPoints(false);
     displayPoints=false;
   })
   

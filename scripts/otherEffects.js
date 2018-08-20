@@ -74,6 +74,7 @@ function splitSquare(accuracy){
     
   }
 }
+//Average color under a square
 function averageColorSquare(x1,y1,sw,sl,accuracy){
   if (x1+sl >cWidth){
     sl = cWidth-x1;

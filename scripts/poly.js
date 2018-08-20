@@ -1,4 +1,4 @@
-var allVertices=[];
+var allVertices=[]; //Store all vertices. NOTE, this does not record when vertices are removed
 
 //Triangulations variable stores the order of the triangles vertices
 var triangulations = [0];
@@ -27,16 +27,18 @@ var quickColor = false;
 var sTime = 0;
 var fTime = 0;
 
+//Display squares created by generateCubicPoly.
 var squares = false;
 var colorAccuracy = 1;
-var tempVerticesHashTable = []; //Temp store unexpanded vertices
-var tempVerticesHashTableFlat = [];
 
 //verticesHashTable(flat) are global variables edited by a bunch of functions
 //Ultimately, verticesHashTableFlat (and triangulations) are used by delaunayDisplay to display triangles
-//verticesHashTable is used for quick calculations for things like erasers.
+//verticesHashTable is used for quick calculations for things like erasers. It is also a real reflection of all the vertices in a canvas.
 var verticesHashTable = [];
 var verticesHashTableFlat = [];
+
+var tempVerticesHashTable = [];
+var tempVerticesHashTableFlat = [];
 
 //Number of points drawn per stroke
 var pointDensity = 4;
@@ -52,12 +54,19 @@ var snappingAccuracy = 20; //How big squares in grid are
 var displayMode = 0; 
 var artstyle = 0; //0: Normal, 1: cubic, 2: ??
 
+
+//Store past vertices placement
+var storedVertices = [];
+//Max number of undos allowed.
+var max_undo = 50;
+
 var myCanvas;
 var img1;
 var d;
+
+var triangleCanvasLayer;
 function preload(){
-  //Load a default image
-  img1=loadImage("images/m10.jpg");
+  img1 = loadImage('images/white.jpg')
 }
 function setup(){
   //pixel density is important for screens with different resolutions (e.g old vs new macbooks)
@@ -69,6 +78,10 @@ function setup(){
   cWidth = round(img1.width/factor);
   cHeight = round(img1.height/factor);
   myCanvas = createCanvas(cWidth,cHeight);
+  
+  
+  //create off screen triangle generating layer
+  triangleCanvasLayer = createGraphics(cWidth,cHeight)
   
   //Initialize points on corners and sides
   allVertices.push([0,0]);
@@ -104,6 +117,18 @@ function setup(){
   
   generateHashSpace();
   frameRate(60);
+  
+  
+  //Initialize storedVertices array with 50 empty slots
+  for (var slot_index = 0; slot_index < max_undo; slot_index++){
+    storedVertices.push([]);
+  }
+  
+  //Store initial vertices
+  recordVertices();
+  verticesHashTableFlat = verticesHashTable.reduce(function(acc,curr){return acc.concat(curr)});
+  
+  
   
   $("#gamedisplay").css("right",(cWidth/2).toString()+"px")
   //$("body").css("width",(cWidth+100).toString()+"px")
@@ -172,15 +197,18 @@ var ff = 0;
 var fr = 0;
 var fc = 0;
 var flowerEffectTime=10;
+
 function draw(){
   if (fc===0){
     fs = millis();
   }
   
   background("#FFFFFF")
+  
   if (displayImage == true){
     image(img1,0,0,cWidth,cHeight);
   }
+
   
   if (flowerEffect === true){
     iterStep = ceil(((triangulations[triangulations.length-1].length)/(fr))/flowerEffectTime);
@@ -205,6 +233,12 @@ function draw(){
           finishedColoring = true;
           fTime = millis();
           console.log("Coloring took:" + ((fTime-sTime)/1000).toFixed(3) + " secs")
+          
+          //Once finished coloring, re color the off screen graphics in case
+          for (j=0;j<triangulations.length;j++){
+            delaunayDisplay(triangulations[j], triangleCanvasLayer);
+
+          }
         }
 
       }
@@ -214,10 +248,16 @@ function draw(){
     if (finishedColoring == false){
       colorIn();
       finishedColoring = true;
+      for (j=0;j<triangulations.length;j++){
+        delaunayDisplay(triangulations[j], triangleCanvasLayer);
+
+      }
     }
   }
   
   stroke(2);
+  
+  //Display pixelated
   if (colorOfSquares.length>0 && squares==true){
     noStroke();
     for (i=0;i<colorOfSquares.length;i++){
@@ -227,21 +267,46 @@ function draw(){
     }
   }
   fill(256,256,256)
-  if (displayTriangulation == true){
+  
+  
+  if (displayTriangulation == true && finishedColoring == true){
+    image(triangleCanvasLayer,0,0);
+    //Each time an option is enacted, run through delaunayDisdplay to show that option
+    //options such as hidhing colors
+    
+    /* old method uses delaunayDisplay, but not the ctx.triangles part...
     for (j=0;j<triangulations.length;j++){
-      delaunayDisplay(triangulations[j]);
+      delaunayDisplay(triangulations[j], myCanvas);
       
     }
+    */
 
   }
+  
+  //Procedurally display those triangles only when it is still coloring
+  if (flowerEffect == true && finishedColoring != true && displayTriangulation == true){
+    
+    for (j=0;j<triangulations.length;j++){
+      //We use this function becasue its faster than transfering from the off screen graphics to the on screen canvas.
+      delaunayDisplay_flower_effect(triangulations[j]);
+
+    } 
+    
+  }
+
+  
   fill(256,256,256)
   stroke(0,0,0)
   if (displayPoints == true){
     for (j=0;j<verticesHashTable.length;j++){
+      //ellipse(verticesHashTableFlat[j][0], verticesHashTableFlat[j][1], 5, 5);
+      
       for (k=0;k<verticesHashTable[j].length;k++){
         ellipse(verticesHashTable[j][k][0],verticesHashTable[j][k][1],5,5)
       }
+      
     }
+    //Points detected by filters
     for (j=0;j<edgePoints.length;j++){
       if (edgePoints[j][2]>colorThreshold && displayEdgePoints == true){
         ellipse(edgePoints[j][0],edgePoints[j][1],5)
@@ -258,7 +323,7 @@ function draw(){
   var dx=oldX-mouseX;
   var dy=oldY-mouseY;
   accDist = sqrt(dx*dx+dy*dy)
-  if (mode===2){
+  if (mode === 2){
     if(downloading == false){
       noFill();
       stroke(2);
@@ -303,6 +368,10 @@ function draw(){
         }
       }
 
+    }
+    else if (!mouseIsPressed){
+      //Allows u to use brush on same spot by clicking multiple times
+      critDist = 0;
     }
   }
 
@@ -411,8 +480,7 @@ function resetAutoGenListener(values,style){
 
           tColors=[];
 
-          $("#displayPoints").html("Show<br>Points<br>");
-          $("#displayPoints").css("background-color","RGB(100,100,100)");
+          css_buttons.displayPoints(false);
           displayPoints=false;
           completedFilters=true;
           resetAutoGenListener([cWidth,cHeight,completedFilters,d,colorThreshold],style);
@@ -465,8 +533,7 @@ function resetAutoGenListener(values,style){
 
         tColors=[];
 
-        $("#displayPoints").html("Show<br>Points<br>");
-        $("#displayPoints").css("background-color","RGB(100,100,100)");
+        css_buttons.displayPoints(false);
         displayPoints=false;
         completedFilters=true;
         $("#loadingScreen").css("opacity","0");
