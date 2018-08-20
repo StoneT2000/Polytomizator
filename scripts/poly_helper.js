@@ -1,4 +1,3 @@
-
 //Create a hash out of the x,y coordinates
 function hashCoordinate(x,y){
   return floor(x/50)*100+floor(y/50);
@@ -401,7 +400,14 @@ function expandImage(mvalue,save){
   
   if (save==true){
     downloading = true;
-    saveCanvas(downloadcanvas, 'PolyArt', 'jpg');
+    
+    //Download canvas using file saver.js due to size restrictions.
+    downloadcanvas.elt.id = "downloadthiscanvas";
+    var canvas = document.getElementById("downloadthiscanvas"), ctx = canvas.getContext("2d");
+    // draw to canvas...
+    canvas.toBlob(function(blob) {
+        saveAs(blob, "pretty image.png");
+    });
     downloading = false;
     console.log("Finished downloading")
   }
