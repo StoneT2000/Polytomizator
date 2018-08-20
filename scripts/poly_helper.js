@@ -33,7 +33,7 @@ function updateHashSpace(x,y,add){
   var hashVal = hashCoordinate(x,y);
   var index = findIndexFromHash(hashVal);
   if (add==true){
-
+    //console.log("x: " + x,"y: "+ y,"hashValue: " + hashVal, "index:" + index);
     verticesHashTable[index].push([x,y])
   }
   if (add==false){
@@ -51,15 +51,18 @@ function keyPressed(event){
   //Space
   if (keyCode === 32) {
     downloading = true;
-    draw();
-    saveCanvas(myCanvas, 'myCanvas', 'jpg');
+    //draw();
+    //saveCanvas(myCanvas, 'myCanvas', 'jpg');
     downloading = false;
   }
   //D
   else if (keyCode===68){
     triangulize();
     
+    //Tell draw() to draw in colors once
     finishedColoring = false;
+    
+    //Load image
     image(img1,0,0,cWidth,cHeight);
     noColors=false;
     css_buttons.displayColor(true);
@@ -81,6 +84,10 @@ function keyPressed(event){
     else {
       noColors = false;
       css_buttons.displayColor(true);
+    }
+    for (j=0;j<triangulations.length;j++){
+      delaunayDisplay(triangulations[j], triangleCanvasLayer);
+
     }
   }
   //P
@@ -190,41 +197,46 @@ function snapVertices(acc){
 
 //Deviation of triangle coords for animated triangles
 var sd = 5;
-//Display all the triangles in tng. Displays them using the variable verticesHashTableFlat
-function delaunayDisplay(tng){
+//Display all the triangles in tng. Displays them using the variable verticesarr = verticesHashTableFlat.
+function delaunayDisplay(tng, ctx, vertices_set){
+  var verticesarr = verticesHashTableFlat;
+  if(vertices_set){
+    //Use this if we don't want to use verticesHashTableFlat directly
+    verticesarr = vertices_set
+  }
+  
   for (var i = 0; i < tng.length; i += 3) {
     if (tColors[i]>=0 && noColors == false){
 
-      fill(tColors[i],tColors[i+1],tColors[i+2]);
-      stroke(tColors[i],tColors[i+1],tColors[i+2]);
-
+      ctx.fill(tColors[i],tColors[i+1],tColors[i+2]);
+      ctx.stroke(tColors[i],tColors[i+1],tColors[i+2]);
     }
     else if (noColors == true){
-      fill(256,256,256);
-      stroke(10,10,10);
+      ctx.fill(256,256,256);
+      ctx.stroke(10,10,10);
     }
     else if (tColors[i]==-1){
-      noFill();
-      noStroke();
+      ctx.noFill();
+      ctx.noStroke();
 
     }
     else {
-      fill(256,256,256);
-      stroke(10,10,10);
+      ctx.fill(256,256,256);
+      ctx.stroke(10,10,10);
     }
 
-    if (verticesHashTableFlat.length > 0){
+    if (verticesarr.length > 0){
 
 
       //Normal
       if (displayMode == 0){
-        triangle(verticesHashTableFlat[tng[i]][0],verticesHashTableFlat[tng[i]][1],verticesHashTableFlat[tng[i+1]][0],verticesHashTableFlat[tng[i+1]][1],verticesHashTableFlat[tng[i+2]][0],verticesHashTableFlat[tng[i+2]][1]);
+        ctx.triangle(verticesarr[tng[i]][0],verticesarr[tng[i]][1],verticesarr[tng[i+1]][0],verticesarr[tng[i+1]][1],verticesarr[tng[i+2]][0],verticesarr[tng[i+2]][1]);
       }
       //Rectangle mode, displays smallest rectangle that encompasses triangle such that sides are parallel to canvas 
       else if (displayMode == 1){
 
-        var xcoords = [verticesHashTableFlat[tng[i]][0],verticesHashTableFlat[tng[i+1]][0],verticesHashTableFlat[tng[i+2]][0]]
-        var ycoords = [verticesHashTableFlat[tng[i]][1],verticesHashTableFlat[tng[i+1]][1],verticesHashTableFlat[tng[i+2]][1]]
+        var xcoords = [verticesarr[tng[i]][0],verticesarr[tng[i+1]][0],verticesarr[tng[i+2]][0]]
+        var ycoords = [verticesarr[tng[i]][1],verticesarr[tng[i+1]][1],verticesarr[tng[i+2]][1]]
         var lowx = xcoords[0];
         var lowy = ycoords[0];
         var highx = -1;
@@ -244,28 +256,28 @@ function delaunayDisplay(tng){
             highy = ycoords[xi]; 
           }
         }
-        rect(lowx,lowy,highx-lowx,highy-lowy);
+        ctx.rect(lowx,lowy,highx-lowx,highy-lowy);
       }
       //Circle mode, displays circles that encompass the triangle using the circumcenter.
       else if (displayMode == 2){
-        var coords = circumcenter(verticesHashTableFlat[tng[i]][0],verticesHashTableFlat[tng[i]][1],verticesHashTableFlat[tng[i+1]][0],verticesHashTableFlat[tng[i+1]][1],verticesHashTableFlat[tng[i+2]][0],verticesHashTableFlat[tng[i+2]][1]);
+        var coords = circumcenter(verticesarr[tng[i]][0],verticesarr[tng[i]][1],verticesarr[tng[i+1]][0],verticesarr[tng[i+1]][1],verticesarr[tng[i+2]][0],verticesarr[tng[i+2]][1]);
         var px = coords.x;
         var py = coords.y;
-        var size = 2*sqrt(squaredist(verticesHashTableFlat[tng[i]][0],verticesHashTableFlat[tng[i]][1],px,py));
+        var size = 2*sqrt(squaredist(verticesarr[tng[i]][0],verticesarr[tng[i]][1],px,py));
 
-        ellipse(px,py,size,size);
+        ctx.ellipse(px,py,size,size);
         
       }
       //Odd animated looking triangles. Looks like water almost
       else if (displayMode == 3){
-        triangle(verticesHashTableFlat[tng[i]][0],verticesHashTableFlat[tng[i]][1],verticesHashTableFlat[tng[i+1]][0],verticesHashTableFlat[tng[i+1]][1],verticesHashTableFlat[tng[i+2]][0],verticesHashTableFlat[tng[i+2]][1]);
+        ctx.triangle(verticesarr[tng[i]][0],verticesarr[tng[i]][1],verticesarr[tng[i+1]][0],verticesarr[tng[i+1]][1],verticesarr[tng[i+2]][0],verticesarr[tng[i+2]][1]);
 
-        triangle(verticesHashTableFlat[tng[i]][0]+random(-sd,sd),verticesHashTableFlat[tng[i]][1]+random(-sd,sd),verticesHashTableFlat[tng[i+1]][0]+random(-sd,sd),verticesHashTableFlat[tng[i+1]][1]+random(-sd,sd),verticesHashTableFlat[tng[i+2]][0]+random(-sd,sd),verticesHashTableFlat[tng[i+2]][1]+random(-sd,sd));
+        ctx.triangle(verticesarr[tng[i]][0]+random(-sd,sd),verticesarr[tng[i]][1]+random(-sd,sd),verticesarr[tng[i+1]][0]+random(-sd,sd),verticesarr[tng[i+1]][1]+random(-sd,sd),verticesarr[tng[i+2]][0]+random(-sd,sd),verticesarr[tng[i+2]][1]+random(-sd,sd));
       }
       //Odd animated looking rectangles
       else if (displayMode == 4){
-        var xcoords = [verticesHashTableFlat[tng[i]][0],verticesHashTableFlat[tng[i+1]][0],verticesHashTableFlat[tng[i+2]][0]]
-        var ycoords = [verticesHashTableFlat[tng[i]][1],verticesHashTableFlat[tng[i+1]][1],verticesHashTableFlat[tng[i+2]][1]]
+        var xcoords = [verticesarr[tng[i]][0],verticesarr[tng[i+1]][0],verticesarr[tng[i+2]][0]]
+        var ycoords = [verticesarr[tng[i]][1],verticesarr[tng[i+1]][1],verticesarr[tng[i+2]][1]]
         var lowx = xcoords[0];
         var lowy = ycoords[0];
         var highx = -1;
@@ -285,8 +297,8 @@ function delaunayDisplay(tng){
             highy = ycoords[xi]; 
           }
         }
-        rect(lowx,lowy,highx-lowx,highy-lowy);
-        rect(lowx+random(-sd,sd),lowy+random(-sd,sd),highx-lowx+random(-sd,sd),highy-lowy+random(-sd,sd));
+        ctx.rect(lowx,lowy,highx-lowx,highy-lowy);
+        ctx.rect(lowx+random(-sd,sd),lowy+random(-sd,sd),highx-lowx+random(-sd,sd),highy-lowy+random(-sd,sd));
       }
     }
   }
@@ -319,6 +331,11 @@ function loadData(dataStored){
   triangulize();
   displayPoints=true;
   css_buttons.displayPoints(true);
+  for (j=0;j<triangulations.length;j++){
+    delaunayDisplay(triangulations[j], triangleCanvasLayer);
+
+  }
+  recordVertices();
 }
 function saveData(){
   var currentData = [allVertices.slice(),triangulations.slice(),tColors.slice(),verticesHashTable.slice(),verticesHashTableFlat.slice()];
@@ -356,47 +373,42 @@ function lineAngle(x1,y1,x2,y2){
 
 //Expand the vertices to download large scale image
 function expandImage(mvalue,save){
-  myCanvas =createCanvas(cWidth*mvalue,cHeight*mvalue);
-  oldWidth = cWidth;
-  oldHeight = cHeight;
-  cWidth = cWidth*mvalue;
-  cHeight = cHeight*mvalue;
   
-  $("#gamedisplay").css("right",(cWidth/2).toString()+"px")
-  $("body").css("width",(cWidth+500).toString()+"px")
-  $("body").css("height",(cHeight+400).toString()+"px")
-  myCanvas.parent('gamedisplay');
-  //tempVerticesHashTable = JSON.parse(JSON.stringify(verticesHashTable));
+  expandedWidth = cWidth*mvalue;
+  expandedHeight = cHeight*mvalue;
+  
+  //Save method by creating off screen graphics
+  var downloadcanvas = createGraphics(expandedWidth,expandedHeight);
+
   //Perform deep copy
-  for (p=0;p<verticesHashTable.length;p++){
-    //tempVerticesHashTable.push([]);
-    for (l=0;l<verticesHashTable[p].length;l++){
-      var tempV = expandVertex(verticesHashTable[p][l],mvalue);
-      //tempVerticesHashTable.push(verticesHashTable[p][l]);
-      verticesHashTable[p][l] = tempV;
+  expandedVerticesHashTable = JSON.parse(JSON.stringify(verticesHashTable));
+  
+  for (p=0;p<expandedVerticesHashTable.length;p++){
+
+    for (l=0;l<expandedVerticesHashTable[p].length;l++){
+      var exv = expandVertex(expandedVerticesHashTable[p][l],mvalue);
+
+      expandedVerticesHashTable[p][l] = exv;
       
     }
   }
-  //tempVerticesHashTableFlat = tempVerticesHashTable.reduce(function(acc,curr){return acc.concat(curr)});
-  verticesHashTableFlat = verticesHashTable.reduce(function(acc,curr){return acc.concat(curr)});
+  expandedVerticesHashTableFlat = expandedVerticesHashTable.reduce(function(acc,curr){return acc.concat(curr)});
+  //verticesHashTableFlat = verticesHashTable.reduce(function(acc,curr){return acc.concat(curr)});
+  
+  for (j=0;j<triangulations.length;j++){
+    delaunayDisplay(triangulations[j], downloadcanvas, expandedVerticesHashTableFlat);
+  }
+  
   if (save==true){
     downloading = true;
-    draw();
-    saveCanvas(myCanvas, 'PolyArt', 'jpg');
+    saveCanvas(downloadcanvas, 'PolyArt', 'jpg');
     downloading = false;
-    
-    //var cWidth = oldWidth;
-    //var cHeight = oldHeight;
-    //verticesHashTable = tempVerticesHashTable;
-    //verticesHashTableFlat = tempVerticesHashTableFlat;
-    //myCanvas = createCanvas(oldWidth,oldHeight);
-    //$("#gamedisplay").css("right",(cWidth/2).toString()+"px")
-    //$("body").css("width",(cWidth+500).toString()+"px")
-    //$("body").css("height",(cHeight+400).toString()+"px")
-    //myCanvas.parent('gamedisplay')
-    
+    console.log("Finished downloading")
   }
 }
+var testCanvas;
+//Take the vertices and creates a flattend version
+//Then uses the delaunator to produce the order in which the vertices are connected to get triangles.
 function triangulize(){
     var delaunay;
     verticesHashTableFlat = verticesHashTable.reduce(function(acc,curr){return acc.concat(curr)});
@@ -490,7 +502,7 @@ function autoGenerateArt(){
       image(img1,0,0,cWidth,cHeight);
       filter(GRAY);
       loadPixels();
-      console.log(pixels);
+      //console.log(pixels);
       pixels = changePixels3('smooth',pixels);
       pixels = changePixels3('edge',pixels);
   }
@@ -653,13 +665,3 @@ function recordVertices(){
   }
   //console.log(storedVertices, indexPos, stepBackNum)
 }
-
-//Detect multiple presses
-document.addEventListener ("keydown", function (zEvent) {
-    if (zEvent.metaKey  &&  zEvent.shiftKey  &&  zEvent.code === "KeyZ") {
-      redo();
-    }
-    if (zEvent.metaKey  &&  zEvent.shiftKey == false  &&  zEvent.code === "KeyZ") {
-      undo();
-    }
-} );

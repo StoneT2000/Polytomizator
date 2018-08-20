@@ -1,16 +1,29 @@
 var completedFilters = false;
 $(document).on('ready',function(){
   
+  document.addEventListener ("keydown", function (zEvent) {
+      if (zEvent.metaKey  &&  zEvent.shiftKey  &&  zEvent.code === "KeyZ") {
+        redo();
+      }
+      if (zEvent.metaKey  &&  zEvent.shiftKey == false  &&  zEvent.code === "KeyZ") {
+        undo();
+      }
+  } );
   $("#pointBrush").css("background-color","RGB(140,140,140)")
   console.log("Let's make computer generated art that looks pretty cool...v33")
   $("#displayColor").on("click",function(){
     if (noColors===true){
       noColors = false;
       css_buttons.displayColor(true);
+      
     }
     else {
       noColors = true;
       css_buttons.displayColor(false);
+    }
+    for (j=0;j<triangulations.length;j++){
+      delaunayDisplay(triangulations[j], triangleCanvasLayer);
+
     }
   })
 
@@ -211,6 +224,8 @@ $(document).on('ready',function(){
       for (var slot_index = 0; slot_index < max_undo; slot_index++){
         storedVertices.push([]);
       }
+      
+      triangleCanvasLayer = createGraphics(cWidth,cHeight)
       
       //Store initial vertices
       recordVertices();

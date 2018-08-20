@@ -37,6 +37,9 @@ var colorAccuracy = 1;
 var verticesHashTable = [];
 var verticesHashTableFlat = [];
 
+var tempVerticesHashTable = [];
+var tempVerticesHashTableFlat = [];
+
 //Number of points drawn per stroke
 var pointDensity = 4;
 var exportSVG = false;
@@ -60,6 +63,8 @@ var max_undo = 50;
 var myCanvas;
 var img1;
 var d;
+
+var triangleCanvasLayer;
 function preload(){
   img1 = loadImage('images/white.jpg')
 }
@@ -73,6 +78,10 @@ function setup(){
   cWidth = round(img1.width/factor);
   cHeight = round(img1.height/factor);
   myCanvas = createCanvas(cWidth,cHeight);
+  
+  
+  //create off screen triangle generating layer
+  triangleCanvasLayer = createGraphics(cWidth,cHeight)
   
   //Initialize points on corners and sides
   allVertices.push([0,0]);
@@ -188,15 +197,18 @@ var ff = 0;
 var fr = 0;
 var fc = 0;
 var flowerEffectTime=10;
+
 function draw(){
   if (fc===0){
     fs = millis();
   }
   
   background("#FFFFFF")
+  
   if (displayImage == true){
     image(img1,0,0,cWidth,cHeight);
   }
+
   
   if (flowerEffect === true){
     iterStep = ceil(((triangulations[triangulations.length-1].length)/(fr))/flowerEffectTime);
@@ -221,6 +233,12 @@ function draw(){
           finishedColoring = true;
           fTime = millis();
           console.log("Coloring took:" + ((fTime-sTime)/1000).toFixed(3) + " secs")
+          
+          //Once finished coloring, re color the off screen graphics in case
+          for (j=0;j<triangulations.length;j++){
+            delaunayDisplay(triangulations[j], triangleCanvasLayer);
+
+          }
         }
 
       }
@@ -230,6 +248,10 @@ function draw(){
     if (finishedColoring == false){
       colorIn();
       finishedColoring = true;
+      for (j=0;j<triangulations.length;j++){
+        delaunayDisplay(triangulations[j], triangleCanvasLayer);
+
+      }
     }
   }
   
@@ -245,13 +267,34 @@ function draw(){
     }
   }
   fill(256,256,256)
-  if (displayTriangulation == true){
+  
+  
+  if (displayTriangulation == true && finishedColoring == true){
+    image(triangleCanvasLayer,0,0);
+    //Each time an option is enacted, run through delaunayDisdplay to show that option
+    //options such as hidhing colors
+    
+    /* old method uses delaunayDisplay, but not the ctx.triangles part...
     for (j=0;j<triangulations.length;j++){
-      delaunayDisplay(triangulations[j]);
+      delaunayDisplay(triangulations[j], myCanvas);
       
     }
+    */
 
   }
+  
+  //Procedurally display those triangles only when it is still coloring
+  if (flowerEffect == true && finishedColoring != true && displayTriangulation == true){
+    
+    for (j=0;j<triangulations.length;j++){
+      //We use this function becasue its faster than transfering from the off screen graphics to the on screen canvas.
+      delaunayDisplay_flower_effect(triangulations[j]);
+
+    } 
+    
+  }
+
+  
   fill(256,256,256)
   stroke(0,0,0)
   if (displayPoints == true){
