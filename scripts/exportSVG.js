@@ -60,6 +60,8 @@ function download(filename, text) {
 }
 function downloadSVG(svgWidth,svgHeight){
     var text = generateSVGFile(storeTrianglesToString(),svgWidth,svgHeight)
-    var filename = "PolyArt.svg";
-    download(filename, text);
+    //var filename = "PolyArt.svg";
+    //download(filename, text);
+    var svgblob = new Blob([text], {type: "text/plain;charset=utf-8"});
+    saveAs(svgblob, "PolyArt.svg");
 }

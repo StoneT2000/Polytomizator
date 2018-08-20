@@ -54,8 +54,7 @@ function generateCubicPoly(accuracy,density,overlay){
   loadPixels();
   tColors=[];
   sTime = millis();
-  $("#displayPoints").html("Show<br>Points<br>");
-  $("#displayPoints").css("background-color","RGB(100,100,100)");
+  css_buttons.displayPoints(false);
   displayPoints=false;
   
 }
