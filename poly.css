@@ -13,7 +13,8 @@ body,html{
   
 }
 .main .p5Canvas{
-  box-shadow:0px 0px 4px 4px #888888;
+  -webkit-box-shadow:0px 0px 4px 4px #888888;
+          box-shadow:0px 0px 4px 4px #888888;
 }
 #loadingScreen{
   background-color:RGBA(40,40,40,0.6);
@@ -203,7 +204,9 @@ th, td{
   text-align:center;
   margin-bottom:20px;
   margin-left:50%;
-  transform: translate(-400px,0);
+  -webkit-transform: translate(-400px,0);
+      -ms-transform: translate(-400px,0);
+          transform: translate(-400px,0);
 }
 #otherOptionsHeader{
   margin-bottom:20px;
@@ -233,7 +236,10 @@ th, td{
   -moz-transform:translate(0,-39px);
   -ms-transform:translate(0,-39px);
   -o-transform:translate(0,-39px);
+  -webkit-transition:-webkit-transform 1s;
+  transition:-webkit-transform 1s;
   transition:transform 1s;
+  transition:transform 1s, -webkit-transform 1s;
   -webkit-transition:transform 1s;
   -moz-transition:transform 1s;
   -ms-transition:transform 1s;
@@ -252,7 +258,10 @@ th, td{
   z-index:0;
   height:30px;
   font-size:20px;
+  -webkit-transition:z-index 1s,-webkit-transform 1s;
+  transition:z-index 1s,-webkit-transform 1s;
   transition:transform 1s,z-index 1s;
+  transition:transform 1s,z-index 1s,-webkit-transform 1s;
   -webkit-transition:transform 1s,z-index 1s;
   -moz-transition:transform 1s,z-index 1s;
   -ms-transition:transform 1s,z-index 1s;
@@ -317,7 +326,9 @@ h3, h4, h1, h2, p{
   margin-top:0px;
   font-size: 20px;
   font-weight: 300;
-  transform: translate(0,-3px);
+  -webkit-transform: translate(0,-3px);
+      -ms-transform: translate(0,-3px);
+          transform: translate(0,-3px);
 }
 .footer a:hover{
   border-radius: 50%;

@@ -52,6 +52,8 @@ var snappingAccuracy = 20; //How big squares in grid are
 var displayMode = 0; 
 var artstyle = 0; //0: Normal, 1: cubic, 2: ??
 
+var storedVertices = [];
+
 var myCanvas;
 var img1;
 var d;
@@ -104,6 +106,9 @@ function setup(){
   
   generateHashSpace();
   frameRate(60);
+  
+  //Store initial vertices
+  recordVertices();
   
   $("#gamedisplay").css("right",(cWidth/2).toString()+"px")
   //$("body").css("width",(cWidth+100).toString()+"px")
@@ -218,6 +223,8 @@ function draw(){
   }
   
   stroke(2);
+  
+  //Display pixelated
   if (colorOfSquares.length>0 && squares==true){
     noStroke();
     for (i=0;i<colorOfSquares.length;i++){

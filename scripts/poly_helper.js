@@ -1,6 +1,9 @@
+
+//Create a hash out of the x,y coordinates
 function hashCoordinate(x,y){
   return floor(x/50)*100+floor(y/50);
 }
+//Find the index of the hashed value in the verticesHashTable array
 function findIndexFromHash(hash){
   var xi = floor((hash/100));
   var yi = hash%100;
@@ -26,6 +29,7 @@ function generateHashSpace(){
 //Add or delete a vertex.
 function updateHashSpace(x,y,add){
   
+  
   var hashVal = hashCoordinate(x,y);
   var index = findIndexFromHash(hashVal);
   if (add==true){
@@ -33,6 +37,7 @@ function updateHashSpace(x,y,add){
     verticesHashTable[index].push([x,y])
   }
   if (add==false){
+    //If deleting, we find the proper index, then proceed to search for that vertex with that coordinate and splice it
     for (i=0;i<verticesHashTable[index].length;i++){
 
       if (verticesHashTable[index][i][0] == x && verticesHashTable[index][i][1] == y){
@@ -42,13 +47,15 @@ function updateHashSpace(x,y,add){
   }
 }
 
-function keyPressed(){
+function keyPressed(event){
+  //Space
   if (keyCode === 32) {
     downloading = true;
     draw();
     saveCanvas(myCanvas, 'myCanvas', 'jpg');
     downloading = false;
   }
+  //D
   else if (keyCode===68){
     triangulize();
     
@@ -64,21 +71,7 @@ function keyPressed(){
     $("#displayPoints").css("background-color","RGB(100,100,100)");
     displayPoints=false;
   }
-  else if (keyCode===220){
-
-    if (mode==0){
-      mode =1;
-      console.log("point mode")
-    }
-    else if (mode==1){
-      mode=2;
-      console.log("line mode")
-    }
-    else {
-      mode = 0;
-      console.log("curves mode")
-    }
-  }
+  //C
   else if (keyCode===67){
     if (noColors === false){
       noColors = true;
@@ -92,14 +85,7 @@ function keyPressed(){
       $("#displayColor").css("background-color","RGB(40,40,40)");
     }
   }
-  else if (keyCode===90){
-
-    if (dataPos>0){
-      dataPos--;
-      loadData(previousData[dataPos])
-    }
-    
-  }
+  //P
   else if (keyCode===80){
     mode = 1;
     $("#pointBrush").css("background-color","RGB(140,140,140)")
@@ -108,6 +94,7 @@ function keyPressed(){
     $("#triangleMover").css("background-color","")
     
   }
+  //E
   else if (keyCode ===69){
     mode = 3;
     $("#eraser").css("background-color","RGB(140,140,140)")
@@ -115,6 +102,7 @@ function keyPressed(){
     $("#lineBrush").css("background-color","")
     $("#triangleMover").css("background-color","")
   }
+  //B
   else if (keyCode === 66){
     mode = 2;
     $("#lineBrush").css("background-color","RGB(140,140,140)")
@@ -122,6 +110,7 @@ function keyPressed(){
     $("#eraser").css("background-color","")
     $("#triangleMover").css("background-color","")
   }
+  //T
   else if (keyCode === 84){
     mode = 4;
     $("#triangleMover").css("background-color","RGB(140,140,140)")
@@ -131,7 +120,7 @@ function keyPressed(){
   }
 }
 function mouseClicked(){
-
+  //Check if click is within canvas
   if (mouseX<=cWidth && mouseX>=0){
     if(mouseY<=cHeight && mouseY>=0){
 
@@ -166,13 +155,18 @@ function mouseClicked(){
         };
 
       }
-
+      //Record past vertices sets for undoing
+      recordVertices();
       
     }
+    
+    
   }
   
   
 }
+
+//Broken
 function snapVertices(acc){
   //acc is snapping accuracy
   for (in1 = 0; in1 < verticesHashTable.length; in1++){
@@ -545,3 +539,61 @@ function autoGenerateArt(){
   $("#displayPoints").css("background-color","RGB(100,100,100)");
   displayPoints=false;
 }
+
+
+var indexPos = -1;
+var stepBackNum = 0;
+var undoState = 0; 
+//Undostate = 0 means currently displaying an un-redoable layer
+//Undostate = 1 means there are redos available. Also implies that if a new path is taken, we must remove the stored veritces up to indexPos - stepBackNum
+function undo(){
+  stepBackNum++;
+  if (indexPos - stepBackNum < 0){
+    stepBackNum--;
+    return;
+  }
+  undoState = 1;
+  allVertices = JSON.parse(JSON.stringify(storedVertices[indexPos - stepBackNum]));
+  generateHashSpace();
+  verticesHashTableFlat = verticesHashTable.reduce(function(acc,curr){return acc.concat(curr)});
+  console.log(storedVertices, indexPos, stepBackNum)
+
+}
+function redo(){
+  stepBackNum--;
+  if (indexPos - stepBackNum > storedVertices.length-1){
+    stepBackNum++;
+    return;
+  }
+  allVertices = JSON.parse(JSON.stringify(storedVertices[indexPos - stepBackNum]));
+  generateHashSpace();
+  verticesHashTableFlat = verticesHashTable.reduce(function(acc,curr){return acc.concat(curr)});
+  console.log(storedVertices, indexPos, stepBackNum)
+}
+function recordVertices(){
+  if (undoState == 0){
+    indexPos++;
+    storedVertices.push(JSON.parse(JSON.stringify(allVertices)));
+  }
+  else{
+    storedVertices.splice(indexPos-stepBackNum+1);
+    indexPos = indexPos - stepBackNum;
+    stepBackNum = 0;
+    undoState = 0;
+    indexPos++;
+    storedVertices.push(JSON.parse(JSON.stringify(allVertices)));
+  }
+  console.log(storedVertices, indexPos, stepBackNum)
+}
+
+//Detect multiple presses
+document.addEventListener ("keydown", function (zEvent) {
+    if (zEvent.metaKey  &&  zEvent.shiftKey  &&  zEvent.code === "KeyZ") {
+        // DO YOUR STUFF HERE
+      redo();
+    }
+    if (zEvent.metaKey  &&  zEvent.shiftKey == false  &&  zEvent.code === "KeyZ") {
+        // DO YOUR STUFF HERE
+      undo();
+    }
+} );
