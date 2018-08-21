@@ -287,8 +287,8 @@ function delaunayDisplay(tng, ctx, vertices_set) {
       //Circle mode, displays circles that encompass the triangle using the circumcenter.
       else if (displayMode == 2) {
         var coords = circumcenter(verticesarr[tng[i]][0], verticesarr[tng[i]][1], verticesarr[tng[i + 1]][0], verticesarr[tng[i + 1]][1], verticesarr[tng[i + 2]][0], verticesarr[tng[i + 2]][1]);
-        var px = coords.x;
-        var py = coords.y;
+        var px = coords[0];
+        var py = coords[1];
         var size = 2 * sqrt(squaredist(verticesarr[tng[i]][0], verticesarr[tng[i]][1], px, py));
 
         ctx.ellipse(px, py, size, size);
@@ -331,22 +331,19 @@ function delaunayDisplay(tng, ctx, vertices_set) {
 }
 //Below function taken from delaunator
 function circumcenter(ax, ay, bx, by, cx, cy) {
-  const dx = bx - ax;
-  const dy = by - ay;
-  const ex = cx - ax;
-  const ey = cy - ay;
+  var dx = bx - ax;
+  var dy = by - ay;
+  var ex = cx - ax;
+  var ey = cy - ay;
 
-  const bl = dx * dx + dy * dy;
-  const cl = ex * ex + ey * ey;
-  const d = dx * ey - dy * ex;
+  var bl = dx * dx + dy * dy;
+  var cl = ex * ex + ey * ey;
+  var d = dx * ey - dy * ex;
 
-  const x = ax + (ey * bl - dy * cl) * 0.5 / d;
-  const y = ay + (dx * cl - ex * bl) * 0.5 / d;
+  var x = ax + (ey * bl - dy * cl) * 0.5 / d;
+  var y = ay + (dx * cl - ex * bl) * 0.5 / d;
 
-  return {
-    x,
-    y
-  };
+  return [x,y];
 }
 
 function loadData(dataStored) {
