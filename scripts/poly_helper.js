@@ -192,6 +192,9 @@ function mouseClicked() {
 //Broken
 function snapVertices(acc) {
   //acc is snapping accuracy
+  if (!acc){
+    acc = 20;
+  }
   for (in1 = 0; in1 < verticesHashTable.length; in1++) {
     for (in2 = 0; in2 < verticesHashTable[in1].length; in2++) {
       var fixx = true;

@@ -390,3 +390,168 @@ p {
   -ms-user-select: none;
   user-select: none;
 }
+
+#options_menu_gear {
+  position: fixed;
+  top: 30px;
+  right: 30px;
+  font-size: 30px;
+  cursor: pointer;
+}
+
+#options_menu {
+  position: fixed;
+  width: 300px;
+  height: 500px;
+  right: 15px;
+  top: 75px;
+  background-color: RGBA(40, 40, 40, 1);
+  z-index: 1000;
+  opacity: 0;
+  display: none;
+  border-radius: 5px;
+
+  box-shadow: 0px 0px 5px 0px black;
+  transition: opacity 0.2s;
+}
+
+#options_menu:after {
+  content: "";
+  position: absolute;
+  right: 16px;
+  top: -12px;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 0 12px 12px 12px;
+  border-color: transparent transparent RGB(40, 40, 40, 1) transparent;
+  z-index: 9998;
+}
+
+.option_menu_item span {
+  position: relative;
+  width: 60%;
+  color: white;
+  left: 0px;
+  text-align: left;
+  padding-left: 10px;
+  font-weight: 300;
+  height: 40px;
+  line-height: 40px;
+  font-size: 14px;
+}
+
+.option_menu_item input {
+  width: 40%;
+  position: relative;
+  text-align: center;
+  height: 30px;
+  font-size: 14px;
+}
+
+.option_menu_item button {
+  height: 30px;
+  color: RGB(50, 50, 50);
+  cursor: pointer;
+  background-color: white;
+  margin-left: 10px;
+  vertical-align: baseline;
+}
+
+#options_menu h4 {
+  color: white;
+  font-weight: 400;
+  border-top: 2px solid white;
+  padding-top: 15px;
+  margin-top: 10px;
+}
+
+#function_options td,
+tr {
+  border: none;
+}
+
+#function_options span {
+  color: white;
+  text-align: right;
+  font-size: 14px;
+  font-weight: 300;
+  position: relative;
+  display: inline-block;
+  width: 100%;
+}
+
+#function_options button {
+  font-size: 14px;
+  margin-top: 10px;
+  cursor: pointer;
+  background-color: white;
+  width: 240px;
+}
+
+#options_menu_additional {
+  position: fixed;
+  width: 400px;
+  height: 200px;
+  left: 50%;
+  margin-left: -200px;
+  top: 50%;
+  z-index: 100;
+  margin-top: -100px;
+  background-color: RGB(40, 40, 40);
+  border-radius: 5px;
+  display: none;
+  box-shadow: 0px 0px 5px 0px black;
+
+}
+
+#options_menu_additional h4 {
+  color: white;
+  margin-top: 10px;
+  font-weight: 400;
+}
+
+#options_menu_additional button {
+  background-color: white;
+  cursor: pointer;
+  display: block;
+  width: 150px;
+  position: absolute;
+  margin-top: 20px;
+  margin-left: -75px;
+  left: 50%;
+}
+
+#options_menu_additional span {
+  color: white;
+  text-align: right;
+  font-size: 14px;
+  font-weight: 300;
+  position: relative;
+  display: inline-block;
+  width: 200px;
+  left: 0px;
+  line-height: 30px;
+  margin-top: 10px;
+  float: left;
+}
+
+#options_menu_additional .parameters {
+  position: relative;
+  display: inline-block;
+  height: 30px;
+  width: 80px;
+  margin-top: 10px;
+  margin-right: 100px;
+  text-align: center;
+  margin-left: 20px;
+}
+
+#options_menu_additional i {
+  position: absolute;
+  right: 15px;
+  top:15px;
+  cursor:pointer;
+  font-size:20px;
+  color:white;
+}

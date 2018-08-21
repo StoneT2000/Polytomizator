@@ -45,20 +45,47 @@
     <h5 style="font-size:15px;margin-bottom: 30px;width:80%;margin-left:50%;transform:translate(-50%,0)">It is <b>highly highly</b> suggested to use Firefox for maximum experience. Cannot download art on Safari at the moment.</h5>
     <h3 style="width:70%;margin-left:50%;transform:translate(-50%,0);margin-bottom:50px;padding-bottom: 50px; border-bottom: 2px solid RGB(40,40,40)">Add points with the brushes. Then click polytomize to make art! Then download the poly art as an image or SVG.</h3>
     <div><h4 style="margin: auto;margin-bottom:20px;width:400px;" id="polytomize">Polytomize (D)</h4></div>
-    <h4 class= "" id="autoGen" style="margin-bottom: 10px;">Auto Generate Art</h4>
-    
-    <p style="position: absolute; width:80px;display: inline;line-height: 32px;font-weight:500;">Styles:</p>
-    <select id="artstyles" style="position: absolute;margin-left:70px;margin-top:6px;height:24px;width:100px;text-align: center;font-size:17px;">
-      <option id="normal">Normal</option>
-      <option id="cubic">Cubic</option>
-    </select>
-    
-    <h5>Level of detail of auto generated art: <input id="colorThreshold" type="text" placeholder="10~255"></h5>
     <div id="download_elements">
       <input type="button" id="downloadSVG" value="Download poly art as an SVG file"/><input type="button" id="expandImage" value="Download poly art as an image (png)"/>
     </div>
     <div class="main">
       <div id="gamedisplay"></div>
+    </div>
+    <div id="options_menu_gear"><i class="fa fa-cog"></i></div>
+    <div id="options_menu">
+      <h4 style="border:none">Options</h4>
+      <div class="option_menu_item">
+        <span style="margin-top:0px;">Snapping</span>
+        <input type="checkbox" style="height:auto;" id="snapping">
+      </div>
+      <div class="option_menu_item">
+        <span style="margin-top:0px;">Snapping</span>
+        <input type="checkbox" style="height:auto;">
+      </div>
+      <h4 style="">Functions</h4>
+      <!-- Old options layout
+      <table id="function_options" style="width:100%;">
+        <tr>
+          <td><span style="margin-top:0px;">Snap Vertices</span></td>
+          <td><button>Snap</button></td>
+        </tr>
+        <tr>
+          <td><span style="margin-top:0px;">Generate Cubic Poly Art</span></td>
+          <td><button>Generate</button></td>
+        </tr>
+        <tr>
+          <td><span style="margin-top:0px;">Generate Normal Poly Art</span></td>
+          <td><button>Generate</button></td>
+        </tr>
+      </table>-->
+      <div id="function_options">
+        <button id="displaysnapvertices">Snap Vertices</button>
+        <button id="displaygencubicpoly">Generate cubic poly art</button>
+        <button id="displaygennormalpoly">Generate normal poly art</button>
+      </div>
+      
+    </div>
+    <div id="options_menu_additional">
     </div>
     <div class="brushes noselect">
       <ul style="padding:0px;">

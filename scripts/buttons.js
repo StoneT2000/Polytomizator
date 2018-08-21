@@ -84,7 +84,7 @@ $(document).on('ready', function () {
       $("#colorThreshold")[0].value = colorThreshold;
     } else {
       colorThreshold = colorThresholdTemp;
-      resetAutoGenListener([cWidth, cHeight, completedFilters, d, colorThreshold], artstyle);
+      //resetAutoGenListener([cWidth, cHeight, completedFilters, d, colorThreshold], artstyle);
     }
   })
   $("#durationOfFlowerEffect").on("focusout", function () {
@@ -208,7 +208,7 @@ $(document).on('ready', function () {
       image(img1, 0, 0, cWidth, cHeight);
       loadPixels();
       filteredPixels = [];
-      resetAutoGenListener([cWidth, cHeight, completedFilters, d, colorThreshold], artstyle);
+      //resetAutoGenListener([cWidth, cHeight, completedFilters, d, colorThreshold], artstyle);
 
       storedVertices = [];
       for (var slot_index = 0; slot_index < max_undo; slot_index++) {
@@ -266,5 +266,126 @@ $(document).on('ready', function () {
     }, 2000)
   });
 
+  //options menu
+
+  $("#options_menu_gear").on("click", function () {
+    display_options();
+  });
+  
+  //Functions in options menu
+  $("#displaygencubicpoly").on("click", function(){
+    open_a_options()
+    display_options(false);
+    $("#options_menu_additional").html("<h4>Generate cubic poly art</h4><i id=\"close_a_options\"class=\"fa fa-times\"></i><span>Accuracy</span><input class=\"parameters\" type=\"text\" placeholder=\"≥ 10\" id=\"gencubicpoly_accuracy\"><span>Density</span><input class=\"parameters\" type=\"text\" placeholder=\"0 ~ 1\" id=\"gencubicpoly_density\"><button id=\"gencubicpoly\">Generate</button>");
+    $("#gencubicpoly").on("click", function(){
+      var cpdensity = parseFloat($("#gencubicpoly_density").val());
+      var cpaccuracy = parseInt($("#gencubicpoly_accuracy").val());
+      if (isNaN(cpdensity)){
+        alert("Enter a decimal value between 0 and 1 for density");
+        return;
+      }
+      if (isNaN(cpaccuracy) || cpaccuracy <= 0){
+        alert("Enter a integer larger than 0 for accuracy");
+        return;
+      }
+      if (cpaccuracy != parseFloat($("#gencubicpoly_accuracy").val())){
+        alert("Enter a integer larger than 0 for accuracy");
+        return;
+      }
+      //This accuracy is actaully half what actaully is represented
+      generateCubicPoly(cpaccuracy * 2, cpdensity)
+      close_a_options();
+    })
+    $("#close_a_options").on("click", function(){
+      close_a_options();
+    });
+  });
+  
+  $("#displaysnapvertices").on("click", function(){
+    open_a_options()
+    display_options(false);
+    $("#options_menu_additional").html("<h4>Snap visible vertices to a grid</h4><i id=\"close_a_options\"class=\"fa fa-times\"></i><span>Accuracy</span><input class=\"parameters\" type=\"text\" placeholder=\"≥ 10\" id=\"snapping_accuracy\"><button id=\"snap_vertices\">Snap</button>");
+    $("#snap_vertices").on("click", function(){
+      var spaccuracy = parseInt($("#snapping_accuracy").val());
+      if (isNaN(spaccuracy) || spaccuracy <= 0){
+        alert("Enter a integer larger than 0 for accuracy");
+        return;
+      }
+      if (spaccuracy != parseFloat($("#snapping_accuracy").val())){
+        alert("Enter a integer larger than 0 for accuracy");
+        return;
+      }
+      snapVertices(spaccuracy)
+      close_a_options();
+    })
+    $("#close_a_options").on("click", function(){
+      close_a_options();
+    });
+  });
+  $("#displaygennormalpoly").on("click", function(){
+    open_a_options()
+    display_options(false);
+    $("#options_menu_additional").html("<h4>Generate poly art</h4><i id=\"close_a_options\"class=\"fa fa-times\"></i><span>Color Threshold</span><input class=\"parameters\" type=\"text\" placeholder=\"10 ~ 255\" id=\"color_threshold\"><button id=\"gennormalpoly\">Generate</button>");
+    $("#gennormalpoly").on("click", function(){
+      var ct = parseFloat($("#color_threshold").val());
+      if (isNaN(ct) || ct < 10){
+        alert("Enter a number larger than 10 for the color threshold");
+        return;
+      }
+      colorThreshold = ct;
+      close_a_options();
+      generate_normal_poly([cWidth, cHeight, completedFilters, d, colorThreshold]);
+      
+    })
+    $("#close_a_options").on("click", function(){
+      close_a_options();
+    });
+  });
+  
+  $("#snapping").on("change", function () {
+    //console.log($("#snapping")[0].checked);
+    if ($("#snapping")[0].checked) {
+      snapping = true;
+    }
+  });
 
 })
+var options_menu_open = false;
+function display_options(value) {
+  if (value) {
+    if (value === true) {
+      $("#options_menu").css("display", "block");
+      window.setTimeout(function () {
+        $("#options_menu").css("opacity", "1")
+      }, 1);
+    } else {
+      window.setTimeout(function () {
+        $("#options_menu").css("display", "none");
+      }, 200);
+      $("#options_menu").css("opacity", "0");
+      options_menu_open = false;
+    }
+  }
+  if (options_menu_open === false) {
+    $("#options_menu").css("display", "block");
+    window.setTimeout(function () {
+      $("#options_menu").css("opacity", "1")
+    }, 1);
+    options_menu_open = true;
+  } else {
+    window.setTimeout(function () {
+      $("#options_menu").css("display", "none");
+    }, 200);
+    $("#options_menu").css("opacity", "0");
+    options_menu_open = false;
+
+  }
+}
+
+//a=additional
+function open_a_options(){
+  $("#options_menu_additional").css("display", "block");
+}
+function close_a_options(){
+  $("#options_menu_additional").css("display", "none");
+}

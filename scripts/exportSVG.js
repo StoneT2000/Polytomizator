@@ -13,7 +13,7 @@ function storeTrianglesToString() {
       verticesHashTableFlat[tng[tInd + 1]][1] + " " +
       verticesHashTableFlat[tng[tInd + 2]][0] + "," +
       verticesHashTableFlat[tng[tInd + 2]][1] + "\" ";
-    //color
+
     hexcolors = rgbToHex(tColors[tInd].toFixed(0), tColors[tInd + 1].toFixed(0), tColors[tInd + 2].toFixed(0));
     data +=
       "style=\"fill:" + hexcolors +
@@ -49,23 +49,9 @@ function generateSVGFile(data, svgW, svgH) {
   return (part1 + part2 + part3 + part4)
 }
 
-function download(filename, text) {
-  var element = document.createElement('a');
-  element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
-  element.setAttribute('download', filename);
-
-  element.style.display = 'none';
-  document.body.appendChild(element);
-
-  element.click();
-
-  document.body.removeChild(element);
-}
-
 function downloadSVG(svgWidth, svgHeight) {
   var text = generateSVGFile(storeTrianglesToString(), svgWidth, svgHeight)
   //var filename = "PolyArt.svg";
-  //download(filename, text);
   var svgblob = new Blob([text], {
     type: "text/plain;charset=utf-8"
   });

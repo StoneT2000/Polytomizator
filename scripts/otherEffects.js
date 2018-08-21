@@ -1,3 +1,4 @@
+//This can only take even numbers at the moment.
 function generateCubicPoly(accuracy, density, overlay) {
   var thisdensity = 0.5;
   if (density) {

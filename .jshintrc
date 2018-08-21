@@ -10,6 +10,7 @@
   "-W004": false, //Reusing a variable
   "-W041": false, //Saying === should be used instead of ==
   "-W117": false, //Saying a function is not defined (probably defined in other files)
+  "-W098": false, //Saying a function is defined but not used. Probably used in other files
   "strict": false, //Saying strict mode is needed
   "globals": {
     "$": true,
