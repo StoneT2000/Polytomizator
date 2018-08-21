@@ -46,6 +46,18 @@ function updateHashSpace(x,y,add){
   }
 }
 
+function unique_vertex(x,y){
+  //Check if vertex at x,y exists or not
+  var uvindex = findIndexFromHash(hashCoordinate (x,y));
+  for (var g = 0; g < verticesHashTable[uvindex].length; g++){
+    if (verticesHashTable[uvindex][g][0] == x && verticesHashTable[uvindex][g][1] == y){
+      //not unique
+      return false;
+    }
+  }
+  return true;
+}
+
 function keyPressed(event){
   //Space
   if (keyCode === 32) {
@@ -58,7 +70,7 @@ function keyPressed(event){
   else if (keyCode===68){
     triangulize();
     
-    //Tell draw() to draw in colors once
+    //Tell draw() to draw in colors once by setting this false. It will turn back to true once it is finished
     finishedColoring = false;
     
     //Load image
@@ -66,8 +78,12 @@ function keyPressed(event){
     noColors=false;
     css_buttons.displayColor(true);
     
+    //Load the pixels of said image
     loadPixels();
+    
+    //Reset the colors calculated
     tColors=[];
+    
     sTime = millis();
     
     css_buttons.displayPoints(false);
@@ -135,8 +151,11 @@ function mouseClicked(){
           vpx = vpx-vpx%snappingAccuracy;
           vpy = vpy-vpy%snappingAccuracy;
         }
-        allVertices.push([vpx,vpy])
-        updateHashSpace(vpx,vpy,true)
+        if (unique_vertex(vpx,vpy)){
+          allVertices.push([vpx,vpy]);
+
+          updateHashSpace(vpx,vpy,true)
+        }
       }
       if (mode==2){
       }
@@ -177,18 +196,30 @@ function snapVertices(acc){
   //acc is snapping accuracy
   for (in1 = 0; in1 < verticesHashTable.length; in1++){
     for (in2 = 0; in2 < verticesHashTable[in1].length; in2++){
-      if (verticesHashTable[in1][in2][0] % acc < acc/2){
-        verticesHashTable[in1][in2][0] = verticesHashTable[in1][in2][0]-(verticesHashTable[in1][in2][0] % acc)
-        
+      var fixx = true;
+      var fixy = true;
+      if (verticesHashTable[in1][in2][0] == cWidth){
+        fixx = false;
       }
-      else {
-        verticesHashTable[in1][in2][0] = verticesHashTable[in1][in2][0]+20-(verticesHashTable[in1][in2][0] % acc)
+      if (verticesHashTable[in1][in2][1] == cHeight){
+        fixy = false;
       }
-      if (verticesHashTable[in1][in2][1] % acc < acc/2){
-        verticesHashTable[in1][in2][1] = verticesHashTable[in1][in2][1]-(verticesHashTable[in1][in2][1] % acc)
+      if (fixx){
+        if (verticesHashTable[in1][in2][0] % acc < acc/2){
+          verticesHashTable[in1][in2][0] = verticesHashTable[in1][in2][0]-(verticesHashTable[in1][in2][0] % acc)
+
+        }
+        else {
+          verticesHashTable[in1][in2][0] = verticesHashTable[in1][in2][0]+20-(verticesHashTable[in1][in2][0] % acc)
+        }
       }
-      else {
-        verticesHashTable[in1][in2][1] = verticesHashTable[in1][in2][1]+20-(verticesHashTable[in1][in2][1] % acc)
+      if (fixy){
+        if (verticesHashTable[in1][in2][1] % acc < acc/2){
+          verticesHashTable[in1][in2][1] = verticesHashTable[in1][in2][1]-(verticesHashTable[in1][in2][1] % acc)
+        }
+        else {
+          verticesHashTable[in1][in2][1] = verticesHashTable[in1][in2][1]+20-(verticesHashTable[in1][in2][1] % acc)
+        }
       }
     }
   }
