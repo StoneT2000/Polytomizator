@@ -1,282 +1,271 @@
 var completedFilters = false;
-$(document).on('ready',function(){
-  
-  document.addEventListener ("keydown", function (zEvent) {
-      if (zEvent.metaKey  &&  zEvent.shiftKey  &&  zEvent.code === "KeyZ") {
-        redo();
-      }
-      if (zEvent.metaKey  &&  zEvent.shiftKey == false  &&  zEvent.code === "KeyZ") {
-        undo();
-      }
-  } );
-  $("#pointBrush").css("background-color","RGB(140,140,140)")
+$(document).on('ready', function () {
+
+  document.addEventListener("keydown", function (zEvent) {
+    if (zEvent.metaKey && zEvent.shiftKey && zEvent.code === "KeyZ") {
+      redo();
+    }
+    if (zEvent.metaKey && zEvent.shiftKey == false && zEvent.code === "KeyZ") {
+      undo();
+    }
+  });
+  $("#pointBrush").css("background-color", "RGB(140,140,140)")
   console.log("Let's make computer generated art that looks pretty cool...v33")
-  $("#displayColor").on("click",function(){
-    if (noColors===true){
+  $("#displayColor").on("click", function () {
+    if (noColors === true) {
       noColors = false;
       css_buttons.displayColor(true);
-      
-    }
-    else {
+
+    } else {
       noColors = true;
       css_buttons.displayColor(false);
     }
-    for (j=0;j<triangulations.length;j++){
+    for (j = 0; j < triangulations.length; j++) {
       delaunayDisplay(triangulations[j], triangleCanvasLayer);
 
     }
   })
 
-  $("#displayPoints").on("click",function(){
-    if (displayPoints == false){
+  $("#displayPoints").on("click", function () {
+    if (displayPoints == false) {
       displayPoints = true;
       css_buttons.displayPoints(true);
 
-    }
-    else {
+    } else {
       displayPoints = false;
       css_buttons.displayPoints(false);
     }
   });
 
-  $("#displayTriangulation").on("click",function(){
-    if (displayTriangulation == false){
+  $("#displayTriangulation").on("click", function () {
+    if (displayTriangulation == false) {
       displayTriangulation = true;
       css_buttons.displayTriangulation(true);
-      
-    }
-    else {
+
+    } else {
       displayTriangulation = false;
       css_buttons.displayTriangulation(false);
     }
   });
-  $("#displayImage").on("click",function(){
-    if (displayImage == false){
+  $("#displayImage").on("click", function () {
+    if (displayImage == false) {
       displayImage = true;
       css_buttons.displayImage(true);
-      
-    }
-    else {
+
+    } else {
       displayImage = false;
       css_buttons.displayImage(false);
     }
   });
-  $("#brushSize").on("focusout",function(){
+  $("#brushSize").on("focusout", function () {
 
     var brushSizeTemp = parseInt(document.querySelector('#brushSize').value);
-    if (isNaN(brushSizeTemp) === true || brushSizeTemp <1){
+    if (isNaN(brushSizeTemp) === true || brushSizeTemp < 1) {
       alert("Type in a number larger than 0 for brush size");
       $("#brushSize")[0].value = brushSize;
-    }
-    else {
+    } else {
       brushSize = brushSizeTemp
     }
   });
-  $("#brushDensity").on("focusout",function(){
+  $("#brushDensity").on("focusout", function () {
 
-    var pointDensityTemp = parseInt(document.querySelector('#brushDensity').value)-1;
-    if (isNaN(pointDensityTemp) === true || pointDensityTemp <1){
+    var pointDensityTemp = parseInt(document.querySelector('#brushDensity').value) - 1;
+    if (isNaN(pointDensityTemp) === true || pointDensityTemp < 1) {
       alert("Type in a number larger than 1 for brush density");
-      $("#brushDensity")[0].value = pointDensity+1;
-    }
-    else{
+      $("#brushDensity")[0].value = pointDensity + 1;
+    } else {
       pointDensity = pointDensityTemp;
     }
   });
-  
-  $("#colorThreshold").on("focusout",function(){
+
+  $("#colorThreshold").on("focusout", function () {
     var colorThresholdTemp = parseInt(document.querySelector('#colorThreshold').value);
-    if (isNaN(colorThresholdTemp) === true || colorThresholdTemp <1){
+    if (isNaN(colorThresholdTemp) === true || colorThresholdTemp < 1) {
       alert("Type in a number larger than 1 for color threshold");
       $("#colorThreshold")[0].value = colorThreshold;
-    }
-    else{
+    } else {
       colorThreshold = colorThresholdTemp;
-      resetAutoGenListener([cWidth,cHeight,completedFilters,d,colorThreshold],artstyle);
+      resetAutoGenListener([cWidth, cHeight, completedFilters, d, colorThreshold], artstyle);
     }
   })
-  $("#durationOfFlowerEffect").on("focusout",function(){
+  $("#durationOfFlowerEffect").on("focusout", function () {
     var flowerEffectTimeTemp = parseInt(document.querySelector('#durationOfFlowerEffect').value);
-    if (isNaN(flowerEffectTimeTemp) === true || flowerEffectTimeTemp <1){
+    if (isNaN(flowerEffectTimeTemp) === true || flowerEffectTimeTemp < 1) {
       alert("Type in a number larger than 1 for effect duration");
-    }
-    else{
+    } else {
       flowerEffectTime = flowerEffectTimeTemp;
     }
   })
-  $("#flowerEffect").on("click",function(){
-    if (flowerEffect === false){
+  $("#flowerEffect").on("click", function () {
+    if (flowerEffect === false) {
       flowerEffect = true;
       $("#flowerEffect").text("Instant Coloring: Off")
-      $("#durationOfFlowerEffect").css("z-index","0");
-      $("#flowerEffectTime").css("transform","translate(0,0)");
-      $("#durationOfFlowerEffect").css("transform","translate(0,0)");
-    }
-    else {
+      $("#durationOfFlowerEffect").css("z-index", "0");
+      $("#flowerEffectTime").css("transform", "translate(0,0)");
+      $("#durationOfFlowerEffect").css("transform", "translate(0,0)");
+    } else {
       flowerEffect = false;
       $("#flowerEffect").text("Instant Coloring: On")
-      
-      $("#flowerEffectTime").css("transform","translate(0,-39px)");
-      $("#durationOfFlowerEffect").css("z-index","-5");
-      $("#durationOfFlowerEffect").css("transform","translate(0,-75px)");
+
+      $("#flowerEffectTime").css("transform", "translate(0,-39px)");
+      $("#durationOfFlowerEffect").css("z-index", "-5");
+      $("#durationOfFlowerEffect").css("transform", "translate(0,-75px)");
     }
-    
+
   })
-  $("#pointBrush").on("click",function(){
-    mode=1;
-    $("#pointBrush").css("background-color","RGB(140,140,140)")
-    $("#lineBrush").css("background-color","")
-    $("#eraser").css("background-color","")
-    $("#triangleMover").css("background-color","")
+  $("#pointBrush").on("click", function () {
+    mode = 1;
+    $("#pointBrush").css("background-color", "RGB(140,140,140)")
+    $("#lineBrush").css("background-color", "")
+    $("#eraser").css("background-color", "")
+    $("#triangleMover").css("background-color", "")
   })
-  $("#lineBrush").on("click",function(){
+  $("#lineBrush").on("click", function () {
     mode = 2;
-    $("#lineBrush").css("background-color","RGB(140,140,140)")
-    $("#pointBrush").css("background-color","")
-    $("#eraser").css("background-color","")
-    $("#triangleMover").css("background-color","")
+    $("#lineBrush").css("background-color", "RGB(140,140,140)")
+    $("#pointBrush").css("background-color", "")
+    $("#eraser").css("background-color", "")
+    $("#triangleMover").css("background-color", "")
   })
-  $("#eraser").on("click",function(){
-    mode =3;
-    $("#eraser").css("background-color","RGB(140,140,140)")
-    $("#pointBrush").css("background-color","")
-    $("#lineBrush").css("background-color","")
-    $("#triangleMover").css("background-color","")
+  $("#eraser").on("click", function () {
+    mode = 3;
+    $("#eraser").css("background-color", "RGB(140,140,140)")
+    $("#pointBrush").css("background-color", "")
+    $("#lineBrush").css("background-color", "")
+    $("#triangleMover").css("background-color", "")
   })
-  $("#triangleMover").on("click",function(){
+  $("#triangleMover").on("click", function () {
     mode = 4;
-    $("#triangleMover").css("background-color","RGB(140,140,140)")
-    $("#pointBrush").css("background-color","")
-    $("#lineBrush").css("background-color","")
-    $("#eraser").css("background-color","")
+    $("#triangleMover").css("background-color", "RGB(140,140,140)")
+    $("#pointBrush").css("background-color", "")
+    $("#lineBrush").css("background-color", "")
+    $("#eraser").css("background-color", "")
   });
-  $("#file").on('change',function(){
-    completedFilters=false;
-    img1 = loadImage(window.URL.createObjectURL(document.getElementById("file").files[0]),function(){
+  $("#file").on('change', function () {
+    completedFilters = false;
+    img1 = loadImage(window.URL.createObjectURL(document.getElementById("file").files[0]), function () {
       //make image have height 600
-        var factor = img1.height/620;
-        cWidth = round(img1.width/factor);
-        cHeight = round(img1.height/factor);
-      if (cWidth > window.innerWidth * 0.9){
-        var factor = img1.width/(window.innerWidth*0.9);
-        cWidth = round(img1.width/factor);
-        cHeight = round(img1.height/factor);
+      var factor = img1.height / 620;
+      cWidth = round(img1.width / factor);
+      cHeight = round(img1.height / factor);
+      if (cWidth > window.innerWidth * 0.9) {
+        var factor = img1.width / (window.innerWidth * 0.9);
+        cWidth = round(img1.width / factor);
+        cHeight = round(img1.height / factor);
       }
       //makes sure we have proper hashing for those images that have perfect grid alignments
-        var iterations = 0;
+      var iterations = 0;
       //Temporary fix for when width is 0 mod 50, the hashmap doesn't work.
-        if (cWidth % 50 == 0){
-          cWidth ++;
-        }
-      if (cHeight % 50 == 0){
-        cHeight ++;
+      if (cWidth % 50 == 0) {
+        cWidth++;
       }
-        myCanvas = createCanvas(cWidth,cHeight);
+      if (cHeight % 50 == 0) {
+        cHeight++;
+      }
+      myCanvas = createCanvas(cWidth, cHeight);
 
-      $("#gamedisplay").css("right",(cWidth/2).toString()+"px")
+      $("#gamedisplay").css("right", (cWidth / 2).toString() + "px")
       //$("body").css("width",(cWidth+500).toString()+"px")
 
       myCanvas.parent('gamedisplay');
 
-      allVertices=[];
+      allVertices = [];
       triangulations = [0];
       tColors = [];
-      verticesHashTable=[];
-      verticesHashTableFlat=[];
+      verticesHashTable = [];
+      verticesHashTableFlat = [];
       d = pixelDensity();
-      allVertices.push([0,0]);
-      allVertices.push([cWidth,0]);
-      allVertices.push([0,cHeight]);
-      allVertices.push([cWidth,cHeight]);
-      
-      for(i=0;i<cWidth/80;i++){
-        var tempv = i*80+round(random(0,30));
-        var tempv2 = i*80+round(random(0,30));
-        if (inCanvas(tempv,cHeight)){
-          allVertices.push([tempv,cHeight])
+      allVertices.push([0, 0]);
+      allVertices.push([cWidth, 0]);
+      allVertices.push([0, cHeight]);
+      allVertices.push([cWidth, cHeight]);
+
+      for (i = 0; i < cWidth / 80; i++) {
+        var tempv = i * 80 + round(random(0, 30));
+        var tempv2 = i * 80 + round(random(0, 30));
+        if (inCanvas(tempv, cHeight)) {
+          allVertices.push([tempv, cHeight])
         }
-        if (inCanvas(tempv2,cHeight)){
-          allVertices.push([tempv2,0])
+        if (inCanvas(tempv2, cHeight)) {
+          allVertices.push([tempv2, 0])
         }
 
 
       }
-      for(i=0;i<cHeight/80;i++){
-        var tempv = i*80+round(random(0,30));
-        var tempv2 = i*80+round(random(0,30));
-        if (inCanvas(cWidth,tempv)){
-          allVertices.push([cWidth,tempv])
+      for (i = 0; i < cHeight / 80; i++) {
+        var tempv = i * 80 + round(random(0, 30));
+        var tempv2 = i * 80 + round(random(0, 30));
+        if (inCanvas(cWidth, tempv)) {
+          allVertices.push([cWidth, tempv])
         }
-        if (inCanvas(0,tempv2)){
-          allVertices.push([0,tempv2])
+        if (inCanvas(0, tempv2)) {
+          allVertices.push([0, tempv2])
         }
 
       }
-      finishedColoring=true;
+      finishedColoring = true;
 
       generateHashSpace();
-      image(img1,0,0,cWidth,cHeight);
+      image(img1, 0, 0, cWidth, cHeight);
       loadPixels();
-      filteredPixels=[];
-      resetAutoGenListener([cWidth,cHeight,completedFilters,d,colorThreshold],artstyle);
-      
+      filteredPixels = [];
+      resetAutoGenListener([cWidth, cHeight, completedFilters, d, colorThreshold], artstyle);
+
       storedVertices = [];
-      for (var slot_index = 0; slot_index < max_undo; slot_index++){
+      for (var slot_index = 0; slot_index < max_undo; slot_index++) {
         storedVertices.push([]);
       }
-      
-      triangleCanvasLayer = createGraphics(cWidth,cHeight)
-      
+
+      triangleCanvasLayer = createGraphics(cWidth, cHeight)
+
       //Store initial vertices
       recordVertices();
     });
-    
+
   });
-  $("#expandImage").on("click",function(){
-    if (finishedColoring == false){
+  $("#expandImage").on("click", function () {
+    if (finishedColoring == false) {
       alert("Please wait until the coloring is finished before enlargining the work and downloading it")
-    }
-    else {
-      if (window.confirm("Are you sure you want to do this? You cannot go back and edit this work again.")){
+    } else {
+      if (window.confirm("Are you sure you want to do this? You cannot go back and edit this work again.")) {
         var factor = 2;
-        if (cWidth>cHeight){
-          factor = ceil(6000/cWidth);
+        if (cWidth > cHeight) {
+          factor = ceil(6000 / cWidth);
+        } else {
+          factor = ceil(6000 / cHeight);
         }
-        else {
-          factor = ceil(6000/cHeight);
-        }
-        
-        expandImage(factor,true);
+
+        expandImage(factor, true);
       }
     }
   });
-  $("#polytomize").on("click",function(){
+  $("#polytomize").on("click", function () {
     triangulize();
     finishedColoring = false;
-    image(img1,0,0,cWidth,cHeight);
+    image(img1, 0, 0, cWidth, cHeight);
 
     loadPixels();
-    tColors=[];
+    tColors = [];
     sTime = millis();
     css_buttons.displayPoints(false);
-    displayPoints=false;
+    displayPoints = false;
   })
-  
+
   //Save or load vertices
-  $("#saveThis").on("click",function(){
+  $("#saveThis").on("click", function () {
     saveData();
     $("#saveThis").text("Saved data!");
-    window.setTimeout(function(){
+    window.setTimeout(function () {
       $("#saveThis").text("Save this canvas");
-    },2000)
+    }, 2000)
   });
-  $("#loadThis").on("click",function(){
+  $("#loadThis").on("click", function () {
     loadData(JSON.parse(localStorage.getItem("art1")))
     $("#loadThis").text("Loaded Data!");
-    window.setTimeout(function(){
+    window.setTimeout(function () {
       $("#loadThis").text("Load last saved");
-    },2000)
+    }, 2000)
   });
-  
+
 
 })

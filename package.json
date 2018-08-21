@@ -1,0 +1,11 @@
+{
+    "name": "mypackage",
+    "version": "0.0.1",
+    "eslintConfig": {
+        "plugins": ["example"],
+        "env": {
+            "jquery":true,
+            "browser":true
+        }
+    }
+}
