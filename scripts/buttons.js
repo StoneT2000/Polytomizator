@@ -10,7 +10,7 @@ $(document).on('ready', function () {
     }
   });
   $("#pointBrush").css("background-color", "RGB(140,140,140)")
-  console.log("Let's make computer generated art that looks pretty cool...v33")
+  console.log("Polytomizator v42")
   $("#displayColor").on("click", function () {
     if (noColors === true) {
       noColors = false;
@@ -280,7 +280,7 @@ $(document).on('ready', function () {
     $("#gencubicpoly").on("click", function(){
       var cpdensity = parseFloat($("#gencubicpoly_density").val());
       var cpaccuracy = parseInt($("#gencubicpoly_accuracy").val());
-      if (isNaN(cpdensity)){
+      if (isNaN(cpdensity) || cpdensity < 0 || cpdensity > 1){
         alert("Enter a decimal value between 0 and 1 for density");
         return;
       }
@@ -315,7 +315,7 @@ $(document).on('ready', function () {
         alert("Enter a integer larger than 0 for accuracy");
         return;
       }
-      snapVertices(spaccuracy)
+      snapVertices(2 * spaccuracy)
       close_a_options();
     })
     $("#close_a_options").on("click", function(){

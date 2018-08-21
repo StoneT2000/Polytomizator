@@ -445,7 +445,7 @@ function expandImage(mvalue, save) {
       saveAs(blob, "PolyArt.png");
     });
     downloading = false;
-    console.log("Finished downloading")
+    //console.log("Finished downloading")
   }
 }
 var testCanvas;
