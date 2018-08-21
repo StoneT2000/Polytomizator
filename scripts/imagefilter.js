@@ -254,7 +254,7 @@ function supress(x,y,data){
 }
 function neighborhoodIndices(x,y,r){
   var positions = [];
-  var indexed = ind1(x,y);
+
   for (i=-r;i<=r;i++){
     for (j=-r;j<=r;j++){
       positions.push(ind1(j+y,i+x));

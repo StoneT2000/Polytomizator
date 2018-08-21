@@ -244,7 +244,3 @@ function autoGenPoints(accuracy, density) {
   scanSquareUD(accuracy, 100000000);
   generateRandomSquares(accuracy, pDensity)
 }
-
-function lossFunction(manualData, data) {
-
-}

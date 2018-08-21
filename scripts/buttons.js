@@ -153,7 +153,7 @@ $(document).on('ready', function () {
         cHeight = round(img1.height / factor);
       }
       //makes sure we have proper hashing for those images that have perfect grid alignments
-      var iterations = 0;
+
       //Temporary fix for when width is 0 mod 50, the hashmap doesn't work.
       if (cWidth % 50 == 0) {
         cWidth++;
