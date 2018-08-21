@@ -173,7 +173,7 @@ function mouseClicked() {
               tColors[k + 2] = tAC[2];
             }
           }
-        };
+        }
 
       }
       //Record past vertices sets for undoing
@@ -391,8 +391,9 @@ function expandVertex(vertex, expandValue) {
 }
 
 function lineAngle(x1, y1, x2, y2) {
+  var angleconstant = 0;
   if (x2 - x1 >= 0) {
-    var angleconstant = 0;
+    angleconstant = 0;
     if (y2 - y1 >= 0) {
       angleconstant = 360;
     }
