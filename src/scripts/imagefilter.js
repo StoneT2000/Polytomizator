@@ -199,10 +199,10 @@ function edgeGradientAngle(x,y,data){
 }
 function roundAngle(rad){
   //0: vert, 1: top right, 2:horizontal, 3:bottom right
-  const api0 = 3*Math.PI/8
-  const api1 = Math.PI/8
-  const api2 = -Math.PI/8
-  const api3 = -3*Math.PI/8
+  var api0 = 3*Math.PI/8
+  var api1 = Math.PI/8
+  var api2 = -Math.PI/8
+  var api3 = -3*Math.PI/8
   if (rad > api0|| rad < api3){
     return 0;
   }
