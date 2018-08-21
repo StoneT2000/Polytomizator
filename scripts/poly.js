@@ -22,9 +22,7 @@ var stepDelaunate = true; //Whether to allow coloring to proceed when using flow
 
 var noColors = false; //Wheter or not the colors, tColors, are used.
 
-
 var flowing = true; //Flowing: true, points can be placed anywhere, when false, points are on fixed vertices.
-
 var brushSize = 100; //Radius of brush
 
 var downloading = false;
@@ -73,10 +71,11 @@ var max_undo = 50;
 var myCanvas; //The canvas
 var img1; //The current loaded image
 var d; //Pixel density
-
+var cWidth = 400;
+var cHeight = 400;
 var triangleCanvasLayer; //Off screen graphics layer for drawing on
 function preload() {
-  img1 = loadImage('images/white.jpg')
+  img1 = loadImage('images/white.jpg');
 }
 
 function setup() {
@@ -90,9 +89,8 @@ function setup() {
   cHeight = round(img1.height / factor);
   myCanvas = createCanvas(cWidth, cHeight);
 
-
   //create off screen triangle generating layer
-  triangleCanvasLayer = createGraphics(cWidth, cHeight)
+  triangleCanvasLayer = createGraphics(cWidth, cHeight);
 
   //Initialize points on corners and sides
   allVertices.push([0, 0]);
@@ -104,22 +102,22 @@ function setup() {
     var tempv = i * 80 + round(random(0, 30));
     var tempv2 = i * 80 + round(random(0, 30));
     if (inCanvas(tempv, cHeight)) {
-      allVertices.push([tempv, cHeight])
+      allVertices.push([tempv, cHeight]);
     }
     if (inCanvas(tempv2, 0)) {
-      allVertices.push([tempv2, 0])
+      allVertices.push([tempv2, 0]);
     }
 
 
   }
-  for (i = 0; i < cHeight / 80; i++) {
-    var tempv = i * 80 + round(random(0, 30));
-    var tempv2 = i * 80 + round(random(0, 30));
-    if (inCanvas(cWidth, tempv)) {
-      allVertices.push([cWidth, tempv])
+  for (var i = 0; i < cHeight / 80; i++) {
+    var tempv3 = i * 80 + round(random(0, 30));
+    var tempv4 = i * 80 + round(random(0, 30));
+    if (inCanvas(cWidth, tempv3)) {
+      allVertices.push([cWidth, tempv3]);
     }
-    if (inCanvas(0, tempv2)) {
-      allVertices.push([0, tempv2])
+    if (inCanvas(0, tempv4)) {
+      allVertices.push([0, tempv4]);
     }
 
 
@@ -138,26 +136,26 @@ function setup() {
   //Store initial vertices
   recordVertices();
   verticesHashTableFlat = verticesHashTable.reduce(function (acc, curr) {
-    return acc.concat(curr)
+    return acc.concat(curr);
   });
 
 
 
-  $("#gamedisplay").css("right", (cWidth / 2).toString() + "px")
+  $("#gamedisplay").css("right", (cWidth / 2).toString() + "px");
   //$("body").css("width",(cWidth+100).toString()+"px")
   myCanvas.parent('gamedisplay');
-  angleMode(DEGREES)
+  angleMode(DEGREES);
   $("#downloadSVG").on("click", function () {
-    if (finishedColoring == false) {
-      alert("Please wait until the coloring is finished before enlargining the work and downloading it")
+    if (finishedColoring === false) {
+      alert("Please wait until the coloring is finished before enlargining the work and downloading it");
     } else if (triangulations[triangulations.length - 1].length > 0) {
       downloadSVG(cWidth, cHeight);
     } else {
-      alert("Make some poly art first")
+      alert("Make some poly art first");
     }
   });
   resetAutoGenListener([cWidth, cHeight, completedFilters, d, colorThreshold], 0);
-  console.log("Finished Setting Up!")
+  console.log("Finished Setting Up!");
   $("#loadingText").css("top", "30%");
   $("#loadingText").css("opacity", "0");
   $("#loadingScreen").css("opacity", "0");
@@ -165,16 +163,16 @@ function setup() {
     $("#loadingScreen").css("display", "none");
 
     $("#loadingText").html("Patience, we are making art <img src=\"images/loadingSymbol.gif\" style=\"margin-left: 10px\" width=\"32px\" height=\"auto\">");
-  }, 1500)
+  }, 1500);
   $("#brushSize")[0].value = brushSize;
   $("#brushDensity")[0].value = pointDensity + 1;
   $("#colorThreshold")[0].value = colorThreshold;
-  document.getElementById('normal').selected = true
+  document.getElementById('normal').selected = true;
   $("#artstyles").on('change', function () {
     console.log("changeStyle");
-    if (document.getElementById('normal').selected == true) {
+    if (document.getElementById('normal').selected === true) {
       artstyle = 0; //resetAutoGenListener([cWidth,cHeight,completedFilters,d,colorThreshold],artstyle);
-    } else if (document.getElementById('cubic').selected == true) {
+    } else if (document.getElementById('cubic').selected === true) {
       artstyle = 1;
       //resetAutoGenListener([cWidth,cHeight,completedFilters,d,colorThreshold],artstyle);
     }
@@ -193,13 +191,13 @@ function colorIn() {
   for (stepD1 = 0; stepD1 < triangulations[0].length - 1; stepD1 += 3) {
 
     var tAC = [0, 0, 0];
-    tAC = averageColor(verticesHashTableFlat[triangulations[triangulations.length - 1][stepD1]][0], verticesHashTableFlat[triangulations[triangulations.length - 1][stepD1]][1], verticesHashTableFlat[triangulations[triangulations.length - 1][stepD1 + 1]][0], verticesHashTableFlat[triangulations[triangulations.length - 1][stepD1 + 1]][1], verticesHashTableFlat[triangulations[triangulations.length - 1][stepD1 + 2]][0], verticesHashTableFlat[triangulations[triangulations.length - 1][stepD1 + 2]][1], colorAccuracy)
+    tAC = averageColor(verticesHashTableFlat[triangulations[triangulations.length - 1][stepD1]][0], verticesHashTableFlat[triangulations[triangulations.length - 1][stepD1]][1], verticesHashTableFlat[triangulations[triangulations.length - 1][stepD1 + 1]][0], verticesHashTableFlat[triangulations[triangulations.length - 1][stepD1 + 1]][1], verticesHashTableFlat[triangulations[triangulations.length - 1][stepD1 + 2]][0], verticesHashTableFlat[triangulations[triangulations.length - 1][stepD1 + 2]][1], colorAccuracy);
     tColors.push(tAC[0], tAC[1], tAC[2]);
 
   }
   finishedColoring = true;
   fTime = millis();
-  console.log("Coloring took:" + ((fTime - sTime) / 1000).toFixed(3) + " secs")
+  console.log("Coloring took:" + ((fTime - sTime) / 1000).toFixed(3) + " secs");
 }
 var iterStep = 4;
 var fs = 0;
@@ -213,9 +211,9 @@ function draw() {
     fs = millis();
   }
 
-  background("#FFFFFF")
+  background("#FFFFFF");
 
-  if (displayImage == true) {
+  if (displayImage === true) {
     image(img1, 0, 0, cWidth, cHeight);
   }
 
@@ -223,17 +221,17 @@ function draw() {
   if (flowerEffect === true) {
     iterStep = ceil(((triangulations[triangulations.length - 1].length) / (fr)) / flowerEffectTime);
     for (iter = 0; iter < iterStep; iter++) {
-      if (iter == 0) {
+      if (iter === 0) {
         image(img1, 0, 0, cWidth, cHeight);
         loadPixels();
       }
-      if (stepDelaunate == true && triangulations.length > 0 && finishedColoring == false) {
+      if (stepDelaunate === true && triangulations.length > 0 && finishedColoring === false) {
         if (triangulations[triangulations.length - 1].length > 0 && stepD <= triangulations[triangulations.length - 1].length - 1) {
           if (stepD === 0) {
             sTime = millis();
           }
           var tAC = [0, 0, 0];
-          tAC = averageColor(verticesHashTableFlat[triangulations[triangulations.length - 1][stepD]][0], verticesHashTableFlat[triangulations[triangulations.length - 1][stepD]][1], verticesHashTableFlat[triangulations[triangulations.length - 1][stepD + 1]][0], verticesHashTableFlat[triangulations[triangulations.length - 1][stepD + 1]][1], verticesHashTableFlat[triangulations[triangulations.length - 1][stepD + 2]][0], verticesHashTableFlat[triangulations[triangulations.length - 1][stepD + 2]][1], colorAccuracy)
+          tAC = averageColor(verticesHashTableFlat[triangulations[triangulations.length - 1][stepD]][0], verticesHashTableFlat[triangulations[triangulations.length - 1][stepD]][1], verticesHashTableFlat[triangulations[triangulations.length - 1][stepD + 1]][0], verticesHashTableFlat[triangulations[triangulations.length - 1][stepD + 1]][1], verticesHashTableFlat[triangulations[triangulations.length - 1][stepD + 2]][0], verticesHashTableFlat[triangulations[triangulations.length - 1][stepD + 2]][1], colorAccuracy);
           tColors.push(tAC[0], tAC[1], tAC[2]);
 
           stepD += 3;
@@ -241,7 +239,7 @@ function draw() {
         } else {
           finishedColoring = true;
           fTime = millis();
-          console.log("Coloring took:" + ((fTime - sTime) / 1000).toFixed(3) + " secs")
+          console.log("Coloring took:" + ((fTime - sTime) / 1000).toFixed(3) + " secs");
 
           //Once finished coloring, re color the off screen graphics in case
           for (j = 0; j < triangulations.length; j++) {
@@ -253,7 +251,7 @@ function draw() {
       }
     }
   } else {
-    if (finishedColoring == false) {
+    if (finishedColoring === false) {
       colorIn();
       finishedColoring = true;
       for (j = 0; j < triangulations.length; j++) {
@@ -266,18 +264,18 @@ function draw() {
   stroke(2);
 
   //Display pixelated
-  if (colorOfSquares.length > 0 && squares == true) {
+  if (colorOfSquares.length > 0 && squares === true) {
     noStroke();
     for (i = 0; i < colorOfSquares.length; i++) {
       var tempSquareColor = colorOfSquares[i];
-      fill(tempSquareColor[0], tempSquareColor[1], tempSquareColor[2])
-      rect(tempSquareColor[3], tempSquareColor[4], 20, 20)
+      fill(tempSquareColor[0], tempSquareColor[1], tempSquareColor[2]);
+      rect(tempSquareColor[3], tempSquareColor[4], 20, 20);
     }
   }
-  fill(256, 256, 256)
+  fill(256, 256, 256);
 
 
-  if (displayTriangulation == true && finishedColoring == true) {
+  if (displayTriangulation === true && finishedColoring === true) {
     image(triangleCanvasLayer, 0, 0);
     //Each time an option is enacted, run through delaunayDisdplay to show that option
     //options such as hidhing colors
@@ -292,7 +290,7 @@ function draw() {
   }
 
   //Procedurally display those triangles only when it is still coloring
-  if (flowerEffect == true && finishedColoring != true && displayTriangulation == true) {
+  if (flowerEffect === true && finishedColoring !== true && displayTriangulation === true) {
 
     for (j = 0; j < triangulations.length; j++) {
       //We use this function becasue its faster than transfering from the off screen graphics to the on screen canvas.
@@ -303,81 +301,81 @@ function draw() {
   }
 
 
-  fill(256, 256, 256)
-  stroke(0, 0, 0)
-  if (displayPoints == true) {
+  fill(256, 256, 256);
+  stroke(0, 0, 0);
+  if (displayPoints === true) {
     for (j = 0; j < verticesHashTable.length; j++) {
       //ellipse(verticesHashTableFlat[j][0], verticesHashTableFlat[j][1], 5, 5);
 
       for (k = 0; k < verticesHashTable[j].length; k++) {
-        ellipse(verticesHashTable[j][k][0], verticesHashTable[j][k][1], 5, 5)
+        ellipse(verticesHashTable[j][k][0], verticesHashTable[j][k][1], 5, 5);
       }
 
     }
     //Points detected by filters
     for (j = 0; j < edgePoints.length; j++) {
-      if (edgePoints[j][2] > colorThreshold && displayEdgePoints == true) {
-        ellipse(edgePoints[j][0], edgePoints[j][1], 5)
+      if (edgePoints[j][2] > colorThreshold && displayEdgePoints === true) {
+        ellipse(edgePoints[j][0], edgePoints[j][1], 5);
       }
     }
   }
 
 
-  $("#numberPoints").text(allVertices.length + " points")
-  $("#numberTriangles").text(parseInt(triangulations[triangulations.length - 1].length / 3) + " triangles")
-  if (finishedColoring == true) {
-    $("#lastTiming").text(((fTime - sTime) / 1000).toFixed(3) + " seconds")
+  $("#numberPoints").text(allVertices.length + " points");
+  $("#numberTriangles").text(parseInt(triangulations[triangulations.length - 1].length / 3) + " triangles");
+  if (finishedColoring === true) {
+    $("#lastTiming").text(((fTime - sTime) / 1000).toFixed(3) + " seconds");
   }
   var dx = oldX - mouseX;
   var dy = oldY - mouseY;
-  accDist = sqrt(dx * dx + dy * dy)
+  accDist = sqrt(dx * dx + dy * dy);
   if (mode === 2) {
-    if (downloading == false) {
+    if (downloading === false) {
       noFill();
       stroke(2);
-      stroke(200, 200, 200)
-      ellipse(mouseX, mouseY, brushSize * 2, brushSize * 2)
+      stroke(200, 200, 200);
+      ellipse(mouseX, mouseY, brushSize * 2, brushSize * 2);
     }
     if (accDist >= critDist && mouseIsPressed) {
 
 
       if (mouseX > cWidth - 1 || mouseX < 1 || mouseY > cHeight - 1 || mouseY < 1) {} else {
         accDist = 0;
-        critDist = random(15, 20)
+        critDist = random(15, 20);
         //accDist and critDist are used to make the brush not place a billion points at a time, and instead you have to move the brush in order to make more points.
 
         oldX = mouseX;
         oldY = mouseY;
         var vpx = (round(mouseX));
         var vpy = (round(mouseY));
-        if (snapping == true) {
+        if (snapping === true) {
           vpx = vpx - vpx % snappingAccuracy;
           vpy = vpy - vpy % snappingAccuracy;
         }
         if (unique_vertex(vpx, vpy)) {
           allVertices.push([vpx, vpy]);
-          updateHashSpace(vpx, vpy, true)
+          updateHashSpace(vpx, vpy, true);
         }
 
         //Randomly generate points
         for (i = 0; i < pointDensity; i++) {
-          var r1 = random(-brushSize, brushSize)
+          var r1 = random(-brushSize, brushSize);
 
           //Given r1, find the bounds of the y value of the vertex such that it is within the brush radius.
           var ybound = sqrt(brushSize * brushSize - r1 * r1);
 
           var r2 = random(-ybound, ybound);
           if (mouseX + r1 > cWidth - 1 || mouseX + r1 < 1 || mouseY + r2 > cHeight - 1 || mouseY + r2 < 1) {} else {
-            var vpx = (round(mouseX + r1));
+            let vpx = (round(mouseX + r1));
             var vpy = (round(mouseY + r2));
-            if (snapping == true) {
+            if (snapping === true) {
               vpx = vpx - vpx % snappingAccuracy;
               vpy = vpy - vpy % snappingAccuracy;
             }
             if (unique_vertex(vpx, vpy)) {
               allVertices.push([vpx, vpy]);
 
-              updateHashSpace(vpx, vpy, true)
+              updateHashSpace(vpx, vpy, true);
             }
 
           }
@@ -392,11 +390,11 @@ function draw() {
 
   //Erase points
   if (mode === 3) {
-    if (downloading == false) {
+    if (downloading === false) {
       noFill();
       stroke(2);
-      stroke(200, 200, 200)
-      ellipse(mouseX, mouseY, brushSize * 2, brushSize * 2)
+      stroke(200, 200, 200);
+      ellipse(mouseX, mouseY, brushSize * 2, brushSize * 2);
     }
     if (mouseIsPressed) {
       var xs = floor(mouseX / 50);
@@ -410,7 +408,7 @@ function draw() {
           if (squaredist(xs, ys, xs + k, ys + j) <= (brushSize / 50) * (brushSize / 50)) {
 
             if (xs + k >= 0 && ys + j >= 0 && xs + k <= ceil(cWidth / 50) && ys + j <= ceil(cHeight / 50)) {
-              verticesRange.push(verticesHashTable[findIndexFromHash((xs + k) * 100 + ys + j)])
+              verticesRange.push(verticesHashTable[findIndexFromHash((xs + k) * 100 + ys + j)]);
 
             }
 
@@ -420,7 +418,7 @@ function draw() {
 
       if (verticesRange.length > 0) {
         for (k = 0; k < verticesRange.length; k++) {
-          if (verticesRange[k] != undefined) {
+          if (verticesRange[k] !== undefined) {
             for (p = 0; p < verticesRange[k].length; p++) {
               var dx = verticesRange[k][p][0] - mouseX;
               var dy = verticesRange[k][p][1] - mouseY;
@@ -446,7 +444,7 @@ function draw() {
     fr = ceil(4 / ((ff - fs) / 1000));
     fc = 0;
   }
-  if (filteringView == true) {
+  if (filteringView === true) {
     updatePixels();
   }
 }

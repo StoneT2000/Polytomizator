@@ -22,7 +22,6 @@ $(document).on('ready', function () {
     }
     for (j = 0; j < triangulations.length; j++) {
       delaunayDisplay(triangulations[j], triangleCanvasLayer);
-
     }
   })
 
