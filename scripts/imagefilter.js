@@ -168,6 +168,8 @@ function smoothAvg5(x,y,data,filter){
   colors[2]/=totalWeight;
   return colors;
 }
+
+//Use this function isntead of JSON.parse(JSON.stringify) way as sometimes it doesn't work?
 function copyTo(arr1,arr2,initialize){
   //copies array 1 to array 2
   if (initialize){
@@ -254,7 +256,7 @@ function supress(x,y,data){
 }
 function neighborhoodIndices(x,y,r){
   var positions = [];
-  var indexed = ind1(x,y);
+
   for (i=-r;i<=r;i++){
     for (j=-r;j<=r;j++){
       positions.push(ind1(j+y,i+x));
