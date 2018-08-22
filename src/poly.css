@@ -2,7 +2,6 @@ body,
 html {
   width: 100%;
   background-image: url('images/PolyBackground.jpg');
-
   position: relative;
   height: auto;
 }

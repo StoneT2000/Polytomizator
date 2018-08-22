@@ -108,17 +108,6 @@ function smoothAvg3(x,y,data,filter){
   }
   return colors;
 }
-//Push the edge points to all vertices array
-function pushEdgePointsToAll(){
-  for (ink=0;ink<edgePoints.length;ink++){
-    if (edgePoints[ink][2] > colorThreshold){
-      allVertices.push([edgePoints[ink][0],edgePoints[ink][1]]);
-    }
-    
-  }
-  //Pushes to allVertices as well
-  generateHashSpace();
-}
 function changePixels5(filter){
   if (!filter){
     filter = "smooth"

@@ -5,46 +5,23 @@ function generateCubicPoly(accuracy, density, overlay) {
     thisdensity = density;
   }
   if (!overlay) {
-    allVertices = [];
+    verticesHashTable = [];
 
   }
 
-  allVertices.push([0, 0]);
-  allVertices.push([cWidth, 0]);
-  allVertices.push([0, cHeight]);
-  allVertices.push([cWidth, cHeight]);
-
+  generateHashSpace();
+  updateHashSpace(0, 0, true)
+  updateHashSpace(cWidth, 0, true)
+  updateHashSpace(0, cHeight, true)
+  updateHashSpace(cWidth, cHeight, true)
   for (i = 0; i < cWidth / accuracy; i++) {
-    /*
-    var tempv = i * 80 + round(random(0, 2)) * accuracy;
-    var tempv2 = i * 80 + round(random(0, 2)) * accuracy;
-    if (inCanvas(tempv, cHeight)) {
-      allVertices.push([tempv, cHeight])
-    }
-    if (inCanvas(tempv2, 0)) {
-      allVertices.push([tempv2, 0])
-    }
-    */
-    allVertices.push([i * accuracy, cHeight])
-    allVertices.push([i * accuracy, 0])
-
+    updateHashSpace(i*accuracy, cHeight, true)
+    updateHashSpace(i*accuracy, 0, true)
 
   }
   for (i = 0; i < cHeight / accuracy; i++) {
-    /*
-    var tempv3 = i * 80 + round(random(0, 2)) * accuracy;
-    var tempv4 = i * 80 + round(random(0, 2)) * accuracy;
-    if (inCanvas(cWidth, tempv3)) {
-      allVertices.push([cWidth, tempv3])
-    }
-    if (inCanvas(0, tempv4)) {
-      allVertices.push([0, tempv4])
-    }
-    */
-    allVertices.push([cWidth, i * accuracy])
-    allVertices.push([0, i * accuracy])
-
-
+    updateHashSpace(cWidth, i * accuracy, true)
+    updateHashSpace(0, i * accuracy, true);
   }
   flowing = false;
   image(img1, 0, 0, cWidth, cHeight);
@@ -57,7 +34,7 @@ function generateCubicPoly(accuracy, density, overlay) {
   generateRandomSquares(accuracy, thisdensity)
   flowing = true;
 
-  generateHashSpace();
+  //generateHashSpace();
   triangulize();
   finishedColoring = false;
   image(img1, 0, 0, cWidth, cHeight);
@@ -126,16 +103,16 @@ function scanSquareLR(accuracy, degree, degree2) {
         var cr1 = round(random(-10, 10));
         var cr2 = round(random(-10, 10));
         if (inCanvas(tsc[3] + cr1 + accuracy, tsc[4] + cr2)) {
-          allVertices.push([tsc[3] + cr1 + accuracy / 2, tsc[4] + cr2]);
+          updateHashSpace(tsc[3] + cr1 + accuracy / 2, tsc[4] + cr2, true);
         }
       } else {
         if (inCanvas(tsc[3] + accuracy / 2, tsc[4])) {
-          allVertices.push([tsc[3] + accuracy / 2, tsc[4]]);
+          updateHashSpace(tsc[3] + accuracy / 2, tsc[4], true);
         }
       }
     }
   }
-  generateHashSpace();
+  //generateHashSpace();
 }
 
 function scanSquareUD(accuracy, degree, degree2) {
@@ -154,16 +131,16 @@ function scanSquareUD(accuracy, degree, degree2) {
         var cr1 = round(random(-10, 10));
         var cr2 = round(random(-10, 10));
         if (inCanvas(tsc[3] + cr1, tsc[4] + cr2 + accuracy / 2)) {
-          allVertices.push([tsc[3] + cr1, tsc[4] + cr2 + accuracy / 2]);
+          updateHashSpace(tsc[3] + cr1, tsc[4] + cr2 + accuracy / 2, true)
         }
       } else {
         if (inCanvas(tsc[3], tsc[4] + accuracy / 2)) {
-          allVertices.push([tsc[3], tsc[4] + accuracy / 2]);
+          updateHashSpace(tsc[3], tsc[4] + accuracy / 2, true);
         }
       }
     }
   }
-  generateHashSpace();
+  //generateHashSpace();
 }
 
 function generateRandomSquares(accuracy, density) {
@@ -174,11 +151,11 @@ function generateRandomSquares(accuracy, density) {
         var cr1 = round(random(-10, 10));
         var cr2 = round(random(-10, 10));
         if (inCanvas(tsc[3] + cr1, tsc[4] + cr2)) {
-          allVertices.push([tsc[3] + cr1, tsc[4] + cr2]);
+          updateHashSpace(tsc[3] + cr1, tsc[4] + cr2, true)
         }
       } else {
         if (inCanvas(tsc[3] + accuracy / 2, tsc[4])) {
-          allVertices.push([tsc[3] + accuracy / 2, tsc[4]]);
+          updateHashSpace(tsc[3] + accuracy / 2, tsc[4], true)
         }
       }
 
@@ -186,64 +163,7 @@ function generateRandomSquares(accuracy, density) {
     }
 
   }
-  generateHashSpace();
-}
-
-function scanUD(data, degree, accuracy) {
-  for (j = 0; j < cWidth - accuracy; j += accuracy) {
-    for (i = 0; i < cHeight - accuracy; i += accuracy) {
-      var c1 = fget(i, j);
-      var c2 = fget(i, j + accuracy / 2);
-      var dr = c1[0] - c2[0]
-      var dg = c1[1] - c2[1]
-      var db = c1[2] - c2[2]
-      var da = c1[3] - c2[3]
-      if (dr * dr + dg * dg + db * db + da * da > degree || abs(dr) > 10 || abs(dg) > 10 || abs(db) > 10) {
-        allVertices.push([i, j]);
-        if (flowing == true) {
-          for (ij = 0; ij < 2; ij++) {
-            var cr1 = round(random(-10, 10));
-            var cr2 = round(random(-10, 10));
-            if (i + cr1 > cWidth - 1 || i + cr1 < 1 || j + cr2 > cHeight - 1 || j + cr2 < 1) {
-
-            } else {
-              allVertices.push([i + cr1, j + cr2]);
-            }
-          }
-
-        }
-      }
-    }
-  }
-}
-
-function scanLR(data, degree, accuracy) {
-  for (j = 0; j < cHeight - accuracy; j += accuracy) {
-    for (i = 0; i < cWidth - accuracy; i += accuracy) {
-      var c1 = fget(i, j);
-      var c2 = fget(i + accuracy / 2, j);
-      var dr = c1[0] - c2[0]
-      var dg = c1[1] - c2[1]
-      var db = c1[2] - c2[2]
-      var da = c1[3] - c2[3]
-      if (dr * dr + dg * dg + db * db + da * da > degree || abs(dr) > 100 || abs(dg) > 100 || abs(db) > 100) {
-        allVertices.push([i, j]);
-        if (flowing == true) {
-          for (ij = 0; ij < 2; ij++) {
-            var cr1 = round(random(-10, 10));
-            var cr2 = round(random(-10, 10));
-            if (i + cr1 > cWidth - 1 || i + cr1 < 1 || j + cr2 > cHeight - 1 || j + cr2 < 1) {
-
-            } else {
-              allVertices.push([i + cr1, j + cr2]);
-            }
-          }
-
-        }
-      }
-    }
-  }
-  generateHashSpace();
+  //generateHashSpace();
 }
 
 function autoGenPoints(accuracy, density) {

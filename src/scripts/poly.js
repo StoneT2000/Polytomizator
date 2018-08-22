@@ -1,5 +1,3 @@
-var allVertices = []; //Store all vertices. NOTE, this does not record when vertices are removed
-
 //Triangulations variable stores the order of the triangles vertices
 var triangulations = [0];
 
@@ -48,6 +46,8 @@ var colorAccuracy = 1;
 //verticesHashTableFlat is used for various other purposes, displaying vertices etc.
 var verticesHashTable = [];
 var verticesHashTableFlat = [];
+
+var totalpoints = 0;
 
 //The below variable is used to store the vertices that correspond with the current triangulations array. It is basically what is downloaded. It is updated whenever triangulations is updated by triangulize();
 var triangulatedVerticesFlat = [];
@@ -103,38 +103,39 @@ function setup() {
   triangleCanvasLayer = createGraphics(cWidth, cHeight);
 
   //Initialize points on corners and sides
-  allVertices.push([0, 0]);
-  allVertices.push([cWidth, 0]);
-  allVertices.push([0, cHeight]);
-  allVertices.push([cWidth, cHeight]);
 
+  generateHashSpace();
+  updateHashSpace(0, 0, true)
+  updateHashSpace(cWidth, 0, true)
+  updateHashSpace(0, cHeight, true)
+  updateHashSpace(cWidth, cHeight, true)
   for (i = 0; i < cWidth / 80; i++) {
     var tempv = i * 80 + round(random(0, 30));
     var tempv2 = i * 80 + round(random(0, 30));
     if (inCanvas(tempv, cHeight)) {
-      allVertices.push([tempv, cHeight]);
+      updateHashSpace(tempv, cHeight, true)
     }
     if (inCanvas(tempv2, 0)) {
-      allVertices.push([tempv2, 0]);
+      updateHashSpace(tempv2, 0, true);
     }
 
 
   }
   for (var i = 0; i < cHeight / 80; i++) {
-    var tempv3 = i * 80 + round(random(0, 30));
-    var tempv4 = i * 80 + round(random(0, 30));
-    if (inCanvas(cWidth, tempv3)) {
-      allVertices.push([cWidth, tempv3]);
+    var tempv = i * 80 + round(random(0, 30));
+    var tempv2 = i * 80 + round(random(0, 30));
+    if (inCanvas(cWidth, tempv)) {
+      updateHashSpace(cWidth, tempv, true);
     }
-    if (inCanvas(0, tempv4)) {
-      allVertices.push([0, tempv4]);
+    if (inCanvas(0, tempv2)) {
+      updateHashSpace(0, tempv2, true);
     }
 
 
   }
   loadPixels();
 
-  generateHashSpace();
+  //generateHashSpace();
   frameRate(60);
 
 
@@ -175,15 +176,15 @@ function setup() {
   }, 1500);
   $("#brushSize")[0].value = brushSize;
   $("#brushDensity")[0].value = pointDensity + 1;
-  
+
   //Detect when it is on the canvas
-  $("#defaultCanvas0").on("mouseenter", function(){
+  $("#defaultCanvas0").on("mouseenter", function () {
     active_canvas = true;
   })
-  $("#defaultCanvas0").on("mouseleave", function(){
+  $("#defaultCanvas0").on("mouseleave", function () {
     active_canvas = false;
   })
-  
+
 
 }
 var accDist = 0;
@@ -215,6 +216,7 @@ var fc = 0;
 var flowerEffectTime = 10;
 
 function draw() {
+  totalpoints = 0;
   if (fc === 0) {
     fs = millis();
   }
@@ -288,13 +290,6 @@ function draw() {
     //Each time an option is enacted, run through delaunayDisdplay to show that option
     //options such as hidhing colors
 
-    /* old method uses delaunayDisplay, but not the ctx.triangles part...
-    for (j=0;j<triangulations.length;j++){
-      delaunayDisplay(triangulations[j], myCanvas);
-      
-    }
-    */
-
   }
 
   //Procedurally display those triangles only when it is still coloring
@@ -311,25 +306,21 @@ function draw() {
 
   fill(256, 256, 256);
   stroke(0, 0, 0);
-  if (displayPoints === true) {
-    for (j = 0; j < verticesHashTable.length; j++) {
-      //ellipse(verticesHashTableFlat[j][0], verticesHashTableFlat[j][1], 5, 5);
 
-      for (k = 0; k < verticesHashTable[j].length; k++) {
+  for (j = 0; j < verticesHashTable.length; j++) {
+    //ellipse(verticesHashTableFlat[j][0], verticesHashTableFlat[j][1], 5, 5);
+
+    for (k = 0; k < verticesHashTable[j].length; k++) {
+      if (displayPoints === true) {
         ellipse(verticesHashTable[j][k][0], verticesHashTable[j][k][1], 5, 5);
       }
+      totalpoints++;
+    }
 
-    }
-    //Points detected by filters
-    for (j = 0; j < edgePoints.length; j++) {
-      if (edgePoints[j][2] > colorThreshold && displayEdgePoints === true) {
-        ellipse(edgePoints[j][0], edgePoints[j][1], 5);
-      }
-    }
   }
 
 
-  $("#numberPoints").text(allVertices.length + " points");
+  $("#numberPoints").text(totalpoints + " points");
   $("#numberTriangles").text(parseInt(triangulations[triangulations.length - 1].length / 3) + " triangles");
   if (finishedColoring === true) {
     $("#lastTiming").text(((fTime - sTime) / 1000).toFixed(3) + " seconds");
@@ -361,7 +352,6 @@ function draw() {
           vpy = vpy - vpy % snappingAccuracy;
         }
         if (unique_vertex(vpx, vpy)) {
-          allVertices.push([vpx, vpy]);
           updateHashSpace(vpx, vpy, true);
 
         }
@@ -382,10 +372,7 @@ function draw() {
               vpy = vpy - vpy % snappingAccuracy;
             }
             if (unique_vertex(vpx, vpy)) {
-              allVertices.push([vpx, vpy]);
-
               updateHashSpace(vpx, vpy, true);
-
             }
 
           }
@@ -482,8 +469,13 @@ function generate_normal_poly(values) {
     artWorker.onmessage = function (e) {
       var artResult = e.data;
 
-      allVertices = artResult[0];
-      edgePoints = artResult[1];
+      generateHashSpace();
+      for (var iv = 0; iv < artResult[0].length; iv++){
+        updateHashSpace(artResult[0][iv][0], artResult[0][iv][1], true);
+      }
+      for (var iv = 0; iv < artResult[1].length; iv++){
+        updateHashSpace(artResult[1][iv][0], artResult[1][iv][1], true);
+      }
 
       copyTo(artResult[2], pixels)
 
@@ -492,7 +484,7 @@ function generate_normal_poly(values) {
       }
       splitSquare(20)
       generateRandomSquares(20, 0.4)
-      pushEdgePointsToAll();
+      //pushEdgePointsToAll();
       triangulize();
       finishedColoring = false;
 
@@ -511,44 +503,44 @@ function generate_normal_poly(values) {
         }, 1800);
       }, 0)
       loop();
-
+      recordVertices();
     }
   } else {
-    allVertices = [];
-    allVertices.push([0, 0]);
-    allVertices.push([cWidth, 0]);
-    allVertices.push([0, cHeight]);
-    allVertices.push([cWidth, cHeight]);
-
+    generateHashSpace()
+    updateHashSpace(0, 0, true)
+    updateHashSpace(cWidth, 0, true)
+    updateHashSpace(0, cHeight, true)
+    updateHashSpace(cWidth, cHeight, true)
     for (i = 0; i < cWidth / 80; i++) {
-      var tempv = i * 80 + Math.round(Math.random(0, 30));
-      var tempv2 = i * 80 + Math.round(Math.random(0, 30));
+      var tempv = i * 80 + Math.round(random(0, 30));
+      var tempv2 = i * 80 + Math.round(random(0, 30));
       if (inCanvas(tempv, cHeight)) {
-        allVertices.push([tempv, cHeight])
+        updateHashSpace(tempv, cHeight, true)
       }
-      if (inCanvas(tempv2, cHeight)) {
-        allVertices.push([tempv2, 0])
+      if (inCanvas(tempv2, 0)) {
+        updateHashSpace(tempv2, 0, true);
       }
 
 
     }
-    for (i = 0; i < cHeight / 80; i++) {
-      var tempv = i * 80 + Math.round(Math.random(0, 30));
-      var tempv2 = i * 80 + Math.round(Math.random(0, 30));
+    for (var i = 0; i < cHeight / 80; i++) {
+      var tempv = i * 80 + Math.round(random(0, 30));
+      var tempv2 = i * 80 + Math.round(random(0, 30));
       if (inCanvas(cWidth, tempv)) {
-        allVertices.push([cWidth, tempv])
+        updateHashSpace(cWidth, tempv, true);
       }
       if (inCanvas(0, tempv2)) {
-        allVertices.push([0, tempv2])
+        updateHashSpace(0, tempv2, true);
       }
+
 
     }
     generateRandomSquares(20, 0.4)
-    pushEdgePointsToAll();
+    //pushEdgePointsToAll();
     triangulize();
     finishedColoring = false;
-    
-    generateHashSpace();
+
+    //generateHashSpace();
     tColors = [];
 
     css_buttons.displayPoints(false);
@@ -561,6 +553,7 @@ function generate_normal_poly(values) {
       $("#loadingScreen").css("display", "none");
     }, 1500);
     loop();
+    recordVertices();
 
   }
 }

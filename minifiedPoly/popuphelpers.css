@@ -96,10 +96,11 @@
   max-width:140px;
   font-size:13px;
   color: RGB(50,50,50);
+  line-height: 20px;
 }
 
 #loadThis:hover::after{
-  content:"Load the last canvas saved";
+  content:"Load the last canvas saved. You also have to re-upload the image.";
   position:relative;
   display: inline-block;
   top:10px;
@@ -109,6 +110,7 @@
   padding:0 5 0 5;
   max-width:140px;
   font-size:13px;
+  line-height: 20px;
   color: RGB(50,50,50);
 }
 #undo:hover::after{
