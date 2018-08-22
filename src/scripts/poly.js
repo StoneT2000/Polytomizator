@@ -341,7 +341,7 @@ function draw() {
   var dx = oldX - mouseX;
   var dy = oldY - mouseY;
   accDist = sqrt(dx * dx + dy * dy);
-  if (mode === 2) {
+  if (mode === 2 && active_canvas) {
     if (downloading === false) {
       noFill();
       stroke(2);
@@ -407,43 +407,7 @@ function draw() {
       ellipse(mouseX, mouseY, brushSize * 2, brushSize * 2);
     }
     if (mouseIsPressed) {
-      var xs = floor(mouseX / 50);
-      var ys = floor(mouseY / 50);
-
-
-      var verticesRange = [];
-      for (k = floor(-brushSize / 50 - 2); k < ceil(brushSize / 50 + 2); k++) {
-        for (j = floor(-brushSize / 50 - 2); j < ceil(brushSize / 50 + 2); j++) {
-
-          if (squaredist(xs, ys, xs + k, ys + j) <= (brushSize / 50) * (brushSize / 50)) {
-
-            if (xs + k >= 0 && ys + j >= 0 && xs + k <= ceil(cWidth / 50) && ys + j <= ceil(cHeight / 50)) {
-              verticesRange.push(verticesHashTable[findIndexFromHash((xs + k) * 100 + ys + j)]);
-
-            }
-
-          }
-        }
-      }
-
-      if (verticesRange.length > 0) {
-        for (k = 0; k < verticesRange.length; k++) {
-          if (verticesRange[k] !== undefined) {
-            for (p = 0; p < verticesRange[k].length; p++) {
-              var dx = verticesRange[k][p][0] - mouseX;
-              var dy = verticesRange[k][p][1] - mouseY;
-
-              if (dx * dx + dy * dy <= brushSize * brushSize) {
-
-                updateHashSpace(verticesRange[k][p][0], verticesRange[k][p][1], false);
-              }
-            }
-          }
-
-
-        }
-      }
-
+      erase_vertices(mouseX, mouseY, brushSize)
     }
   }
 
