@@ -17,18 +17,18 @@ function delaunayDisplay_flower_effect(tng) {
       stroke(10, 10, 10);
     }
 
-    if (verticesHashTableFlat.length > 0) {
+    if (triangulatedVerticesFlat.length > 0) {
 
 
       //Normal
       if (displayMode == 0) {
-        triangle(verticesHashTableFlat[tng[i]][0], verticesHashTableFlat[tng[i]][1], verticesHashTableFlat[tng[i + 1]][0], verticesHashTableFlat[tng[i + 1]][1], verticesHashTableFlat[tng[i + 2]][0], verticesHashTableFlat[tng[i + 2]][1]);
+        triangle(triangulatedVerticesFlat[tng[i]][0], triangulatedVerticesFlat[tng[i]][1], triangulatedVerticesFlat[tng[i + 1]][0], triangulatedVerticesFlat[tng[i + 1]][1], triangulatedVerticesFlat[tng[i + 2]][0], triangulatedVerticesFlat[tng[i + 2]][1]);
       }
       //Rectangle mode, displays smallest rectangle that encompasses triangle such that sides are parallel to canvas 
       else if (displayMode == 1) {
 
-        var xcoords = [verticesHashTableFlat[tng[i]][0], verticesHashTableFlat[tng[i + 1]][0], verticesHashTableFlat[tng[i + 2]][0]]
-        var ycoords = [verticesHashTableFlat[tng[i]][1], verticesHashTableFlat[tng[i + 1]][1], verticesHashTableFlat[tng[i + 2]][1]]
+        var xcoords = [triangulatedVerticesFlat[tng[i]][0], triangulatedVerticesFlat[tng[i + 1]][0], triangulatedVerticesFlat[tng[i + 2]][0]]
+        var ycoords = [triangulatedVerticesFlat[tng[i]][1], triangulatedVerticesFlat[tng[i + 1]][1], triangulatedVerticesFlat[tng[i + 2]][1]]
         var lowx = xcoords[0];
         var lowy = ycoords[0];
         var highx = -1;
@@ -52,24 +52,24 @@ function delaunayDisplay_flower_effect(tng) {
       }
       //Circle mode, displays circles that encompass the triangle using the circumcenter.
       else if (displayMode == 2) {
-        var coords = circumcenter(verticesHashTableFlat[tng[i]][0], verticesHashTableFlat[tng[i]][1], verticesHashTableFlat[tng[i + 1]][0], verticesHashTableFlat[tng[i + 1]][1], verticesHashTableFlat[tng[i + 2]][0], verticesHashTableFlat[tng[i + 2]][1]);
+        var coords = circumcenter(triangulatedVerticesFlat[tng[i]][0], triangulatedVerticesFlat[tng[i]][1], triangulatedVerticesFlat[tng[i + 1]][0], triangulatedVerticesFlat[tng[i + 1]][1], triangulatedVerticesFlat[tng[i + 2]][0], triangulatedVerticesFlat[tng[i + 2]][1]);
         var px = coords.x;
         var py = coords.y;
-        var size = 2 * sqrt(squaredist(verticesHashTableFlat[tng[i]][0], verticesHashTableFlat[tng[i]][1], px, py));
+        var size = 2 * sqrt(squaredist(triangulatedVerticesFlat[tng[i]][0], triangulatedVerticesFlat[tng[i]][1], px, py));
 
         ellipse(px, py, size, size);
 
       }
       //Odd animated looking triangles. Looks like water almost
       else if (displayMode == 3) {
-        triangle(verticesHashTableFlat[tng[i]][0], verticesHashTableFlat[tng[i]][1], verticesHashTableFlat[tng[i + 1]][0], verticesHashTableFlat[tng[i + 1]][1], verticesHashTableFlat[tng[i + 2]][0], verticesHashTableFlat[tng[i + 2]][1]);
+        triangle(triangulatedVerticesFlat[tng[i]][0], triangulatedVerticesFlat[tng[i]][1], triangulatedVerticesFlat[tng[i + 1]][0], triangulatedVerticesFlat[tng[i + 1]][1], triangulatedVerticesFlat[tng[i + 2]][0], triangulatedVerticesFlat[tng[i + 2]][1]);
 
-        triangle(verticesHashTableFlat[tng[i]][0] + random(-sd, sd), verticesHashTableFlat[tng[i]][1] + random(-sd, sd), verticesHashTableFlat[tng[i + 1]][0] + random(-sd, sd), verticesHashTableFlat[tng[i + 1]][1] + random(-sd, sd), verticesHashTableFlat[tng[i + 2]][0] + random(-sd, sd), verticesHashTableFlat[tng[i + 2]][1] + random(-sd, sd));
+        triangle(triangulatedVerticesFlat[tng[i]][0] + random(-sd, sd), triangulatedVerticesFlat[tng[i]][1] + random(-sd, sd), triangulatedVerticesFlat[tng[i + 1]][0] + random(-sd, sd), triangulatedVerticesFlat[tng[i + 1]][1] + random(-sd, sd), triangulatedVerticesFlat[tng[i + 2]][0] + random(-sd, sd), triangulatedVerticesFlat[tng[i + 2]][1] + random(-sd, sd));
       }
       //Odd animated looking rectangles
       else if (displayMode == 4) {
-        var xcoords = [verticesHashTableFlat[tng[i]][0], verticesHashTableFlat[tng[i + 1]][0], verticesHashTableFlat[tng[i + 2]][0]]
-        var ycoords = [verticesHashTableFlat[tng[i]][1], verticesHashTableFlat[tng[i + 1]][1], verticesHashTableFlat[tng[i + 2]][1]]
+        var xcoords = [triangulatedVerticesFlat[tng[i]][0], triangulatedVerticesFlat[tng[i + 1]][0], triangulatedVerticesFlat[tng[i + 2]][0]]
+        var ycoords = [triangulatedVerticesFlat[tng[i]][1], triangulatedVerticesFlat[tng[i + 1]][1], triangulatedVerticesFlat[tng[i + 2]][1]]
         var lowx = xcoords[0];
         var lowy = ycoords[0];
         var highx = -1;
