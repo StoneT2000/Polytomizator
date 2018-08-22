@@ -23,7 +23,13 @@ function generateCubicPoly(accuracy, density, overlay) {
     updateHashSpace(cWidth, i * accuracy, true)
     updateHashSpace(0, i * accuracy, true);
   }
+  
   flowing = false;
+  if (flowerEffect === true){
+    flower_step = 0;
+    flowering = true;
+  }
+  
   image(img1, 0, 0, cWidth, cHeight);
   loadPixels();
   splitSquare(accuracy);

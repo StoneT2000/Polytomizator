@@ -22,8 +22,13 @@ $(document).on('ready', function () {
       noColors = true;
       css_buttons.displayColor(false);
     }
-    for (j = 0; j < triangulations.length; j++) {
-      delaunayDisplay(triangulations[j], triangleCanvasLayer);
+    if (flowerEffect){
+      
+    }
+    else {
+      for (j = 0; j < triangulations.length; j++) {
+        delaunayDisplay(triangulations[j], triangleCanvasLayer);
+      }
     }
   })
 
@@ -86,33 +91,8 @@ $(document).on('ready', function () {
       $("#colorThreshold")[0].value = colorThreshold;
     } else {
       colorThreshold = colorThresholdTemp;
-      //resetAutoGenListener([cWidth, cHeight, completedFilters, d, colorThreshold], artstyle);
+      
     }
-  })
-  $("#durationOfFlowerEffect").on("focusout", function () {
-    var flowerEffectTimeTemp = parseInt(document.querySelector('#durationOfFlowerEffect').value);
-    if (isNaN(flowerEffectTimeTemp) === true || flowerEffectTimeTemp < 1) {
-      alert("Type in a number larger than 1 for effect duration");
-    } else {
-      flowerEffectTime = flowerEffectTimeTemp;
-    }
-  })
-  $("#flowerEffect").on("click", function () {
-    if (flowerEffect === false) {
-      flowerEffect = true;
-      $("#flowerEffect").text("Instant Coloring: Off")
-      $("#durationOfFlowerEffect").css("z-index", "0");
-      $("#flowerEffectTime").css("transform", "translate(0,0)");
-      $("#durationOfFlowerEffect").css("transform", "translate(0,0)");
-    } else {
-      flowerEffect = false;
-      $("#flowerEffect").text("Instant Coloring: On")
-
-      $("#flowerEffectTime").css("transform", "translate(0,-39px)");
-      $("#durationOfFlowerEffect").css("z-index", "-5");
-      $("#durationOfFlowerEffect").css("transform", "translate(0,-75px)");
-    }
-
   })
   $("#pointBrush").on("click", function () {
     mode = 1;
@@ -243,10 +223,19 @@ $(document).on('ready', function () {
   });
   $("#polytomize").on("click", function () {
 
+    //Should be the exact same as pressing the D key
     triangulize();
     finishedColoring = false;
     image(img1, 0, 0, cWidth, cHeight);
-
+    
+    
+    if (flowerEffect === true){
+      flower_step = 0;
+      flowering = true;
+    }
+    noColors = false;
+    css_buttons.displayColor(true);
+    
     loadPixels();
     tColors = [];
     sTime = millis();
@@ -345,7 +334,7 @@ $(document).on('ready', function () {
       close_a_options();
     });
   });
-
+  
   $("#snapping").on("change", function () {
     //console.log($("#snapping")[0].checked);
     if ($("#snapping")[0].checked) {
@@ -371,6 +360,23 @@ $(document).on('ready', function () {
     }
     snappingAccuracy = newacc;
   });
+  $("#flower_effect").on("change", function () {
+    if ($("#flower_effect")[0].checked) {
+      flowerEffect = true;
+    } else {
+      flowerEffect = false;
+      flowering = false;
+    }
+  })
+  $("#flower_effect_speed").on("change", function () {
+    var newspeed = parseInt($("#flower_effect_speed").val());
+    if (isNaN(newspeed) || newspeed < 1) {
+      alert("Enter a positive integer for flowering speed")
+      $("#flower_effect_speed").val(flowering_speed);
+      return;
+    }
+    flowering_speed = newspeed;
+  })
 
 })
 var options_menu_open = false;
@@ -395,6 +401,9 @@ function display_options(value) {
     window.setTimeout(function () {
       $("#options_menu").css("opacity", "1")
     }, 1);
+    $("#options_menu_gear > i").removeClass("fa-cog")
+    $("#options_menu_gear > i").addClass("fa-times")
+    $("#options_menu_gear").css("right","31px")
     options_menu_open = true;
   } else {
     window.setTimeout(function () {
@@ -402,7 +411,11 @@ function display_options(value) {
     }, 200);
     $("#options_menu").css("opacity", "0");
     options_menu_open = false;
-
+    $("#options_menu_gear > i").addClass("fa-cog")
+    $("#options_menu_gear > i").removeClass("fa-times")
+    $("#options_menu_gear").css("right","30px")
+    //"fa fa-cog"
+    //fa fa-times
   }
 }
 

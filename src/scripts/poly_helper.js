@@ -67,7 +67,14 @@ function keyPressed(event) {
 
     //Tell draw() to draw in colors once by setting this false. It will turn back to true once it is finished
     finishedColoring = false;
-
+    
+    
+    //Settings for flower effect
+    if (flowerEffect){
+      flower_step = 0;
+      flowering = true;
+    }
+    
     //Load image
     image(img1, 0, 0, cWidth, cHeight);
     noColors = false;
@@ -94,9 +101,13 @@ function keyPressed(event) {
       noColors = false;
       css_buttons.displayColor(true);
     }
-    for (j = 0; j < triangulations.length; j++) {
-      delaunayDisplay(triangulations[j], triangleCanvasLayer);
-
+    if (flowerEffect){
+      
+    }
+    else {
+      for (j = 0; j < triangulations.length; j++) {
+        delaunayDisplay(triangulations[j], triangleCanvasLayer);
+      }
     }
   }
   //P
@@ -263,7 +274,7 @@ function snapVertices(acc) {
 //Deviation of triangle coords for animated triangles
 var sd = 5;
 //Display all the triangles in tng. Displays them using the variable verticesarr = verticesHashTableFlat.
-function delaunayDisplay(tng, ctx, vertices_set) {
+function delaunayDisplay(tng, ctx, vertices_set, flower_effect, flowering_step, flower_speed) {
 
   //we use triangulatedVerticesFlat as it is corresponding with tng
   var verticesarr = triangulatedVerticesFlat;
@@ -274,106 +285,166 @@ function delaunayDisplay(tng, ctx, vertices_set) {
   //ctx.fill('RGBA(255,255,255,0)');
   //ctx.rect(0,0,cWidth,cHeight)
   
-  if (displayImage === true){
-    ctx.image(img1, 0, 0, cWidth, cHeight);
+  if (flower_step === 0 && flower_effect) {
+    //First display empty triangles
+    uncoloredTriangleCanvasLayer = createGraphics(cWidth,cHeight);
+    colorIn();
+    sTime = millis();
+    if (displayImage === true){
+      ctx.image(img1, 0, 0, cWidth, cHeight);
+      uncoloredTriangleCanvasLayer.image(img1, 0, 0, cWidth, cHeight);
+    }
+    else {
+      ctx.fill(255);
+      ctx.rect(0,0,cWidth,cHeight)
+      uncoloredTriangleCanvasLayer.fill(255);
+      uncoloredTriangleCanvasLayer.rect(0,0,cWidth,cHeight)
+    }
+    for (var i = 0; i < tng.length; i += 3) {
+        ctx.fill(256, 256, 256);
+        ctx.stroke(10, 10, 10);
+        uncoloredTriangleCanvasLayer.fill(256, 256, 256);
+        uncoloredTriangleCanvasLayer.stroke(10, 10, 10);
+
+      if (verticesarr.length > 0) {
+        ctx.triangle(verticesarr[tng[i]][0], verticesarr[tng[i]][1], verticesarr[tng[i + 1]][0], verticesarr[tng[i + 1]][1], verticesarr[tng[i + 2]][0], verticesarr[tng[i + 2]][1]);
+        
+        uncoloredTriangleCanvasLayer.triangle(verticesarr[tng[i]][0], verticesarr[tng[i]][1], verticesarr[tng[i + 1]][0], verticesarr[tng[i + 1]][1], verticesarr[tng[i + 2]][0], verticesarr[tng[i + 2]][1]);
+      }
+    }
+    
+  }
+  
+  
+  
+
+  if (flower_effect){
+    var coloring_speed = 1;
+    if (flower_speed){
+      coloring_speed = flower_speed;
+    }
+    //console.log(coloring_speed);
+    for (i = flowering_step * 3; i < (flowering_step*3) + 3*coloring_speed;i+=3){
+      //console.log(i);
+      if (i < tng.length){
+        if (tColors[i] >= 0) {
+
+          ctx.fill(tColors[i], tColors[i + 1], tColors[i + 2]);
+          ctx.stroke(tColors[i], tColors[i + 1], tColors[i + 2]);
+        } else {
+          ctx.fill(256, 256, 256);
+          ctx.stroke(10, 10, 10);
+        }
+
+        if (verticesarr.length > 0) {
+          ctx.triangle(verticesarr[tng[i]][0], verticesarr[tng[i]][1], verticesarr[tng[i + 1]][0], verticesarr[tng[i + 1]][1], verticesarr[tng[i + 2]][0], verticesarr[tng[i + 2]][1]);
+        }
+      }
+    }
     
   }
   else {
-    ctx.fill(255);
-    ctx.rect(0,0,cWidth,cHeight)
-  }
-  
-  for (var i = 0; i < tng.length; i += 3) {
-    if (tColors[i] >= 0 && noColors == false) {
+    //Clear background, then draw
+    if (displayImage === true){
+      ctx.image(img1, 0, 0, cWidth, cHeight);
 
-      ctx.fill(tColors[i], tColors[i + 1], tColors[i + 2]);
-      ctx.stroke(tColors[i], tColors[i + 1], tColors[i + 2]);
-    } else if (noColors == true) {
-      ctx.fill(256, 256, 256);
-      ctx.stroke(10, 10, 10);
-    } else if (tColors[i] == -1) {
-      ctx.noFill();
-      ctx.noStroke();
-
-    } else {
-      ctx.fill(256, 256, 256);
-      ctx.stroke(10, 10, 10);
     }
+    else {
+      ctx.fill(255);
+      ctx.rect(0,0,cWidth,cHeight)
+    }
+    for (var i = 0; i < tng.length; i += 3) {
+      if (tColors[i] >= 0 && noColors == false) {
 
-    if (verticesarr.length > 0) {
+        ctx.fill(tColors[i], tColors[i + 1], tColors[i + 2]);
+        ctx.stroke(tColors[i], tColors[i + 1], tColors[i + 2]);
+      } else if (noColors == true) {
+        ctx.fill(256, 256, 256);
+        ctx.stroke(10, 10, 10);
+      } else if (tColors[i] == -1) {
+        ctx.noFill();
+        ctx.noStroke();
 
-
-      //Normal
-      if (displayMode == 0) {
-        ctx.triangle(verticesarr[tng[i]][0], verticesarr[tng[i]][1], verticesarr[tng[i + 1]][0], verticesarr[tng[i + 1]][1], verticesarr[tng[i + 2]][0], verticesarr[tng[i + 2]][1]);
+      } else {
+        ctx.fill(256, 256, 256);
+        ctx.stroke(10, 10, 10);
       }
-      //Rectangle mode, displays smallest rectangle that encompasses triangle such that sides are parallel to canvas 
-      else if (displayMode == 1) {
 
-        var xcoords = [verticesarr[tng[i]][0], verticesarr[tng[i + 1]][0], verticesarr[tng[i + 2]][0]]
-        var ycoords = [verticesarr[tng[i]][1], verticesarr[tng[i + 1]][1], verticesarr[tng[i + 2]][1]]
-        var lowx = xcoords[0];
-        var lowy = ycoords[0];
-        var highx = -1;
-        var highy = -1;
-        //find top left and bottom right corners
-        for (xi = 0; xi < xcoords.length; xi++) {
-          if (xcoords[xi] < lowx) {
-            lowx = xcoords[xi];
-          }
-          if (xcoords[xi] > highx) {
-            highx = xcoords[xi];
-          }
-          if (ycoords[xi] < lowy) {
-            lowy = ycoords[xi];
-          }
-          if (ycoords[xi] > highy) {
-            highy = ycoords[xi];
-          }
+      if (verticesarr.length > 0) {
+
+
+        //Normal
+        if (displayMode == 0) {
+          ctx.triangle(verticesarr[tng[i]][0], verticesarr[tng[i]][1], verticesarr[tng[i + 1]][0], verticesarr[tng[i + 1]][1], verticesarr[tng[i + 2]][0], verticesarr[tng[i + 2]][1]);
         }
-        ctx.rect(lowx, lowy, highx - lowx, highy - lowy);
-      }
-      //Circle mode, displays circles that encompass the triangle using the circumcenter.
-      else if (displayMode == 2) {
-        var coords = circumcenter(verticesarr[tng[i]][0], verticesarr[tng[i]][1], verticesarr[tng[i + 1]][0], verticesarr[tng[i + 1]][1], verticesarr[tng[i + 2]][0], verticesarr[tng[i + 2]][1]);
-        var px = coords[0];
-        var py = coords[1];
-        var size = 2 * sqrt(squaredist(verticesarr[tng[i]][0], verticesarr[tng[i]][1], px, py));
+        //Rectangle mode, displays smallest rectangle that encompasses triangle such that sides are parallel to canvas 
+        else if (displayMode == 1) {
 
-        ctx.ellipse(px, py, size, size);
-
-      }
-      //Odd animated looking triangles. Looks like water almost
-      else if (displayMode == 3) {
-        ctx.triangle(verticesarr[tng[i]][0], verticesarr[tng[i]][1], verticesarr[tng[i + 1]][0], verticesarr[tng[i + 1]][1], verticesarr[tng[i + 2]][0], verticesarr[tng[i + 2]][1]);
-
-        ctx.triangle(verticesarr[tng[i]][0] + random(-sd, sd), verticesarr[tng[i]][1] + random(-sd, sd), verticesarr[tng[i + 1]][0] + random(-sd, sd), verticesarr[tng[i + 1]][1] + random(-sd, sd), verticesarr[tng[i + 2]][0] + random(-sd, sd), verticesarr[tng[i + 2]][1] + random(-sd, sd));
-      }
-      //Odd animated looking rectangles
-      else if (displayMode == 4) {
-        var xcoords = [verticesarr[tng[i]][0], verticesarr[tng[i + 1]][0], verticesarr[tng[i + 2]][0]]
-        var ycoords = [verticesarr[tng[i]][1], verticesarr[tng[i + 1]][1], verticesarr[tng[i + 2]][1]]
-        var lowx = xcoords[0];
-        var lowy = ycoords[0];
-        var highx = -1;
-        var highy = -1;
-        //find top left and bottom right corners
-        for (xi = 0; xi < xcoords.length; xi++) {
-          if (xcoords[xi] < lowx) {
-            lowx = xcoords[xi];
+          var xcoords = [verticesarr[tng[i]][0], verticesarr[tng[i + 1]][0], verticesarr[tng[i + 2]][0]]
+          var ycoords = [verticesarr[tng[i]][1], verticesarr[tng[i + 1]][1], verticesarr[tng[i + 2]][1]]
+          var lowx = xcoords[0];
+          var lowy = ycoords[0];
+          var highx = -1;
+          var highy = -1;
+          //find top left and bottom right corners
+          for (xi = 0; xi < xcoords.length; xi++) {
+            if (xcoords[xi] < lowx) {
+              lowx = xcoords[xi];
+            }
+            if (xcoords[xi] > highx) {
+              highx = xcoords[xi];
+            }
+            if (ycoords[xi] < lowy) {
+              lowy = ycoords[xi];
+            }
+            if (ycoords[xi] > highy) {
+              highy = ycoords[xi];
+            }
           }
-          if (xcoords[xi] > highx) {
-            highx = xcoords[xi];
-          }
-          if (ycoords[xi] < lowy) {
-            lowy = ycoords[xi];
-          }
-          if (ycoords[xi] > highy) {
-            highy = ycoords[xi];
-          }
+          ctx.rect(lowx, lowy, highx - lowx, highy - lowy);
         }
-        ctx.rect(lowx, lowy, highx - lowx, highy - lowy);
-        ctx.rect(lowx + random(-sd, sd), lowy + random(-sd, sd), highx - lowx + random(-sd, sd), highy - lowy + random(-sd, sd));
+        //Circle mode, displays circles that encompass the triangle using the circumcenter.
+        else if (displayMode == 2) {
+          var coords = circumcenter(verticesarr[tng[i]][0], verticesarr[tng[i]][1], verticesarr[tng[i + 1]][0], verticesarr[tng[i + 1]][1], verticesarr[tng[i + 2]][0], verticesarr[tng[i + 2]][1]);
+          var px = coords[0];
+          var py = coords[1];
+          var size = 2 * sqrt(squaredist(verticesarr[tng[i]][0], verticesarr[tng[i]][1], px, py));
+
+          ctx.ellipse(px, py, size, size);
+
+        }
+        //Odd animated looking triangles. Looks like water almost
+        else if (displayMode == 3) {
+          ctx.triangle(verticesarr[tng[i]][0], verticesarr[tng[i]][1], verticesarr[tng[i + 1]][0], verticesarr[tng[i + 1]][1], verticesarr[tng[i + 2]][0], verticesarr[tng[i + 2]][1]);
+
+          ctx.triangle(verticesarr[tng[i]][0] + random(-sd, sd), verticesarr[tng[i]][1] + random(-sd, sd), verticesarr[tng[i + 1]][0] + random(-sd, sd), verticesarr[tng[i + 1]][1] + random(-sd, sd), verticesarr[tng[i + 2]][0] + random(-sd, sd), verticesarr[tng[i + 2]][1] + random(-sd, sd));
+        }
+        //Odd animated looking rectangles
+        else if (displayMode == 4) {
+          var xcoords = [verticesarr[tng[i]][0], verticesarr[tng[i + 1]][0], verticesarr[tng[i + 2]][0]]
+          var ycoords = [verticesarr[tng[i]][1], verticesarr[tng[i + 1]][1], verticesarr[tng[i + 2]][1]]
+          var lowx = xcoords[0];
+          var lowy = ycoords[0];
+          var highx = -1;
+          var highy = -1;
+          //find top left and bottom right corners
+          for (xi = 0; xi < xcoords.length; xi++) {
+            if (xcoords[xi] < lowx) {
+              lowx = xcoords[xi];
+            }
+            if (xcoords[xi] > highx) {
+              highx = xcoords[xi];
+            }
+            if (ycoords[xi] < lowy) {
+              lowy = ycoords[xi];
+            }
+            if (ycoords[xi] > highy) {
+              highy = ycoords[xi];
+            }
+          }
+          ctx.rect(lowx, lowy, highx - lowx, highy - lowy);
+          ctx.rect(lowx + random(-sd, sd), lowy + random(-sd, sd), highx - lowx + random(-sd, sd), highy - lowy + random(-sd, sd));
+        }
       }
     }
   }
