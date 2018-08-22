@@ -16,6 +16,8 @@ var displayTriangulation = true;
 var displayPoints = true;
 var displayImage = true;
 
+var display_grid = false;
+
 var stepDelaunate = true; //Whether to allow coloring to proceed when using flower effect
 
 var noColors = false; //Wheter or not the colors, tColors, are used.
@@ -60,7 +62,9 @@ var flowerEffect = false; //Whether or not to have the flower effect
 var filteringView = false; //Debugging purposes
 var displayEdgePoints = false; //Display points whenusing filters
 var snapping = false; //Snap points to a grid when using brushes
-var snappingAccuracy = 20; //How big squares in grid are
+
+var snappingAccuracy = 20; //How big the squares in the grid are, relates with the positions of snapped on vertices.
+
 //Testing different ways to display the information 
 //displayMode = 0 is normal, 1:rectangles 2:circles 3:animated triangles 4: animated rectangles
 var displayMode = 0;
@@ -318,7 +322,16 @@ function draw() {
     }
 
   }
-
+  if (display_grid === true) {
+    strokeWeight(1);
+    stroke(150);
+    for (j = 0; j < cWidth/snappingAccuracy; j++){
+      line(j*snappingAccuracy, 0, j*snappingAccuracy, cHeight);
+    }
+    for (j = 0; j < cHeight/snappingAccuracy; j++){
+      line(0, j*snappingAccuracy, cWidth, j*snappingAccuracy);
+    }
+  }
 
   $("#numberPoints").text(totalpoints + " points");
   $("#numberTriangles").text(parseInt(triangulations[triangulations.length - 1].length / 3) + " triangles");
@@ -328,7 +341,7 @@ function draw() {
   var dx = oldX - mouseX;
   var dy = oldY - mouseY;
   accDist = sqrt(dx * dx + dy * dy);
-  if (mode === 2) {
+  if (mode === 2 && active_canvas) {
     if (downloading === false) {
       noFill();
       stroke(2);
@@ -394,43 +407,7 @@ function draw() {
       ellipse(mouseX, mouseY, brushSize * 2, brushSize * 2);
     }
     if (mouseIsPressed) {
-      var xs = floor(mouseX / 50);
-      var ys = floor(mouseY / 50);
-
-
-      var verticesRange = [];
-      for (k = floor(-brushSize / 50 - 2); k < ceil(brushSize / 50 + 2); k++) {
-        for (j = floor(-brushSize / 50 - 2); j < ceil(brushSize / 50 + 2); j++) {
-
-          if (squaredist(xs, ys, xs + k, ys + j) <= (brushSize / 50) * (brushSize / 50)) {
-
-            if (xs + k >= 0 && ys + j >= 0 && xs + k <= ceil(cWidth / 50) && ys + j <= ceil(cHeight / 50)) {
-              verticesRange.push(verticesHashTable[findIndexFromHash((xs + k) * 100 + ys + j)]);
-
-            }
-
-          }
-        }
-      }
-
-      if (verticesRange.length > 0) {
-        for (k = 0; k < verticesRange.length; k++) {
-          if (verticesRange[k] !== undefined) {
-            for (p = 0; p < verticesRange[k].length; p++) {
-              var dx = verticesRange[k][p][0] - mouseX;
-              var dy = verticesRange[k][p][1] - mouseY;
-
-              if (dx * dx + dy * dy <= brushSize * brushSize) {
-
-                updateHashSpace(verticesRange[k][p][0], verticesRange[k][p][1], false);
-              }
-            }
-          }
-
-
-        }
-      }
-
+      erase_vertices(mouseX, mouseY, brushSize)
     }
   }
 

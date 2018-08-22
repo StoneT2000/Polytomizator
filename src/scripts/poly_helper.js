@@ -1,19 +1,20 @@
+var hashing_size = 50; //shouldn't be too small
 //Create a hash out of the x,y coordinates
 function hashCoordinate(x, y) {
-  return floor(x / 50) * 100 + floor(y / 50);
+  return floor((x) / hashing_size) * 100 + floor(y / hashing_size);
 }
 //Find the index of the hashed value in the verticesHashTable array
 function findIndexFromHash(hash) {
   var xi = floor((hash / 100));
   var yi = hash % 100;
-  return xi + yi * ceil(cWidth / 50)
+  return xi + yi * ceil(cWidth / hashing_size)
 }
 
 //Genearte verticesHashTable array, which is the array containing the coords of every vertice in a hashed array index.
 function generateHashSpace() {
   verticesHashTable = [];
-  //50x50 squares in grid
-  for (i = 0; i <= ceil(cWidth / 50) * ceil(cHeight / 50); i++) {
+  //hashing_size x hashing_size squares in grid
+  for (i = 0; i <= ceil(cWidth / hashing_size) * ceil(cHeight / hashing_size); i++) {
     verticesHashTable.push([]);
 
   }
@@ -138,7 +139,7 @@ function mouseClicked() {
   if (active_canvas === true) {
     if (mouseX <= cWidth && mouseX >= 0) {
       if (mouseY <= cHeight && mouseY >= 0) {
-
+        //console.log(erase_vertices(mouseX,mouseY,100))
         if (mode == 1) {
           var vpx = round(mouseX);
           var vpy = round(mouseY);
@@ -172,6 +173,7 @@ function mouseClicked() {
         }
         //Record past vertices sets for undoing
         recordVertices();
+        console.log("record")
 
         //verticesHashTableFlat = verticesHashTable.reduce(function(acc,curr){return acc.concat(curr)});
 
@@ -183,7 +185,46 @@ function mouseClicked() {
 
 }
 
-//Broken
+function erase_vertices(x,y,radius) {
+  
+  //Find top left corner of the square eraser is in
+  var px = floor(round(x)/hashing_size) * hashing_size;
+  var py = floor(round(y)/hashing_size) * hashing_size;
+  var eraser_index = findIndexFromHash(hashCoordinate(px,py));
+  
+  //Proceed to search around this eraser_index
+  //Basically, +,- hashing_size around it depending on radius
+  var search_indices = [];
+  for (var t = -ceil(radius/hashing_size); t <= ceil(radius/hashing_size); t++){
+    for (var k = -ceil(radius/hashing_size); k <= ceil(radius/hashing_size); k++){
+      //Take some point, hashing_size multiple away from eraser, check if its in canvas still
+      var cx = px + hashing_size * t;
+      var cy = py + hashing_size * k;
+      if (inCanvas(cx,cy)) {
+        search_indices.push(findIndexFromHash(hashCoordinate(cx,cy)));
+      }
+    }
+  }
+
+  var flagged_to_erase = [];
+  for (var t = 0; t < search_indices.length; t++){
+
+    for (var k = 0; k < verticesHashTable[search_indices[t]].length; k++){
+      var vhtk = verticesHashTable[search_indices[t]][k];
+
+      if (squaredist(vhtk[0], vhtk[1], x, y) <= radius * radius){
+        //Flag for erase so we don't end up not erasing some because we dynamically removed it from the array.
+        flagged_to_erase.push(vhtk[0], vhtk[1]);
+      }
+    }
+  }
+  for (var t = 0; t < flagged_to_erase.length; t+=2){
+    updateHashSpace(flagged_to_erase[t],flagged_to_erase[t+1], false)
+  }
+  
+  
+}
+
 function snapVertices(acc) {
   //acc is snapping accuracy
   if (!acc) {

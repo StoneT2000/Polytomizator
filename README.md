@@ -8,7 +8,7 @@ A working link to this program is provided here https://stonet2000.github.io/Pol
 
 Or...
 
-Simply download the repository's zip file, open it, and then open polytomize.html. This local method is compatible on Firefox only.
+Simply download the repository's zip file, open it, and then open index.html. This local method is compatible on Firefox only.
 
 
 ## Features

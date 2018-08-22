@@ -10,7 +10,9 @@ $(document).on('ready', function () {
     }
   });
   $("#pointBrush").css("background-color", "RGB(140,140,140)")
-  console.log("Polytomizator v42")
+  console.log("Polytomizator v45")
+  $("#grid_accuracy").val(20)
+
   $("#displayColor").on("click", function () {
     if (noColors === true) {
       noColors = false;
@@ -228,16 +230,15 @@ $(document).on('ready', function () {
 
     if (finishedColoring == false) {
       alert("Please wait until the coloring is finished before enlargining the work and downloading it")
-    } 
-    else {
+    } else {
       var factor = 2;
-        if (cWidth > cHeight) {
-          factor = ceil(6000 / cWidth);
-        } else {
-          factor = ceil(6000 / cHeight);
-        }
+      if (cWidth > cHeight) {
+        factor = ceil(6000 / cWidth);
+      } else {
+        factor = ceil(6000 / cHeight);
+      }
 
-        expandImage(factor, true);
+      expandImage(factor, true);
     }
   });
   $("#polytomize").on("click", function () {
@@ -274,24 +275,24 @@ $(document).on('ready', function () {
   $("#options_menu_gear").on("click", function () {
     display_options();
   });
-  
+
   //Functions in options menu
-  $("#displaygencubicpoly").on("click", function(){
+  $("#displaygencubicpoly").on("click", function () {
     open_a_options()
     display_options(false);
     $("#options_menu_additional").html("<h4>Generate cubic poly art</h4><i id=\"close_a_options\"class=\"fa fa-times\"></i><span>Accuracy</span><input class=\"parameters\" type=\"text\" placeholder=\"≥ 10\" id=\"gencubicpoly_accuracy\"><span>Density</span><input class=\"parameters\" type=\"text\" placeholder=\"0 ~ 1\" id=\"gencubicpoly_density\"><button id=\"gencubicpoly\">Generate</button>");
-    $("#gencubicpoly").on("click", function(){
+    $("#gencubicpoly").on("click", function () {
       var cpdensity = parseFloat($("#gencubicpoly_density").val());
       var cpaccuracy = parseInt($("#gencubicpoly_accuracy").val());
-      if (isNaN(cpdensity) || cpdensity < 0 || cpdensity > 1){
+      if (isNaN(cpdensity) || cpdensity < 0 || cpdensity > 1) {
         alert("Enter a decimal value between 0 and 1 for density");
         return;
       }
-      if (isNaN(cpaccuracy) || cpaccuracy <= 0){
+      if (isNaN(cpaccuracy) || cpaccuracy <= 0) {
         alert("Enter a integer larger than 0 for accuracy");
         return;
       }
-      if (cpaccuracy != parseFloat($("#gencubicpoly_accuracy").val())){
+      if (cpaccuracy != parseFloat($("#gencubicpoly_accuracy").val())) {
         alert("Enter a integer larger than 0 for accuracy");
         return;
       }
@@ -299,62 +300,81 @@ $(document).on('ready', function () {
       generateCubicPoly(cpaccuracy * 2, cpdensity)
       close_a_options();
     })
-    $("#close_a_options").on("click", function(){
+    $("#close_a_options").on("click", function () {
       close_a_options();
     });
   });
-  
-  $("#displaysnapvertices").on("click", function(){
+
+  $("#displaysnapvertices").on("click", function () {
     open_a_options()
     display_options(false);
     $("#options_menu_additional").html("<h4>Snap visible vertices to a grid</h4><i id=\"close_a_options\"class=\"fa fa-times\"></i><span>Accuracy</span><input class=\"parameters\" type=\"text\" placeholder=\"≥ 10\" id=\"snapping_accuracy\"><button id=\"snap_vertices\">Snap</button>");
-    $("#snap_vertices").on("click", function(){
+    $("#snap_vertices").on("click", function () {
       var spaccuracy = parseInt($("#snapping_accuracy").val());
-      if (isNaN(spaccuracy) || spaccuracy <= 0){
+      if (isNaN(spaccuracy) || spaccuracy <= 0) {
         alert("Enter a integer larger than 0 for accuracy");
         return;
       }
-      if (spaccuracy != parseFloat($("#snapping_accuracy").val())){
+      if (spaccuracy != parseFloat($("#snapping_accuracy").val())) {
         alert("Enter a integer larger than 0 for accuracy");
         return;
       }
       snapVertices(2 * spaccuracy)
       close_a_options();
     })
-    $("#close_a_options").on("click", function(){
+    $("#close_a_options").on("click", function () {
       close_a_options();
     });
   });
-  $("#displaygennormalpoly").on("click", function(){
+  $("#displaygennormalpoly").on("click", function () {
     open_a_options()
     display_options(false);
     $("#options_menu_additional").html("<h4>Generate poly art</h4><i id=\"close_a_options\"class=\"fa fa-times\"></i><span>Color Threshold</span><input class=\"parameters\" type=\"text\" placeholder=\"10 ~ 255\" id=\"color_threshold\"><button id=\"gennormalpoly\">Generate</button>");
-    $("#gennormalpoly").on("click", function(){
+    $("#gennormalpoly").on("click", function () {
       var ct = parseFloat($("#color_threshold").val());
-      if (isNaN(ct) || ct < 10){
+      if (isNaN(ct) || ct < 10) {
         alert("Enter a number larger than 10 for the color threshold");
         return;
       }
       colorThreshold = ct;
       close_a_options();
       generate_normal_poly([cWidth, cHeight, completedFilters, d, colorThreshold]);
-      
+
     })
-    $("#close_a_options").on("click", function(){
+    $("#close_a_options").on("click", function () {
       close_a_options();
     });
   });
-  
+
   $("#snapping").on("change", function () {
     //console.log($("#snapping")[0].checked);
     if ($("#snapping")[0].checked) {
       snapping = true;
+    } else {
+      snapping = false;
     }
   });
-  
+  $("#display_grid").on("change", function () {
+    //console.log($("#snapping")[0].checked);
+    if ($("#display_grid")[0].checked) {
+      display_grid = true;
+    } else {
+      display_grid = false;
+    }
+  });
+  $("#grid_accuracy").on("change", function () {
+    var newacc = parseInt($("#grid_accuracy").val());
+    if (isNaN(newacc) || newacc < 2) {
+      alert("Enter a integer more than 1 for grid accuracy")
+      $("#grid_accuracy").val(snappingAccuracy);
+      return;
+    }
+    snappingAccuracy = newacc;
+  });
 
 })
 var options_menu_open = false;
+
 function display_options(value) {
   if (value) {
     if (value === true) {
@@ -387,9 +407,10 @@ function display_options(value) {
 }
 
 //a=additional
-function open_a_options(){
+function open_a_options() {
   $("#options_menu_additional").css("display", "block");
 }
-function close_a_options(){
+
+function close_a_options() {
   $("#options_menu_additional").css("display", "none");
 }
