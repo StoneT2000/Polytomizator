@@ -43,10 +43,14 @@ var squares = false;
 var colorAccuracy = 1;
 
 //verticesHashTable(flat) are global variables edited by a bunch of functions
-//Ultimately, verticesHashTableFlat (and triangulations) are used by delaunayDisplay to display triangles
+//Ultimately, triangulatedVerticesFlat (and triangulations) are used by delaunayDisplay to display triangles
 //verticesHashTable is used for quick calculations for things like erasers. It is also a real reflection of all the vertices in a canvas.
+//verticesHashTableFlat is used for various other purposes, displaying vertices etc.
 var verticesHashTable = [];
 var verticesHashTableFlat = [];
+
+//The below variable is used to store the vertices that correspond with the current triangulations array. It is basically what is downloaded. It is updated whenever triangulations is updated by triangulize();
+var triangulatedVerticesFlat = [];
 
 //Number of points drawn per stroke
 var pointDensity = 4;
@@ -74,6 +78,12 @@ var d; //Pixel density
 var cWidth = 400;
 var cHeight = 400;
 var triangleCanvasLayer; //Off screen graphics layer for drawing on
+
+//active_canvas is when user is hovering over canvas
+var active_canvas = false
+
+
+
 function preload() {
   img1 = loadImage('images/white.jpg');
 }
@@ -165,6 +175,15 @@ function setup() {
   }, 1500);
   $("#brushSize")[0].value = brushSize;
   $("#brushDensity")[0].value = pointDensity + 1;
+  
+  //Detect when it is on the canvas
+  $("#defaultCanvas0").on("mouseenter", function(){
+    active_canvas = true;
+  })
+  $("#defaultCanvas0").on("mouseleave", function(){
+    active_canvas = false;
+  })
+  
 
 }
 var accDist = 0;
@@ -220,7 +239,7 @@ function draw() {
             sTime = millis();
           }
           var tAC = [0, 0, 0];
-          tAC = averageColor(verticesHashTableFlat[triangulations[triangulations.length - 1][stepD]][0], verticesHashTableFlat[triangulations[triangulations.length - 1][stepD]][1], verticesHashTableFlat[triangulations[triangulations.length - 1][stepD + 1]][0], verticesHashTableFlat[triangulations[triangulations.length - 1][stepD + 1]][1], verticesHashTableFlat[triangulations[triangulations.length - 1][stepD + 2]][0], verticesHashTableFlat[triangulations[triangulations.length - 1][stepD + 2]][1], colorAccuracy);
+          tAC = averageColor(triangulatedVerticesFlat[triangulations[triangulations.length - 1][stepD]][0], triangulatedVerticesFlat[triangulations[triangulations.length - 1][stepD]][1], triangulatedVerticesFlat[triangulations[triangulations.length - 1][stepD + 1]][0], triangulatedVerticesFlat[triangulations[triangulations.length - 1][stepD + 1]][1], triangulatedVerticesFlat[triangulations[triangulations.length - 1][stepD + 2]][0], triangulatedVerticesFlat[triangulations[triangulations.length - 1][stepD + 2]][1], colorAccuracy);
           tColors.push(tAC[0], tAC[1], tAC[2]);
 
           stepD += 3;
@@ -344,6 +363,7 @@ function draw() {
         if (unique_vertex(vpx, vpy)) {
           allVertices.push([vpx, vpy]);
           updateHashSpace(vpx, vpy, true);
+
         }
 
         //Randomly generate points
@@ -365,6 +385,7 @@ function draw() {
               allVertices.push([vpx, vpy]);
 
               updateHashSpace(vpx, vpy, true);
+
             }
 
           }
@@ -526,7 +547,8 @@ function generate_normal_poly(values) {
     pushEdgePointsToAll();
     triangulize();
     finishedColoring = false;
-
+    
+    generateHashSpace();
     tColors = [];
 
     css_buttons.displayPoints(false);

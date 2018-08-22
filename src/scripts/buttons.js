@@ -223,11 +223,12 @@ $(document).on('ready', function () {
 
   });
   $("#expandImage").on("click", function () {
+
     if (finishedColoring == false) {
       alert("Please wait until the coloring is finished before enlargining the work and downloading it")
-    } else {
-      if (window.confirm("Are you sure you want to do this? You cannot go back and edit this work again.")) {
-        var factor = 2;
+    } 
+    else {
+      var factor = 2;
         if (cWidth > cHeight) {
           factor = ceil(6000 / cWidth);
         } else {
@@ -235,10 +236,10 @@ $(document).on('ready', function () {
         }
 
         expandImage(factor, true);
-      }
     }
   });
   $("#polytomize").on("click", function () {
+
     triangulize();
     finishedColoring = false;
     image(img1, 0, 0, cWidth, cHeight);
@@ -348,6 +349,7 @@ $(document).on('ready', function () {
       snapping = true;
     }
   });
+  
 
 })
 var options_menu_open = false;

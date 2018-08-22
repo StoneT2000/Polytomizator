@@ -14,7 +14,8 @@ function generateCubicPoly(accuracy, density, overlay) {
   allVertices.push([0, cHeight]);
   allVertices.push([cWidth, cHeight]);
 
-  for (i = 0; i < cWidth / 80; i++) {
+  for (i = 0; i < cWidth / accuracy; i++) {
+    /*
     var tempv = i * 80 + round(random(0, 2)) * accuracy;
     var tempv2 = i * 80 + round(random(0, 2)) * accuracy;
     if (inCanvas(tempv, cHeight)) {
@@ -23,18 +24,25 @@ function generateCubicPoly(accuracy, density, overlay) {
     if (inCanvas(tempv2, 0)) {
       allVertices.push([tempv2, 0])
     }
+    */
+    allVertices.push([i * accuracy, cHeight])
+    allVertices.push([i * accuracy, 0])
 
 
   }
-  for (i = 0; i < cHeight / 80; i++) {
-    var tempv = i * 80 + round(random(0, 2)) * accuracy;
-    var tempv2 = i * 80 + round(random(0, 2)) * accuracy;
-    if (inCanvas(cWidth, tempv)) {
-      allVertices.push([cWidth, tempv])
+  for (i = 0; i < cHeight / accuracy; i++) {
+    /*
+    var tempv3 = i * 80 + round(random(0, 2)) * accuracy;
+    var tempv4 = i * 80 + round(random(0, 2)) * accuracy;
+    if (inCanvas(cWidth, tempv3)) {
+      allVertices.push([cWidth, tempv3])
     }
-    if (inCanvas(0, tempv2)) {
-      allVertices.push([0, tempv2])
+    if (inCanvas(0, tempv4)) {
+      allVertices.push([0, tempv4])
     }
+    */
+    allVertices.push([cWidth, i * accuracy])
+    allVertices.push([0, i * accuracy])
 
 
   }
@@ -48,6 +56,8 @@ function generateCubicPoly(accuracy, density, overlay) {
   scanSquareUD(accuracy, 100000000);
   generateRandomSquares(accuracy, thisdensity)
   flowing = true;
+
+  generateHashSpace();
   triangulize();
   finishedColoring = false;
   image(img1, 0, 0, cWidth, cHeight);
@@ -57,6 +67,7 @@ function generateCubicPoly(accuracy, density, overlay) {
   sTime = millis();
   css_buttons.displayPoints(false);
   displayPoints = false;
+  recordVertices();
 
 }
 

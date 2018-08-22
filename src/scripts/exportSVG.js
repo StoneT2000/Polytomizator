@@ -7,12 +7,12 @@ function storeTrianglesToString() {
   tng = triangulations[triangulations.length - 1];
   for (tInd = 0; tInd < tng.length; tInd += 3) {
     data += "<polygon points=\"" +
-      verticesHashTableFlat[tng[tInd]][0] + "," +
-      verticesHashTableFlat[tng[tInd]][1] + " " +
-      verticesHashTableFlat[tng[tInd + 1]][0] + "," +
-      verticesHashTableFlat[tng[tInd + 1]][1] + " " +
-      verticesHashTableFlat[tng[tInd + 2]][0] + "," +
-      verticesHashTableFlat[tng[tInd + 2]][1] + "\" ";
+      triangulatedVerticesFlat[tng[tInd]][0] + "," +
+      triangulatedVerticesFlat[tng[tInd]][1] + " " +
+      triangulatedVerticesFlat[tng[tInd + 1]][0] + "," +
+      triangulatedVerticesFlat[tng[tInd + 1]][1] + " " +
+      triangulatedVerticesFlat[tng[tInd + 2]][0] + "," +
+      triangulatedVerticesFlat[tng[tInd + 2]][1] + "\" ";
 
     hexcolors = rgbToHex(tColors[tInd].toFixed(0), tColors[tInd + 1].toFixed(0), tColors[tInd + 2].toFixed(0));
     data +=
