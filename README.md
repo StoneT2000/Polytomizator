@@ -4,11 +4,11 @@ A web applet that helps generate poly art using an uploaded background image.
 This was made using JS and HTML. Library used was p5.js.
 
 ## Using this program
-A working link to this program is provided here https://stonet2000.github.io/Polytomizator
+A working link to this program is provided here https://stonet2000.github.io/Polytomizator/polytomize.html
 
 Or...
 
-Simply download the repository's zip file, open it, and then open index.html. This local method is compatible on Firefox only.
+Simply download the repository's zip file, open it, and then open polytomize.html. This local method is compatible on Firefox only.
 
 
 ## Features
