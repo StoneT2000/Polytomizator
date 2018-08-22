@@ -202,7 +202,7 @@ function colorIn() {
   loadPixels();
   sTime = millis();
   for (stepD1 = 0; stepD1 < triangulations[0].length - 1; stepD1 += 3) {
-
+    //NOTE, this uses verticesHashTableFlat, not triangulatedVerticesFlat?
     var tAC = [0, 0, 0];
     tAC = averageColor(verticesHashTableFlat[triangulations[triangulations.length - 1][stepD1]][0], verticesHashTableFlat[triangulations[triangulations.length - 1][stepD1]][1], verticesHashTableFlat[triangulations[triangulations.length - 1][stepD1 + 1]][0], verticesHashTableFlat[triangulations[triangulations.length - 1][stepD1 + 1]][1], verticesHashTableFlat[triangulations[triangulations.length - 1][stepD1 + 2]][0], verticesHashTableFlat[triangulations[triangulations.length - 1][stepD1 + 2]][1], colorAccuracy);
     tColors.push(tAC[0], tAC[1], tAC[2]);
@@ -218,7 +218,10 @@ var ff = 0;
 var fr = 0;
 var fc = 0;
 var flowerEffectTime = 10;
-
+var flowering = false;
+var flower_step = 0;
+var flowering_speed = 1;
+var uncoloredTriangleCanvasLayer;
 function draw() {
   totalpoints = 0;
   if (fc === 0) {
@@ -233,6 +236,7 @@ function draw() {
 
 
   if (flowerEffect === true) {
+    /*
     iterStep = ceil(((triangulations[triangulations.length - 1].length) / (fr)) / flowerEffectTime);
     for (iter = 0; iter < iterStep; iter++) {
       if (iter === 0) {
@@ -264,6 +268,19 @@ function draw() {
 
       }
     }
+    */
+    if (flowering === true){
+      delaunayDisplay(triangulations[0], triangleCanvasLayer, triangulatedVerticesFlat, true, flower_step, flowering_speed)
+      flower_step+= flowering_speed;
+      if (flower_step + 1 > triangulations[0].length / 3){
+        flowering = false;
+        fTime = millis();
+        console.log("Coloring took:" + ((fTime - sTime) / 1000).toFixed(3) + " secs");
+        flower_step = 0;
+      }
+    }
+
+    
   } else {
     if (finishedColoring === false) {
       colorIn();
@@ -290,7 +307,13 @@ function draw() {
 
 
   if (displayTriangulation === true && finishedColoring === true) {
-    image(triangleCanvasLayer, 0, 0);
+    if (flowerEffect === true && noColors === true){
+      //Thisis for the one case when the user selects to hide colors while flowering is in progress.
+      image(uncoloredTriangleCanvasLayer, 0, 0);
+    }
+    else {
+      image(triangleCanvasLayer, 0, 0);
+    }
     //Each time an option is enacted, run through delaunayDisdplay to show that option
     //options such as hidhing colors
 
@@ -301,7 +324,7 @@ function draw() {
 
     for (j = 0; j < triangulations.length; j++) {
       //We use this function becasue its faster than transfering from the off screen graphics to the on screen canvas.
-      delaunayDisplay_flower_effect(triangulations[j]);
+      //delaunayDisplay_flower_effect(triangulations[j]);
 
     }
 
@@ -438,6 +461,10 @@ function generate_normal_poly(values) {
     image(img1, 0, 0, cWidth, cHeight);
     filter(GRAY);
     loadPixels();
+  }
+  if (flowerEffect === true){
+    flower_step = 0;
+    flowering = true;
   }
   var artWorker = new Worker('scripts/webworkerArtGen.js')
   if (completedFilters == false) {

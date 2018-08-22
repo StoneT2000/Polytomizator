@@ -396,6 +396,7 @@ p {
   right: 30px;
   font-size: 30px;
   cursor: pointer;
+  z-index:9999;
 }
 
 #options_menu {
@@ -405,7 +406,7 @@ p {
   right: 15px;
   top: 75px;
   background-color: RGBA(40, 40, 40, 1);
-  z-index: 1000;
+  z-index: 9999;
   opacity: 0;
   display: none;
   border-radius: 5px;
