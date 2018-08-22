@@ -48,6 +48,8 @@ function generateCubicPoly(accuracy, density, overlay) {
   scanSquareUD(accuracy, 100000000);
   generateRandomSquares(accuracy, thisdensity)
   flowing = true;
+  
+  generateHashSpace();
   triangulize();
   finishedColoring = false;
   image(img1, 0, 0, cWidth, cHeight);

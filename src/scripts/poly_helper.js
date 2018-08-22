@@ -231,7 +231,7 @@ function delaunayDisplay(tng, ctx, vertices_set) {
   var verticesarr = verticesHashTableFlat;
   if (vertices_set) {
     //Use this if we don't want to use verticesHashTableFlat directly
-    verticesarr = vertices_set
+    verticesarr = JSON.parse(JSON.stringify(vertices_set))
   }
 
   for (var i = 0; i < tng.length; i += 3) {

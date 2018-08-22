@@ -526,7 +526,8 @@ function generate_normal_poly(values) {
     pushEdgePointsToAll();
     triangulize();
     finishedColoring = false;
-
+    
+    generateHashSpace();
     tColors = [];
 
     css_buttons.displayPoints(false);
