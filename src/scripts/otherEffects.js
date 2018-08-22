@@ -27,13 +27,13 @@ function generateCubicPoly(accuracy, density, overlay) {
 
   }
   for (i = 0; i < cHeight / 80; i++) {
-    var tempv = i * 80 + round(random(0, 2)) * accuracy;
-    var tempv2 = i * 80 + round(random(0, 2)) * accuracy;
-    if (inCanvas(cWidth, tempv)) {
-      allVertices.push([cWidth, tempv])
+    var tempv3 = i * 80 + round(random(0, 2)) * accuracy;
+    var tempv4 = i * 80 + round(random(0, 2)) * accuracy;
+    if (inCanvas(cWidth, tempv3)) {
+      allVertices.push([cWidth, tempv3])
     }
-    if (inCanvas(0, tempv2)) {
-      allVertices.push([0, tempv2])
+    if (inCanvas(0, tempv4)) {
+      allVertices.push([0, tempv4])
     }
 
 
