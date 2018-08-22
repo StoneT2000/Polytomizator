@@ -431,36 +431,6 @@ p {
   z-index: 9998;
 }
 
-.option_menu_item span {
-  position: relative;
-  width: 60%;
-  color: white;
-  left: 0px;
-  text-align: left;
-  padding-left: 10px;
-  font-weight: 300;
-  height: 40px;
-  line-height: 40px;
-  font-size: 14px;
-}
-
-.option_menu_item input {
-  width: 40%;
-  position: relative;
-  text-align: center;
-  height: 30px;
-  font-size: 14px;
-}
-
-.option_menu_item button {
-  height: 30px;
-  color: RGB(50, 50, 50);
-  cursor: pointer;
-  background-color: white;
-  margin-left: 10px;
-  vertical-align: baseline;
-}
-
 #options_menu h4 {
   color: white;
   font-weight: 400;
@@ -491,7 +461,46 @@ tr {
   background-color: white;
   width: 240px;
 }
+#options_table{
+  border:none;
+}
+#options_table tr{
+  height:30px;
+  border-bottom: 0px;
 
+}
+#options_table td{
+  height:30px;
+  border-bottom: 0px;
+}
+.option_input_title{
+  font-size:12px;
+  line-height: 10px;
+  color:white;
+  text-align: center;
+}
+.option_input_title_tr td{
+  height:10px  !important;
+  vertical-align: text-bottom;
+  color:white;
+}
+.option_name{
+  color:white;
+  font-weight:300;
+  width: 100px;
+  font-size:16px;
+  line-height: 10px;
+  text-align: center;
+}
+#options_table .inputs{
+  text-align: center;
+}
+#options_table .inputs input{
+  width: 50px;
+  font-size:13px;
+  text-align: center;
+  height:20px;
+}
 #options_menu_additional {
   position: fixed;
   width: 400px;

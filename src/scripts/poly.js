@@ -16,6 +16,8 @@ var displayTriangulation = true;
 var displayPoints = true;
 var displayImage = true;
 
+var display_grid = false;
+
 var stepDelaunate = true; //Whether to allow coloring to proceed when using flower effect
 
 var noColors = false; //Wheter or not the colors, tColors, are used.
@@ -60,7 +62,9 @@ var flowerEffect = false; //Whether or not to have the flower effect
 var filteringView = false; //Debugging purposes
 var displayEdgePoints = false; //Display points whenusing filters
 var snapping = false; //Snap points to a grid when using brushes
-var snappingAccuracy = 20; //How big squares in grid are
+
+var snappingAccuracy = 20; //How big the squares in the grid are, relates with the positions of snapped on vertices.
+
 //Testing different ways to display the information 
 //displayMode = 0 is normal, 1:rectangles 2:circles 3:animated triangles 4: animated rectangles
 var displayMode = 0;
@@ -318,7 +322,16 @@ function draw() {
     }
 
   }
-
+  if (display_grid === true) {
+    strokeWeight(1);
+    stroke(150);
+    for (j = 0; j < cWidth/snappingAccuracy; j++){
+      line(j*snappingAccuracy, 0, j*snappingAccuracy, cHeight);
+    }
+    for (j = 0; j < cHeight/snappingAccuracy; j++){
+      line(0, j*snappingAccuracy, cWidth, j*snappingAccuracy);
+    }
+  }
 
   $("#numberPoints").text(totalpoints + " points");
   $("#numberTriangles").text(parseInt(triangulations[triangulations.length - 1].length / 3) + " triangles");

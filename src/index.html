@@ -19,18 +19,18 @@
   <script src="scripts/delaunatormin.js"></script>
 
   <!--Local Scripts-->
-  <script language="javascript" type="text/javascript" src="scripts/poly.js?version=44"></script>
-  <script language="javascript" type="text/javascript" src="scripts/poly_helper.js?version=44"></script>
-  <script language="javascript" type="text/javascript" src="scripts/buttons.js?version=44"></script>
-  <script language="javascript" type="text/javascript" src="scripts/otherEffects.js?version=44"></script>
-  <script language="javascript" type="text/javascript" src="scripts/imagefilter.js?version=44"></script>
-  <script language="javascript" type="text/javascript" src="scripts/exportSVG.js?version=44"></script>
-  <script language="javascript" type="text/javascript" src="scripts/flower_effect.js?version=44"></script>
+  <script language="javascript" type="text/javascript" src="scripts/poly.js?version=45"></script>
+  <script language="javascript" type="text/javascript" src="scripts/poly_helper.js?version=45"></script>
+  <script language="javascript" type="text/javascript" src="scripts/buttons.js?version=45"></script>
+  <script language="javascript" type="text/javascript" src="scripts/otherEffects.js?version=45"></script>
+  <script language="javascript" type="text/javascript" src="scripts/imagefilter.js?version=45"></script>
+  <script language="javascript" type="text/javascript" src="scripts/exportSVG.js?version=45"></script>
+  <script language="javascript" type="text/javascript" src="scripts/flower_effect.js?version=45"></script>
   <script language="javascript" type="text/javascript" src="scripts/FileSaver.js"></script>
 
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" />
-  <link rel="stylesheet" href="poly.css?version=44">
-  <link rel="stylesheet" href="popuphelpers.css?version=44">
+  <link rel="stylesheet" href="poly.css?version=45">
+  <link rel="stylesheet" href="popuphelpers.css?version=45">
 
   <!--When updating this html file, also update the index one-->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
@@ -57,26 +57,26 @@
     <div id="options_menu_gear"><i class="fa fa-cog"></i></div>
     <div id="options_menu">
       <h4 style="border:none">Options</h4>
-      <div class="option_menu_item">
-        <span style="margin-top:0px;">Snapping</span>
-        <input type="checkbox" style="height:auto;" id="snapping">
-      </div>
+      <table id="options_table" style="width:100%;">
+        <tr style="height:10px;" class="option_input_title_tr">
+          <td></td>
+          <td></td>
+          <td class="option_input_title">Accuracy</td>
+        </tr>
+        <tr>
+          <td class="option_name">Grid</td>
+          <td><input type="checkbox" style="" id="display_grid"></td>
+          <td class="inputs"><input type="text" style="" id="grid_accuracy" placeholder="≥ 2"></td>
+        </tr>
+        <tr>
+          <td class="option_name">Snap to grid</td>
+          <td><input type="checkbox" style="height:auto;" id="snapping"></td>
+          <td class="inputs"></td>
+        </tr>
+        <tr>
+        </tr>
+      </table>
       <h4 style="">Functions</h4>
-      <!-- Old options layout
-      <table id="function_options" style="width:100%;">
-        <tr>
-          <td><span style="margin-top:0px;">Snap Vertices</span></td>
-          <td><button>Snap</button></td>
-        </tr>
-        <tr>
-          <td><span style="margin-top:0px;">Generate Cubic Poly Art</span></td>
-          <td><button>Generate</button></td>
-        </tr>
-        <tr>
-          <td><span style="margin-top:0px;">Generate Normal Poly Art</span></td>
-          <td><button>Generate</button></td>
-        </tr>
-      </table>-->
       <div id="function_options">
         <button id="displaysnapvertices">Snap Vertices</button>
         <button id="displaygencubicpoly">Generate cubic poly art</button>
