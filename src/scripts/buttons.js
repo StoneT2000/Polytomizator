@@ -168,43 +168,45 @@ $(document).on('ready', function () {
 
       myCanvas.parent('gamedisplay');
 
-      allVertices = [];
       triangulations = [0];
       tColors = [];
       verticesHashTable = [];
+      triangulatedVerticesFlat = [];
       verticesHashTableFlat = [];
       d = pixelDensity();
-      allVertices.push([0, 0]);
-      allVertices.push([cWidth, 0]);
-      allVertices.push([0, cHeight]);
-      allVertices.push([cWidth, cHeight]);
 
+      generateHashSpace();
+      updateHashSpace(0, 0, true)
+      updateHashSpace(cWidth, 0, true)
+      updateHashSpace(0, cHeight, true)
+      updateHashSpace(cWidth, cHeight, true)
       for (i = 0; i < cWidth / 80; i++) {
         var tempv = i * 80 + round(random(0, 30));
         var tempv2 = i * 80 + round(random(0, 30));
         if (inCanvas(tempv, cHeight)) {
-          allVertices.push([tempv, cHeight])
+          updateHashSpace(tempv, cHeight, true)
         }
-        if (inCanvas(tempv2, cHeight)) {
-          allVertices.push([tempv2, 0])
+        if (inCanvas(tempv2, 0)) {
+          updateHashSpace(tempv2, 0, true);
         }
 
 
       }
-      for (i = 0; i < cHeight / 80; i++) {
+      for (var i = 0; i < cHeight / 80; i++) {
         var tempv = i * 80 + round(random(0, 30));
         var tempv2 = i * 80 + round(random(0, 30));
         if (inCanvas(cWidth, tempv)) {
-          allVertices.push([cWidth, tempv])
+          updateHashSpace(cWidth, tempv, true);
         }
         if (inCanvas(0, tempv2)) {
-          allVertices.push([0, tempv2])
+          updateHashSpace(0, tempv2, true);
         }
+
 
       }
       finishedColoring = true;
 
-      generateHashSpace();
+      //generateHashSpace();
       image(img1, 0, 0, cWidth, cHeight);
       loadPixels();
       filteredPixels = [];

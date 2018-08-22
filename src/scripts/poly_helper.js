@@ -17,12 +17,6 @@ function generateHashSpace() {
     verticesHashTable.push([]);
 
   }
-  for (i = 0; i < allVertices.length; i++) {
-
-    var hashVal = hashCoordinate(allVertices[i][0], allVertices[i][1]);
-    var index = findIndexFromHash(hashVal);
-    verticesHashTable[index].push([allVertices[i][0], allVertices[i][1]])
-  }
 }
 
 //Add or delete a vertex.
@@ -153,8 +147,6 @@ function mouseClicked() {
             vpy = vpy - vpy % snappingAccuracy;
           }
           if (unique_vertex(vpx, vpy)) {
-            allVertices.push([vpx, vpy]);
-
             updateHashSpace(vpx, vpy, true)
 
           }
@@ -238,7 +230,18 @@ function delaunayDisplay(tng, ctx, vertices_set) {
     //Use this if we don't want to use verticesHashTableFlat directly
     verticesarr = vertices_set
   }
-
+  //ctx.fill('RGBA(255,255,255,0)');
+  //ctx.rect(0,0,cWidth,cHeight)
+  
+  if (displayImage === true){
+    ctx.image(img1, 0, 0, cWidth, cHeight);
+    
+  }
+  else {
+    ctx.fill(255);
+    ctx.rect(0,0,cWidth,cHeight)
+  }
+  
   for (var i = 0; i < tng.length; i += 3) {
     if (tColors[i] >= 0 && noColors == false) {
 
@@ -355,11 +358,15 @@ function loadData(dataStored) {
   if (dataStored === null) {
     alert("No recently saved data")
   }
-  allVertices = dataStored[0];
-  triangulations = dataStored[1];
-  tColors = dataStored[2];
-  verticesHashTable = dataStored[3];
-  verticesHashTableFlat = dataStored[4];
+  triangulations = dataStored[0];
+  tColors = dataStored[1];
+  verticesHashTable = dataStored[2];
+  verticesHashTableFlat = dataStored[3];
+  //img1 = dataStored[4];
+  cWidth = dataStored[4];
+  cHeight = dataStored[5];
+  myCanvas = resizeCanvas(cWidth, cHeight);
+  $("#gamedisplay").css("right", (cWidth / 2).toString() + "px");
   triangulize();
 
 
@@ -373,9 +380,15 @@ function loadData(dataStored) {
   recordVertices();
 }
 
-function saveData() {
-  var currentData = [allVertices.slice(), triangulations.slice(), tColors.slice(), verticesHashTable.slice(), verticesHashTableFlat.slice()];
-  localStorage.setItem("art1", JSON.stringify(currentData));
+function saveData(location) {
+  var location_name = "art1";
+  if (location){
+    location_name = location;
+  }
+  //image(img1, 0, 0, cWidth, cHeight);
+  //loadPixels();
+  var currentData = [triangulations.slice(), tColors.slice(), verticesHashTable.slice(), verticesHashTableFlat.slice(), cWidth, cHeight];
+  localStorage.setItem(location_name, JSON.stringify(currentData));
 
 }
 
@@ -489,6 +502,7 @@ function triangulize() {
 
 }
 
+//Get colors at x,y with pixel density (or resolution) d
 function fget(x, y) {
   y = parseInt(y.toFixed(0));
   var off = ((y * d * cWidth + x) * d * 4);
@@ -580,20 +594,20 @@ function autoGenerateArt() {
     pixels = changePixels3('smooth', pixels);
     pixels = changePixels3('edge', pixels);
   }
-  allVertices = [];
-  allVertices.push([0, 0]);
-  allVertices.push([cWidth, 0]);
-  allVertices.push([0, cHeight]);
-  allVertices.push([cWidth, cHeight]);
 
+  generateHashSpace();
+  updateHashSpace(0, 0, true)
+  updateHashSpace(cWidth, 0, true)
+  updateHashSpace(0, cHeight, true)
+  updateHashSpace(cWidth, cHeight, true)
   for (i = 0; i < cWidth / 80; i++) {
     var tempv = i * 80 + round(random(0, 30));
     var tempv2 = i * 80 + round(random(0, 30));
     if (inCanvas(tempv, cHeight)) {
-      allVertices.push([tempv, cHeight])
+      updateHashSpace(tempv, cHeight, true)
     }
     if (inCanvas(tempv2, cHeight)) {
-      allVertices.push([tempv2, 0])
+      updateHashSpace(tempv2, 0, true);
     }
 
 
@@ -602,16 +616,16 @@ function autoGenerateArt() {
     var tempv = i * 80 + round(random(0, 30));
     var tempv2 = i * 80 + round(random(0, 30));
     if (inCanvas(cWidth, tempv)) {
-      allVertices.push([cWidth, tempv])
+      updateHashSpace(cWidth, tempv, true);
     }
     if (inCanvas(0, tempv2)) {
-      allVertices.push([0, tempv2])
+      updateHashSpace(0, tempv2, true);
     }
 
   }
   splitSquare(20)
   generateRandomSquares(20, 0.4)
-  pushEdgePointsToAll();
+  pushEdgePointsToAll(); //Possible error
   triangulize();
 
   finishedColoring = false;
