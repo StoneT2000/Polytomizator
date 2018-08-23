@@ -184,9 +184,6 @@ function mouseClicked() {
         }
         //Record past vertices sets for undoing
         recordVertices();
-        console.log("record")
-
-        //verticesHashTableFlat = verticesHashTable.reduce(function(acc,curr){return acc.concat(curr)});
 
       }
 
@@ -272,7 +269,7 @@ function snapVertices(acc) {
 }
 
 //Deviation of triangle coords for animated triangles
-var sd = 5;
+var sd = 15;
 //Display all the triangles in tng. Displays them using the variable verticesarr = verticesHashTableFlat.
 function delaunayDisplay(tng, ctx, vertices_set, flower_effect, flowering_step, flower_speed) {
 
@@ -540,7 +537,10 @@ function expandImage(mvalue, save) {
 
   var expandedWidth = cWidth * mvalue;
   var expandedHeight = cHeight * mvalue;
-
+  
+  //Change the sd value to accomodate new size for those downloading the distorted triangulations
+  sd *= mvalue;
+  
   //Save method by creating off screen graphics
   downloadcanvas = createGraphics(expandedWidth, expandedHeight);
 
@@ -587,6 +587,7 @@ function expandImage(mvalue, save) {
     downloading = false;
     //console.log("Finished downloading")
   }
+  sd/=mvalue;
 }
 var testCanvas;
 //Take the vertices and creates a flattend version

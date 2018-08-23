@@ -19,18 +19,18 @@
   <script src="scripts/delaunatormin.js"></script>
 
   <!--Local Scripts-->
-  <script language="javascript" type="text/javascript" src="scripts/poly.js?version=47"></script>
-  <script language="javascript" type="text/javascript" src="scripts/poly_helper.js?version=47"></script>
-  <script language="javascript" type="text/javascript" src="scripts/buttons.js?version=47"></script>
-  <script language="javascript" type="text/javascript" src="scripts/otherEffects.js?version=47"></script>
-  <script language="javascript" type="text/javascript" src="scripts/imagefilter.js?version=47"></script>
-  <script language="javascript" type="text/javascript" src="scripts/exportSVG.js?version=47"></script>
-  <script language="javascript" type="text/javascript" src="scripts/flower_effect.js?version=47"></script>
+  <script language="javascript" type="text/javascript" src="scripts/poly.js?version=48"></script>
+  <script language="javascript" type="text/javascript" src="scripts/poly_helper.js?version=48"></script>
+  <script language="javascript" type="text/javascript" src="scripts/buttons.js?version=48"></script>
+  <script language="javascript" type="text/javascript" src="scripts/otherEffects.js?version=48"></script>
+  <script language="javascript" type="text/javascript" src="scripts/imagefilter.js?version=48"></script>
+  <script language="javascript" type="text/javascript" src="scripts/exportSVG.js?version=48"></script>
+  <script language="javascript" type="text/javascript" src="scripts/flower_effect.js?version=48"></script>
   <script language="javascript" type="text/javascript" src="scripts/FileSaver.js"></script>
 
-  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" />
-  <link rel="stylesheet" href="poly.css?version=47">
-  <link rel="stylesheet" href="popuphelpers.css?version=47">
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="poly.css?version=48">
+  <link rel="stylesheet" href="popuphelpers.css?version=48">
 
   <!--When updating this html file, also update the index one-->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
@@ -58,7 +58,7 @@
     <div id="options_menu">
       <h4 style="border:none">Options</h4>
       <table id="options_table" style="width:100%;">
-        <tr style="height:10px;" class="option_input_title_tr">
+        <tr class="option_input_title_tr">
           <td></td>
           <td></td>
           <td class="option_input_title">Accuracy</td>
@@ -68,20 +68,35 @@
           <td><input type="checkbox" style="" id="display_grid"></td>
           <td class="inputs"><input type="text" style="" id="grid_accuracy" placeholder="≥ 2"></td>
         </tr>
+        <tr class="option_input_title_tr">
+        </tr>
         <tr>
           <td class="option_name">Snap to grid</td>
           <td><input type="checkbox" style="height:auto;" id="snapping"></td>
           <td class="inputs"></td>
         </tr>
-        <tr style="height:10px;" class="option_input_title_tr">
+        <tr class="option_input_title_tr">
           <td></td>
           <td></td>
           <td class="option_input_title">Speed</td>
         </tr>
-        <td class="option_name">Flower effect</td>
+        <tr>
+          <td class="option_name">Flower effect</td>
           <td><input type="checkbox" style="height:auto;" id="flower_effect"></td>
           <td class="inputs"><input type="text" id="flower_effect_speed" placeholder="≥ 1"></td>
+        </tr>
+        <tr class="option_input_title_tr">
+        </tr>
         <tr>
+          <td class="option_name">Display mode</td>
+          <td><input type="checkbox" style="height:auto;" id="display_mode_check"></td>
+          <td class="inputs" style="height:20px;">
+            <select id="display_mode_selection">
+              <option value="circles">Circles</option>
+              <option value="rectangles">Rectangles</option>
+              <option value="distorted_triangles">Distorted *</option>
+            </select>
+          </td>
         </tr>
       </table>
       <h4 style="">Functions</h4>

@@ -462,9 +462,6 @@ tr {
   background-color: white;
   width: 240px;
 }
-#options_table{
-  border:none;
-}
 #options_table tr{
   height:30px;
   border-bottom: 0px;
@@ -480,7 +477,7 @@ tr {
   color:white;
   text-align: center;
 }
-.option_input_title_tr td{
+.option_input_title_tr, .option_input_title_tr td{
   height:10px  !important;
   vertical-align: text-bottom;
   color:white;
@@ -488,13 +485,14 @@ tr {
 .option_name{
   color:white;
   font-weight:300;
-  width: 100px;
+  width: 120px;
   font-size:16px;
   line-height: 10px;
   text-align: center;
 }
 #options_table .inputs{
   text-align: center;
+  vertical-align: middle;
 }
 #options_table .inputs input{
   width: 50px;
@@ -502,6 +500,14 @@ tr {
   text-align: center;
   height:20px;
 }
+#options_table .inputs select{
+  line-height: 20px;
+  font-size:13px;
+  margin-top:5px;
+  text-align: center;
+  height:20px;
+}
+/*CSS for pop up menu for setting params for functions*/
 #options_menu_additional {
   position: fixed;
   width: 400px;

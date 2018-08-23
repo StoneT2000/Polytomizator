@@ -12,6 +12,7 @@ $(document).on('ready', function () {
   $("#pointBrush").css("background-color", "RGB(140,140,140)")
   console.log("Polytomizator v45")
   $("#grid_accuracy").val(20)
+  $("#flower_effect_speed").val(1);
 
   $("#displayColor").on("click", function () {
     if (noColors === true) {
@@ -376,9 +377,37 @@ $(document).on('ready', function () {
       return;
     }
     flowering_speed = newspeed;
-  })
+  });
+  var selected_mode_num = 2;
+  $("#display_mode_selection").on("change", function () {
+    var selected_mode = $("#display_mode_selection").val();
 
-})
+    if (selected_mode == "circles") {
+      selected_mode_num = 2;
+    }
+    else if (selected_mode == "rectangles") {
+      selected_mode_num = 1;
+    }
+    else if (selected_mode == "distorted_triangles") {
+      selected_mode_num = 3;
+    }
+    if (display_mode_on === true){
+      displayMode = selected_mode_num;
+    }
+  });
+  $("#display_mode_check").on("change", function () {
+    if ($("#display_mode_check")[0].checked) {
+      displayMode = selected_mode_num;
+      display_mode_on = true;
+    } else {
+      displayMode = 0;
+      display_mode_on = false;
+      
+    }
+  });
+
+});
+var display_mode_on = false;
 var options_menu_open = false;
 
 function display_options(value) {

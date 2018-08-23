@@ -18,15 +18,14 @@ var displayImage = true;
 
 var display_grid = false;
 
-var stepDelaunate = true; //Whether to allow coloring to proceed when using flower effect
-
 var noColors = false; //Wheter or not the colors, tColors, are used.
 
-var flowing = true; //Flowing: true, points can be placed anywhere, when false, points are on fixed vertices.
+var flowing = true; //Flowing: true, points can be placed anywhere, when false, points are on fixed vertices. For cubic poly
+
 var brushSize = 100; //Radius of brush
 
-var downloading = false;
-//var magnification = 1;
+
+
 
 //Whether or not the current canvas is done coloring. Usually when it is not done, its usually due to the flower effect being turned on.
 var finishedColoring = true;
@@ -139,7 +138,6 @@ function setup() {
   }
   loadPixels();
 
-  //generateHashSpace();
   frameRate(60);
 
 
@@ -164,7 +162,13 @@ function setup() {
     if (finishedColoring === false) {
       alert("Please wait until the coloring is finished before enlargining the work and downloading it");
     } else if (triangulations[triangulations.length - 1].length > 0) {
-      downloadSVG(cWidth, cHeight);
+      if (display_mode_on === true) {
+        alert("At the moment, you can't download SVGs of the different display modes. Turn display mode off in settings to download SVG of the triangulation")
+      }
+      else{
+        downloadSVG(cWidth, cHeight);
+      }
+      
     } else {
       alert("Make some poly art first");
     }
@@ -197,6 +201,7 @@ var oldY = 0;
 var critDist = 10;
 var stepD = 0;
 
+//Finds the colors for all triangles in the current triangulation
 function colorIn() {
   image(img1, 0, 0, cWidth, cHeight);
   loadPixels();
@@ -204,7 +209,8 @@ function colorIn() {
   for (stepD1 = 0; stepD1 < triangulations[0].length - 1; stepD1 += 3) {
     //NOTE, this uses verticesHashTableFlat, not triangulatedVerticesFlat?
     var tAC = [0, 0, 0];
-    tAC = averageColor(verticesHashTableFlat[triangulations[triangulations.length - 1][stepD1]][0], verticesHashTableFlat[triangulations[triangulations.length - 1][stepD1]][1], verticesHashTableFlat[triangulations[triangulations.length - 1][stepD1 + 1]][0], verticesHashTableFlat[triangulations[triangulations.length - 1][stepD1 + 1]][1], verticesHashTableFlat[triangulations[triangulations.length - 1][stepD1 + 2]][0], verticesHashTableFlat[triangulations[triangulations.length - 1][stepD1 + 2]][1], colorAccuracy);
+
+    tAC = averageColor(triangulatedVerticesFlat[triangulations[triangulations.length - 1][stepD1]][0], triangulatedVerticesFlat[triangulations[triangulations.length - 1][stepD1]][1], triangulatedVerticesFlat[triangulations[triangulations.length - 1][stepD1 + 1]][0], triangulatedVerticesFlat[triangulations[triangulations.length - 1][stepD1 + 1]][1], triangulatedVerticesFlat[triangulations[triangulations.length - 1][stepD1 + 2]][0], triangulatedVerticesFlat[triangulations[triangulations.length - 1][stepD1 + 2]][1], colorAccuracy);
     tColors.push(tAC[0], tAC[1], tAC[2]);
 
   }
@@ -212,15 +218,23 @@ function colorIn() {
   fTime = millis();
   console.log("Coloring took:" + ((fTime - sTime) / 1000).toFixed(3) + " secs");
 }
-var iterStep = 4;
+
 var fs = 0;
 var ff = 0;
 var fr = 0;
 var fc = 0;
-var flowerEffectTime = 10;
+
+
+//Currently drawing flower effect?
 var flowering = false;
+
+//Step of flowering effect
 var flower_step = 0;
+
+//Speed of flowering effect
 var flowering_speed = 1;
+
+//Just to display the triangles without colors of triangulatedVerticesFlat
 var uncoloredTriangleCanvasLayer;
 function draw() {
   totalpoints = 0;
@@ -236,39 +250,7 @@ function draw() {
 
 
   if (flowerEffect === true) {
-    /*
-    iterStep = ceil(((triangulations[triangulations.length - 1].length) / (fr)) / flowerEffectTime);
-    for (iter = 0; iter < iterStep; iter++) {
-      if (iter === 0) {
-        image(img1, 0, 0, cWidth, cHeight);
-        loadPixels();
-      }
-      if (stepDelaunate === true && triangulations.length > 0 && finishedColoring === false) {
-        if (triangulations[triangulations.length - 1].length > 0 && stepD <= triangulations[triangulations.length - 1].length - 1) {
-          if (stepD === 0) {
-            sTime = millis();
-          }
-          var tAC = [0, 0, 0];
-          tAC = averageColor(triangulatedVerticesFlat[triangulations[triangulations.length - 1][stepD]][0], triangulatedVerticesFlat[triangulations[triangulations.length - 1][stepD]][1], triangulatedVerticesFlat[triangulations[triangulations.length - 1][stepD + 1]][0], triangulatedVerticesFlat[triangulations[triangulations.length - 1][stepD + 1]][1], triangulatedVerticesFlat[triangulations[triangulations.length - 1][stepD + 2]][0], triangulatedVerticesFlat[triangulations[triangulations.length - 1][stepD + 2]][1], colorAccuracy);
-          tColors.push(tAC[0], tAC[1], tAC[2]);
 
-          stepD += 3;
-
-        } else {
-          finishedColoring = true;
-          fTime = millis();
-          console.log("Coloring took:" + ((fTime - sTime) / 1000).toFixed(3) + " secs");
-
-          //Once finished coloring, re color the off screen graphics in case
-          for (j = 0; j < triangulations.length; j++) {
-            delaunayDisplay(triangulations[j], triangleCanvasLayer);
-
-          }
-        }
-
-      }
-    }
-    */
     if (flowering === true){
       delaunayDisplay(triangulations[0], triangleCanvasLayer, triangulatedVerticesFlat, true, flower_step, flowering_speed)
       flower_step+= flowering_speed;
@@ -319,17 +301,6 @@ function draw() {
 
   }
 
-  //Procedurally display those triangles only when it is still coloring
-  if (flowerEffect === true && finishedColoring !== true && displayTriangulation === true) {
-
-    for (j = 0; j < triangulations.length; j++) {
-      //We use this function becasue its faster than transfering from the off screen graphics to the on screen canvas.
-      //delaunayDisplay_flower_effect(triangulations[j]);
-
-    }
-
-  }
-
 
   fill(256, 256, 256);
   stroke(0, 0, 0);
@@ -365,12 +336,11 @@ function draw() {
   var dy = oldY - mouseY;
   accDist = sqrt(dx * dx + dy * dy);
   if (mode === 2 && active_canvas) {
-    if (downloading === false) {
-      noFill();
-      stroke(2);
-      stroke(200, 200, 200);
-      ellipse(mouseX, mouseY, brushSize * 2, brushSize * 2);
-    }
+
+    noFill();
+    stroke(2);
+    stroke(200, 200, 200);
+    ellipse(mouseX, mouseY, brushSize * 2, brushSize * 2);
     if (accDist >= critDist && mouseIsPressed) {
 
 
@@ -422,13 +392,11 @@ function draw() {
   }
 
   //Erase points
-  if (mode === 3) {
-    if (downloading === false) {
-      noFill();
-      stroke(2);
-      stroke(200, 200, 200);
-      ellipse(mouseX, mouseY, brushSize * 2, brushSize * 2);
-    }
+  if (mode === 3 && active_canvas === true) {
+    noFill();
+    stroke(2);
+    stroke(200, 200, 200);
+    ellipse(mouseX, mouseY, brushSize * 2, brushSize * 2);
     if (mouseIsPressed) {
       erase_vertices(mouseX, mouseY, brushSize)
     }
