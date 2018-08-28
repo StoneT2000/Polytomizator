@@ -1,11 +1,13 @@
 body,
 html {
   width: 100%;
-  background-image: url('images/PolyBackground.jpg');
+  background-color:whitesmoke;
   position: relative;
   height: auto;
 }
-
+.container {
+  background-color:whitesmoke;
+}
 .main {
   position: relative;
   display: inline;
