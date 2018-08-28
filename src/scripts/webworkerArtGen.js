@@ -69,7 +69,7 @@ onmessage = function (e) {
   //return data
   //result
   //0: allVertices
-  //1: edgePoints
+  //1: edgePoints, of form [x,y,RGB color values]
   //2: filtered pixel data
   var result = [allVertices, edgePoints, pixelData];
   postMessage(result);

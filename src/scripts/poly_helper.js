@@ -566,7 +566,7 @@ function expandImage(mvalue, save) {
     expandedVerticesHashTableFlat[p] = exv;
   }
   //verticesHashTableFlat = verticesHashTable.reduce(function(acc,curr){return acc.concat(curr)});
-
+  downloadcanvas.noSmooth();
   for (j = 0; j < triangulations.length; j++) {
     delaunayDisplay(triangulations[j], downloadcanvas, expandedVerticesHashTableFlat);
   }

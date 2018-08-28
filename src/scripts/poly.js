@@ -140,7 +140,9 @@ function setup() {
 
   frameRate(60);
 
-
+  //Disable anti-aliasing? Doesn't seem to work
+  //noSmooth();
+  
   //Initialize storedVertices array with 50 empty slots
   for (var slot_index = 0; slot_index < max_undo; slot_index++) {
     storedVertices.push([]);
@@ -185,7 +187,7 @@ function setup() {
   $("#brushSize")[0].value = brushSize;
   $("#brushDensity")[0].value = pointDensity + 1;
 
-  //Detect when it is on the canvas
+  //Detect when cursor is on the canvas
   $("#defaultCanvas0").on("mouseenter", function () {
     active_canvas = true;
   })
@@ -218,13 +220,6 @@ function colorIn() {
   fTime = millis();
   console.log("Coloring took:" + ((fTime - sTime) / 1000).toFixed(3) + " secs");
 }
-
-var fs = 0;
-var ff = 0;
-var fr = 0;
-var fc = 0;
-
-
 //Currently drawing flower effect?
 var flowering = false;
 
@@ -238,10 +233,6 @@ var flowering_speed = 1;
 var uncoloredTriangleCanvasLayer;
 function draw() {
   totalpoints = 0;
-  if (fc === 0) {
-    fs = millis();
-  }
-
   background("#FFFFFF");
 
   if (displayImage === true) {
@@ -402,18 +393,14 @@ function draw() {
     }
   }
 
-
-  fc++;
-  if (fc === 5) {
-    ff = millis();
-    fr = ceil(4 / ((ff - fs) / 1000));
-    fc = 0;
-  }
   if (filteringView === true) {
+    pixels = filteredPixels;
     updatePixels();
   }
 }
 var filteredPixels = [];
+var detected_edge_vertices = [];
+//Of form [[x,y, brightness],[x,y, brightness],...]
 
 function generate_normal_poly(values) {
   noLoop();
@@ -446,8 +433,16 @@ function generate_normal_poly(values) {
         updateHashSpace(artResult[0][iv][0], artResult[0][iv][1], true);
       }
       for (var iv = 0; iv < artResult[1].length; iv++){
-        updateHashSpace(artResult[1][iv][0], artResult[1][iv][1], true);
+        //updateHashSpace(artResult[1][iv][0], artResult[1][iv][1], true);
+        detected_edge_vertices.push([artResult[1][iv][0],artResult[1][iv][1],artResult[1][iv][2]]);
       }
+      
+      for (var i = 0; i< detected_edge_vertices.length; i++){
+        if (detected_edge_vertices[i][2] >= colorThreshold){
+          updateHashSpace(detected_edge_vertices[i][0], detected_edge_vertices[i][1], true);
+        }
+      }
+      
 
       copyTo(artResult[2], pixels)
 
@@ -456,7 +451,12 @@ function generate_normal_poly(values) {
       }
       splitSquare(20)
       generateRandomSquares(20, 0.4)
-      //pushEdgePointsToAll();
+      
+      //Then clean up the edge points
+      
+      
+      
+      
       triangulize();
       finishedColoring = false;
 
@@ -507,12 +507,24 @@ function generate_normal_poly(values) {
 
 
     }
-    generateRandomSquares(20, 0.4)
-    //pushEdgePointsToAll();
+    //generateRandomSquares(20, 0.4)
+    
+    for (var i = 0; i< detected_edge_vertices.length; i++){
+      if (detected_edge_vertices[i][2] >= colorThreshold){
+        updateHashSpace(detected_edge_vertices[i][0], detected_edge_vertices[i][1], true);
+      }
+    }
+    
+    
+    //Then clean up the edge points a little.
+    //Heuristic: if a very bright point has lots of points nearby, remove nearby ones, radius 10?
+    
+    
+    
+    
     triangulize();
     finishedColoring = false;
 
-    //generateHashSpace();
     tColors = [];
 
     css_buttons.displayPoints(false);
