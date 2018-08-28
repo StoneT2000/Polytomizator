@@ -507,7 +507,7 @@ function generate_normal_poly(values) {
 
 
     }
-    //generateRandomSquares(20, 0.4)
+    generateRandomSquares(20, 0.4)
     
     for (var i = 0; i< detected_edge_vertices.length; i++){
       if (detected_edge_vertices[i][2] >= colorThreshold){
