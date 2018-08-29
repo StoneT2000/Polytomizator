@@ -5,33 +5,35 @@
   <title>Polytomizator</title>
   <link rel="shortcut icon" type="image/x-icon" href="images/websiteLogo.ico" />
   <!--Libraries Used-->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+  
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+  
   <script src="libraries/p5.min.js"></script>
   <script src="scripts/delaunatormin.js"></script>
 
   <!--Local Scripts-->
-  <script language="javascript" type="text/javascript" src="scripts/poly.min.js?version=49"></script>
-  <script language="javascript" type="text/javascript" src="scripts/poly_helper.min.js?version=49"></script>
-  <script language="javascript" type="text/javascript" src="scripts/buttons.min.js?version=49"></script>
-  <script language="javascript" type="text/javascript" src="scripts/otherEffects.min.js?version=49"></script>
-  <script language="javascript" type="text/javascript" src="scripts/imagefilter.min.js?version=49"></script>
-  <script language="javascript" type="text/javascript" src="scripts/exportSVG.min.js?version=49"></script>
+  <script language="javascript" type="text/javascript" src="scripts/poly.min.js"></script>
+  <script language="javascript" type="text/javascript" src="scripts/poly_helper.min.js"></script>
+  <script language="javascript" type="text/javascript" src="scripts/buttons.min.js"></script>
+  <script language="javascript" type="text/javascript" src="scripts/otherEffects.min.js"></script>
+  <script language="javascript" type="text/javascript" src="scripts/imagefilter.min.js"></script>
+  <script language="javascript" type="text/javascript" src="scripts/exportSVG.min.js"></script>
   <script language="javascript" type="text/javascript" src="scripts/FileSaver.min.js"></script>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="poly.min.css">
 
-  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" />
-  <link rel="stylesheet" href="poly.min.css?version=49">
-  <link rel="stylesheet" href="popuphelpers.min.css?version=49">
-
-  <!--When updating this html file, also update the index one-->
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
 </head>
 
 <body>
   <div id="loadingScreen">
     <h1 id="loadingText" style="position: fixed;text-align: center;width: 100%;">Loading Content<img src="images/loadingSymbol.gif" style="margin-left: 10px" width="32px" height="auto"></h1>
   </div>
-  <div class='container' style="width:10000px;">
+  <div class='flex-container' style="">
+    <!--<button type="button" class="btn btn-primary" data-toggle='popover' data-content='hello there'>Press</button>-->
     <h1 style="margin-top:10px">Polytomizator</h1>
     <h5 style="font-size:15px;margin-bottom: 30px;width:80%;margin-left:50%;transform:translate(-50%,0)">It is <b>highly highly</b> suggested to use Firefox for maximum experience. Cannot download art on Safari at the moment.</h5>
     <h3 style="width:70%;margin-left:50%;transform:translate(-50%,0);margin-bottom:50px;padding-bottom: 50px; border-bottom: 2px solid RGB(40,40,40)">Add points with the brushes. Then click polytomize to make art! Then download the poly art as an image or SVG.</h3>
@@ -44,7 +46,7 @@
     <div class="main">
       <div id="gamedisplay"></div>
     </div>
-    <div id="options_menu_gear"><i class="fa fa-cog"></i></div>
+    <div id="options_menu_gear"><i class="fa fa-cog"><!--<div style="width:25px;height:25px;border-radius:50%;background-color:RGB(50,50,50)"></div>--></i></div>
     <div id="options_menu">
       <h4 style="border:none">Options</h4>
       <table id="options_table" style="width:100%;">
@@ -94,6 +96,7 @@
         <button id="displaysnapvertices">Snap Vertices</button>
         <button id="displaygencubicpoly">Generate cubic poly art</button>
         <button id="displaygennormalpoly">Generate normal poly art</button>
+        
       </div>
 
     </div>
@@ -101,28 +104,28 @@
     </div>
     <div class="brushes noselect">
       <ul style="padding:0px;">
-        <li id="pointBrush"><img src="icons/pointIcon.png" width="50px"></li>
-        <li id="lineBrush"><img src="icons/brushIcon.png" width="50px"></li>
-        <li id="eraser"><img src="icons/EraserIcon.png" width="50px"></li>
+        <li id="pointBrush" data-toggle="tooltip" data-placement="top" data-title="Pointer: Place one point (P)" data-delay='1000'><img src="icons/pointIcon.png" width="50px"></li>
+        <li id="lineBrush" data-toggle="tooltip" data-placement="top" data-title="Brush: Place multiple points at once (B)" data-delay='1000'><img src="icons/brushIcon.png" width="50px"></li>
+        <li id="eraser" data-toggle="tooltip" data-placement="top" data-title="Eraser: Erase points (E)" data-delay='1000'><img src="icons/EraserIcon.png" width="50px"></li>
 
         <!--<li id="triangleMover"><img src="icons/triangleMover.png" width="50px"></li>-->
-        <li id="sizing1">Brush Size<input id="brushSize" type="text" placeholder="100"></li>
-
-        <li id="sizing2">Brush Density<input id="brushDensity" type="text" placeholder="5"></li>
-        <li id="undo" style="vertical-align: top;line-height: 45px" onclick="undo()">Undo</li>
-        <li id="redo" style="vertical-align: top;line-height: 45px" onclick="redo()">Redo</li>
-        <li id="saveThis" style="vertical-align: top;line-height: 25px">Save this canvas</li>
-        <li id="loadThis" style="vertical-align: top;line-height: 25px">Load last canvas</li>
+        <li id="sizing1" data-toggle="tooltip" data-placement="top" data-title="Size of brush and eraser" data-delay='1000'>Brush Size<input id="brushSize" class="form-control" type="text" placeholder="100"></li>
+        <li id="sizing2" data-toggle="tooltip" data-placement="top" data-title="Number of points placed with brush at once" data-delay='1000'>Brush Density<input id="brushDensity" type="text" class="form-control" placeholder="5"></li>
+        <button id="undo" class="btn btn-dark" style="vertical-align: top;line-height: 25px" onclick="undo()" data-toggle="tooltip" data-placement="top" data-title="Undo the last step" data-delay='1000'>Undo</button>
+        <button id="redo" class="btn btn-dark" style="vertical-align: top;line-height: 25px" onclick="redo()" data-toggle="tooltip" data-placement="top" data-title="Redo the next step" data-delay='1000'>Redo</button>
+        <button id="saveThis" class="btn btn-dark" data-toggle="tooltip" data-placement="top" data-title="Save the vertices for this canvas for next time" data-delay='1000'>Save this<br>canvas</button>
+        <button id="loadThis" class="btn btn-dark" data-toggle="tooltip" data-placement="top" data-title="Load previously saved vertices. NOTE: It is best this is done on the same image used last time" data-delay='1000'>Load last<br>canvas</button>
 
       </ul>
     </div>
-    <div class="buttonRow noselect" style="display:inline-block;">
+    <div class="noselect" style="display:inline-block;">
       <div class="buttonRow">
         <ul id="buttonList" style="padding:0;">
-          <li id="displayPoints">Hide<br>Points<br></li>
-          <li id="displayColor">Hide<br>Colors<br></li>
-          <li id="displayTriangulation">Hide<br>Triangles<br></li>
-          <li id="displayImage">Hide<br>Image<br></li>
+          <button id="displayPoints" class="btn btn-outline-dark">Hide<br>Points</button>
+          <button id="displayColor" class="btn btn-outline-dark">Hide<br>Colors</button>
+          <button id="displayTriangulation" class="btn btn-outline-dark">Hide<br>Triangles</button>
+          <button id="displayImage" class="btn btn-outline-dark">Hide<br>Image</button>
+          <!--<li id="displayImage">Hide<br>Image<br></li>-->
         </ul>
       </div>
 
@@ -152,19 +155,8 @@
         </tr>
       </table>
     </div>
-    <!--
-    <div class="otherOptions">
-      <h3 id="otherOptionsHeader">Advanced Options</h3>
-
-      <h4 id="flowerEffect">Instant Coloring: On</h4>
-      <div id=popUp2>Turn on or off instant coloring of triangles. When off, the canvas will be colored under a set time with a flowering effect</div>
-      <h4 id="flowerEffectTime">Approximate max duration of flowering effect</h4>
-      <input id="durationOfFlowerEffect" type="text" placeholder="">
-      <div id=flowerEffectTimePopUp>(Usually canvas completes coloring way under this time. To have a complete flower effect, set this value high)</div>
-    </div>
-    -->
     <div class="otherInfo" style="">
-      <h5>Created using p5.js, HTML, CSS</h5>
+      <h5>Created with HTML, CSS, Boostrap, p5.js</h5>
     </div>
   </div>
   <div class="footer" style="">
