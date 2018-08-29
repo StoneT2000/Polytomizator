@@ -9,7 +9,12 @@ $(document).ready(function () {
       undo();
     }
   });
-  $("#pointBrush").css("background-color", "RGB(140,140,140)")
+  $("#undo").addClass("disabled");
+  $("#redo").addClass("disabled");
+  $("#undo").css("cursor", "not-allowed");
+  $("#redo").css("cursor", "not-allowed");
+  
+  $("#pointBrush").addClass("active");
   console.log("Polytomizator v50")
   $("#grid_accuracy").val(20)
   $("#flower_effect_speed").val(1);
@@ -106,31 +111,23 @@ $(document).ready(function () {
   })
   $("#pointBrush").on("click", function () {
     mode = 1;
-    $("#pointBrush").css("background-color", "RGB(140,140,140)")
-    $("#lineBrush").css("background-color", "")
-    $("#eraser").css("background-color", "")
-    $("#triangleMover").css("background-color", "")
+    removeClassFromBrushes("active");
+    $("#pointBrush").addClass("active");
   })
   $("#lineBrush").on("click", function () {
     mode = 2;
-    $("#lineBrush").css("background-color", "RGB(140,140,140)")
-    $("#pointBrush").css("background-color", "")
-    $("#eraser").css("background-color", "")
-    $("#triangleMover").css("background-color", "")
+    removeClassFromBrushes("active");
+    $("#lineBrush").addClass("active");
   })
   $("#eraser").on("click", function () {
     mode = 3;
-    $("#eraser").css("background-color", "RGB(140,140,140)")
-    $("#pointBrush").css("background-color", "")
-    $("#lineBrush").css("background-color", "")
-    $("#triangleMover").css("background-color", "")
+    removeClassFromBrushes("active");
+    $("#eraser").addClass("active");
   })
   $("#triangleMover").on("click", function () {
     mode = 4;
-    $("#triangleMover").css("background-color", "RGB(140,140,140)")
-    $("#pointBrush").css("background-color", "")
-    $("#lineBrush").css("background-color", "")
-    $("#eraser").css("background-color", "")
+    removeClassFromBrushes("active");
+    $("#triangleMove").addClass("active");
   });
   $("#file").on('change', function () {
     console.log("change")
@@ -167,8 +164,12 @@ $(document).ready(function () {
       triangulatedVerticesFlat = [];
       verticesHashTableFlat = [];
       d = pixelDensity();
-
+      storedVertices = [];
+      for (var slot_index = 0; slot_index < max_undo; slot_index++) {
+        storedVertices.push([]);
+      }
       generateHashSpace();
+      recordVertices();
       updateHashSpace(0, 0, true)
       updateHashSpace(cWidth, 0, true)
       updateHashSpace(0, cHeight, true)
@@ -204,11 +205,6 @@ $(document).ready(function () {
       loadPixels();
       filteredPixels = [];
       //resetAutoGenListener([cWidth, cHeight, completedFilters, d, colorThreshold], artstyle);
-
-      storedVertices = [];
-      for (var slot_index = 0; slot_index < max_undo; slot_index++) {
-        storedVertices.push([]);
-      }
 
       triangleCanvasLayer = createGraphics(cWidth, cHeight)
 
@@ -260,11 +256,11 @@ $(document).ready(function () {
     display_options();
   });
 
-  //Functions in options menu
+  //Functions in options menu... These can probably be optomized
   $("#displaygencubicpoly").on("click", function () {
     open_a_options()
     display_options(false);
-    $("#options_menu_additional").html("<h4>Generate cubic poly art</h4><i id=\"close_a_options\"class=\"fa fa-times\"></i><span>Accuracy</span><input class=\"parameters\" type=\"text\" placeholder=\"≥ 10\" id=\"gencubicpoly_accuracy\"><span>Density</span><input class=\"parameters\" type=\"text\" placeholder=\"0 ~ 1\" id=\"gencubicpoly_density\"><button id=\"gencubicpoly\">Generate</button>");
+    $("#options_menu_additional").html("<h4>Generate cubic poly art</h4><i id=\"close_a_options\"class=\"fa fa-times\"></i><span>Accuracy</span><input class=\"parameters form-control\" type=\"text\" placeholder=\"≥ 10\" id=\"gencubicpoly_accuracy\"><span>Density</span><input class=\"parameters form-control\" type=\"text\" placeholder=\"0 ~ 1\" id=\"gencubicpoly_density\"><button class=\"btn btn-outline-light\" id=\"gencubicpoly\">Generate</button>");
     $("#gencubicpoly").on("click", function () {
       var cpdensity = parseFloat($("#gencubicpoly_density").val());
       var cpaccuracy = parseInt($("#gencubicpoly_accuracy").val());
@@ -292,7 +288,7 @@ $(document).ready(function () {
   $("#displaysnapvertices").on("click", function () {
     open_a_options()
     display_options(false);
-    $("#options_menu_additional").html("<h4>Snap visible vertices to a grid</h4><i id=\"close_a_options\"class=\"fa fa-times\"></i><span>Accuracy</span><input class=\"parameters\" type=\"text\" placeholder=\"≥ 10\" id=\"snapping_accuracy\"><button id=\"snap_vertices\">Snap</button>");
+    $("#options_menu_additional").html("<h4>Snap visible vertices to a grid</h4><i id=\"close_a_options\"class=\"fa fa-times\"></i><span>Accuracy</span><input class=\"parameters form-control\" type=\"text\" placeholder=\"≥ 10\" id=\"snapping_accuracy\"><button class=\"btn btn-outline-light\" id=\"snap_vertices\">Snap</button>");
     $("#snap_vertices").on("click", function () {
       var spaccuracy = parseInt($("#snapping_accuracy").val());
       if (isNaN(spaccuracy) || spaccuracy <= 0) {
@@ -313,7 +309,7 @@ $(document).ready(function () {
   $("#displaygennormalpoly").on("click", function () {
     open_a_options()
     display_options(false);
-    $("#options_menu_additional").html("<h4>Generate poly art</h4><i id=\"close_a_options\"class=\"fa fa-times\"></i><span>Color Threshold</span><input class=\"parameters\" type=\"text\" placeholder=\"10 ~ 255\" id=\"color_threshold\"><button id=\"gennormalpoly\">Generate</button>");
+    $("#options_menu_additional").html("<h4>Generate poly art</h4><i id=\"close_a_options\"class=\"fa fa-times\"></i><span>Color Threshold</span><input class=\"parameters form-control\" type=\"text\" placeholder=\"10 ~ 255\" id=\"color_threshold\"><button class=\"btn btn-outline-light\" id=\"gennormalpoly\">Generate</button>");
     $("#gennormalpoly").on("click", function () {
       var ct = parseFloat($("#color_threshold").val());
       if (isNaN(ct) || ct < 10) {
@@ -402,6 +398,14 @@ $(document).ready(function () {
       
     }
   });
+  $("#stats_mode_check").on("change", function () {
+    if ($("#stats_mode_check")[0].checked) {
+      $("#stats_for_nerds").css("display","block");
+    }
+    else {
+      $("#stats_for_nerds").css("display","none");
+    }
+  })
 
 });
 var display_mode_on = false;
@@ -452,4 +456,11 @@ function open_a_options() {
 
 function close_a_options() {
   $("#options_menu_additional").css("display", "none");
+}
+
+function removeClassFromBrushes(name) {
+  $("#pointBrush").removeClass(name);
+  $("#lineBrush").removeClass(name);
+  $("#eraser").removeClass(name);
+  $("#triangleMove").removeClass(name);
 }
