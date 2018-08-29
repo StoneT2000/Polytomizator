@@ -226,23 +226,7 @@ $(document).ready(function () {
   $("#polytomize").on("click", function () {
 
     //Should be the exact same as pressing the D key
-    triangulize();
-    finishedColoring = false;
-    image(img1, 0, 0, cWidth, cHeight);
-    
-    
-    if (flowerEffect === true){
-      flower_step = 0;
-      flowering = true;
-    }
-    noColors = false;
-    css_buttons.displayColor(true);
-    
-    loadPixels();
-    tColors = [];
-    sTime = millis();
-    css_buttons.displayPoints(false);
-    displayPoints = false;
+    triangulate_and_display();
   })
 
   //Save or load vertices
@@ -394,15 +378,18 @@ $(document).ready(function () {
     }
     if (display_mode_on === true){
       displayMode = selected_mode_num;
+      triangulate_and_display();
     }
   });
   $("#display_mode_check").on("change", function () {
     if ($("#display_mode_check")[0].checked) {
       displayMode = selected_mode_num;
       display_mode_on = true;
+      triangulate_and_display();
     } else {
       displayMode = 0;
       display_mode_on = false;
+      triangulate_and_display();
       
     }
   });

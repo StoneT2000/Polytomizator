@@ -457,13 +457,7 @@ function generate_normal_poly(values) {
       
       
       
-      triangulize();
-      finishedColoring = false;
-
-      tColors = [];
-
-      css_buttons.displayPoints(false);
-      displayPoints = false;
+      triangulate_and_display();
       completedFilters = true;
 
       window.setTimeout(function () {
@@ -522,13 +516,7 @@ function generate_normal_poly(values) {
     
     
     
-    triangulize();
-    finishedColoring = false;
-
-    tColors = [];
-
-    css_buttons.displayPoints(false);
-    displayPoints = false;
+    triangulate_and_display();
     completedFilters = true;
     $("#loadingScreen").css("opacity", "0");
     $("#loadingText").css("opacity", "0");

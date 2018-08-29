@@ -41,15 +41,7 @@ function generateCubicPoly(accuracy, density, overlay) {
   flowing = true;
 
   //generateHashSpace();
-  triangulize();
-  finishedColoring = false;
-  image(img1, 0, 0, cWidth, cHeight);
-
-  loadPixels();
-  tColors = [];
-  sTime = millis();
-  css_buttons.displayPoints(false);
-  displayPoints = false;
+  triangulate_and_display();
   recordVertices();
 
 }
