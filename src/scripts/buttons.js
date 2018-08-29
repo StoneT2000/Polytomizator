@@ -1,5 +1,5 @@
 var completedFilters = false;
-$(document).on('ready', function () {
+$(document).ready(function () {
 
   document.addEventListener("keydown", function (zEvent) {
     if (zEvent.metaKey && zEvent.shiftKey && zEvent.code === "KeyZ") {
@@ -10,7 +10,7 @@ $(document).on('ready', function () {
     }
   });
   $("#pointBrush").css("background-color", "RGB(140,140,140)")
-  console.log("Polytomizator v45")
+  console.log("Polytomizator v50")
   $("#grid_accuracy").val(20)
   $("#flower_effect_speed").val(1);
 
@@ -124,6 +124,7 @@ $(document).on('ready', function () {
     $("#eraser").css("background-color", "")
   });
   $("#file").on('change', function () {
+    console.log("change")
     completedFilters = false;
     img1 = loadImage(window.URL.createObjectURL(document.getElementById("file").files[0]), function () {
       //make image have height 600
@@ -270,7 +271,7 @@ $(document).on('ready', function () {
   $("#displaygencubicpoly").on("click", function () {
     open_a_options()
     display_options(false);
-    $("#options_menu_additional").html("<h4>Generate cubic poly art</h4><i id=\"close_a_options\"class=\"fa fa-times\">X</i><span>Accuracy</span><input class=\"parameters\" type=\"text\" placeholder=\"≥ 10\" id=\"gencubicpoly_accuracy\"><span>Density</span><input class=\"parameters\" type=\"text\" placeholder=\"0 ~ 1\" id=\"gencubicpoly_density\"><button id=\"gencubicpoly\">Generate</button>");
+    $("#options_menu_additional").html("<h4>Generate cubic poly art</h4><i id=\"close_a_options\"class=\"fa fa-times\"></i><span>Accuracy</span><input class=\"parameters\" type=\"text\" placeholder=\"≥ 10\" id=\"gencubicpoly_accuracy\"><span>Density</span><input class=\"parameters\" type=\"text\" placeholder=\"0 ~ 1\" id=\"gencubicpoly_density\"><button id=\"gencubicpoly\">Generate</button>");
     $("#gencubicpoly").on("click", function () {
       var cpdensity = parseFloat($("#gencubicpoly_density").val());
       var cpaccuracy = parseInt($("#gencubicpoly_accuracy").val());
@@ -298,7 +299,7 @@ $(document).on('ready', function () {
   $("#displaysnapvertices").on("click", function () {
     open_a_options()
     display_options(false);
-    $("#options_menu_additional").html("<h4>Snap visible vertices to a grid</h4><i id=\"close_a_options\"class=\"fa fa-times\">X</i><span>Accuracy</span><input class=\"parameters\" type=\"text\" placeholder=\"≥ 10\" id=\"snapping_accuracy\"><button id=\"snap_vertices\">Snap</button>");
+    $("#options_menu_additional").html("<h4>Snap visible vertices to a grid</h4><i id=\"close_a_options\"class=\"fa fa-times\"></i><span>Accuracy</span><input class=\"parameters\" type=\"text\" placeholder=\"≥ 10\" id=\"snapping_accuracy\"><button id=\"snap_vertices\">Snap</button>");
     $("#snap_vertices").on("click", function () {
       var spaccuracy = parseInt($("#snapping_accuracy").val());
       if (isNaN(spaccuracy) || spaccuracy <= 0) {
@@ -319,7 +320,7 @@ $(document).on('ready', function () {
   $("#displaygennormalpoly").on("click", function () {
     open_a_options()
     display_options(false);
-    $("#options_menu_additional").html("<h4>Generate poly art</h4><i id=\"close_a_options\"class=\"fa fa-times\">X</i><span>Color Threshold</span><input class=\"parameters\" type=\"text\" placeholder=\"10 ~ 255\" id=\"color_threshold\"><button id=\"gennormalpoly\">Generate</button>");
+    $("#options_menu_additional").html("<h4>Generate poly art</h4><i id=\"close_a_options\"class=\"fa fa-times\"></i><span>Color Threshold</span><input class=\"parameters\" type=\"text\" placeholder=\"10 ~ 255\" id=\"color_threshold\"><button id=\"gennormalpoly\">Generate</button>");
     $("#gennormalpoly").on("click", function () {
       var ct = parseFloat($("#color_threshold").val());
       if (isNaN(ct) || ct < 10) {

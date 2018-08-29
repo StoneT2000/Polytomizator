@@ -311,6 +311,7 @@ p {
   font-size: 30px;
   cursor: pointer;
   z-index:9999;
+  color: RGB(33, 37, 41);
 }
 
 #options_menu {
