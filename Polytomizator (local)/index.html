@@ -36,11 +36,13 @@
     <h1 style="margin-top:10px">Polytomizator</h1>
     <h5 style="font-size:15px;margin-bottom: 30px;width:80%;margin-left:50%;transform:translate(-50%,0)">It is <b>highly highly</b> suggested to use Firefox for maximum experience. Cannot download art on Safari at the moment.</h5>
     <h3 style="width:70%;margin-left:50%;transform:translate(-50%,0);margin-bottom:50px;padding-bottom: 50px; border-bottom: 2px solid RGB(40,40,40)">Add points with the brushes. Then click polytomize to make art! Then download the poly art as an image or SVG.</h3>
+        <h3 id="uploadText">Upload your own image to work with here:</h3>
+    <input style="display:block" id="file" type="file">
     <div>
-      <h4 style="margin: auto;margin-bottom:20px;width:400px;" id="polytomize">Polytomize (D)</h4>
+      <button id="polytomize" class="btn btn-dark" data-toggle="tooltip" title="Triangulize the canvas and color it in" data-delay="1000">Polytomize</button>
     </div>
     <div id="download_elements">
-      <input type="button" id="downloadSVG" value="Download poly art as an SVG file" /><input type="button" id="expandImage" value="Download poly art as an image (png)" />
+      <button type="button" id="downloadSVG" class="btn btn-dark">Download poly art as an SVG file</button><button type="button" id="expandImage" class="btn btn-dark">Download poly art as an image (png)</button>
     </div>
     <div class="main">
       <div id="gamedisplay"></div>
@@ -57,7 +59,7 @@
         <tr>
           <td class="option_name">Grid</td>
           <td><input type="checkbox" style="" id="display_grid"></td>
-          <td class="inputs"><input type="text" style="" id="grid_accuracy" placeholder="≥ 2"></td>
+          <td class="inputs"><input type="text" class="form-control" id="grid_accuracy" placeholder="≥ 2"></td>
         </tr>
         <tr class="option_input_title_tr">
         </tr>
@@ -74,7 +76,7 @@
         <tr>
           <td class="option_name">Flower effect</td>
           <td><input type="checkbox" style="height:auto;" id="flower_effect"></td>
-          <td class="inputs"><input type="text" id="flower_effect_speed" placeholder="≥ 1"></td>
+          <td class="inputs"><input class="form-control" type="text" id="flower_effect_speed" placeholder="≥ 1"></td>
         </tr>
         <tr class="option_input_title_tr">
         </tr>
@@ -82,19 +84,25 @@
           <td class="option_name">Display mode</td>
           <td><input type="checkbox" style="height:auto;" id="display_mode_check"></td>
           <td class="inputs" style="height:20px;">
-            <select id="display_mode_selection">
+            <select class="custom-select" id="display_mode_selection" style="border:none; width:100px;padding:0 1.75rem 0 .75rem">
               <option value="circles">Circles</option>
               <option value="rectangles">Rectangles</option>
               <option value="distorted_triangles">Distorted</option>
             </select>
           </td>
         </tr>
+        <tr class="option_input_title_tr">
+        </tr>
+        <tr>
+          <td class="option_name">Display stats</td>
+          <td><input type="checkbox" style="height:auto;" id="stats_mode_check"></td>
+        </tr>
       </table>
       <h4 style="">Functions</h4>
       <div id="function_options">
-        <button id="displaysnapvertices">Snap Vertices</button>
-        <button id="displaygencubicpoly">Generate cubic poly art</button>
-        <button id="displaygennormalpoly">Generate normal poly art</button>
+        <button class="btn btn-light" id="displaysnapvertices">Snap Vertices</button>
+        <button class="btn btn-light" id="displaygencubicpoly">Generate cubic poly art</button>
+        <button class="btn btn-light" id="displaygennormalpoly">Generate normal poly art</button>
         
       </div>
 
@@ -103,15 +111,15 @@
     </div>
     <div class="brushes noselect">
       <ul style="padding:0px;">
-        <li id="pointBrush" data-toggle="tooltip" data-placement="top" data-title="Pointer: Place one point (P)" data-delay='1000'><img src="icons/pointIcon.png" width="50px"></li>
-        <li id="lineBrush" data-toggle="tooltip" data-placement="top" data-title="Brush: Place multiple points at once (B)" data-delay='1000'><img src="icons/brushIcon.png" width="50px"></li>
-        <li id="eraser" data-toggle="tooltip" data-placement="top" data-title="Eraser: Erase points (E)" data-delay='1000'><img src="icons/EraserIcon.png" width="50px"></li>
+        <button id="pointBrush" class="btn btn-outline-dark" data-toggle="tooltip" data-placement="top" data-title="Pen: Place one point (P)" data-delay='1000'><i class="fa fa-pen"></i></button>
+        <button id="lineBrush" class="btn btn-outline-dark" data-toggle="tooltip" data-placement="top" data-title="Brush: Place multiple points at once (B)" data-delay='1000'><i class="fa fa-paint-brush"></i></button>
+        <button id="eraser" class="btn btn-outline-dark" data-toggle="tooltip" data-placement="top" data-title="Eraser: Erase points (E)" data-delay='1000'><i class="fa fa-eraser"></i></button>
 
         <!--<li id="triangleMover"><img src="icons/triangleMover.png" width="50px"></li>-->
         <li id="sizing1" data-toggle="tooltip" data-placement="top" data-title="Size of brush and eraser" data-delay='1000'>Brush Size<input id="brushSize" class="form-control" type="text" placeholder="100"></li>
         <li id="sizing2" data-toggle="tooltip" data-placement="top" data-title="Number of points placed with brush at once" data-delay='1000'>Brush Density<input id="brushDensity" type="text" class="form-control" placeholder="5"></li>
-        <button id="undo" class="btn btn-dark" style="vertical-align: top;line-height: 25px" onclick="undo()" data-toggle="tooltip" data-placement="top" data-title="Undo the last step" data-delay='1000'>Undo</button>
-        <button id="redo" class="btn btn-dark" style="vertical-align: top;line-height: 25px" onclick="redo()" data-toggle="tooltip" data-placement="top" data-title="Redo the next step" data-delay='1000'>Redo</button>
+        <button id="undo" class="btn btn-dark" style="vertical-align: top;line-height: 25px" onclick="undo()" data-toggle="tooltip" data-placement="top" data-title="Undo the last step (Cmd + Z)" data-delay='1000'>Undo</button>
+        <button id="redo" class="btn btn-dark" style="vertical-align: top;line-height: 25px" onclick="redo()" data-toggle="tooltip" data-placement="top" data-title="Redo the next step (Cmd + Shift + Z)" data-delay='1000'>Redo</button>
         <button id="saveThis" class="btn btn-dark" data-toggle="tooltip" data-placement="top" data-title="Save the vertices for this canvas for next time" data-delay='1000'>Save this<br>canvas</button>
         <button id="loadThis" class="btn btn-dark" data-toggle="tooltip" data-placement="top" data-title="Load previously saved vertices. NOTE: It is best this is done on the same image used last time" data-delay='1000'>Load last<br>canvas</button>
 
@@ -129,33 +137,29 @@
       </div>
 
     </div>
-    <h3 id="uploadText">Upload your own image to work with here:</h3>
-    <input style="display:block" id="file" type="file">
-
-
-    <div class="statistics">
+    <div id="stats_for_nerds" style="margin-top:50px;">
       <h3 id="statsHeader"> Some stats for nerds</h3>
-      <table id="statsTable">
+      <table id="stats_for_nerds_table">
         <tr>
           <th>Metric</th>
           <th>Value</th>
         </tr>
         <tr>
-          <td>Points</td>
+          <td>Vertices</td>
           <td id="numberPoints">0</td>
         </tr>
         <tr>
           <td>Triangles</td>
           <td id="numberTriangles">0</td>
         </tr>
-        <tr>
+        <tr style="border-bottom:5px solid #343a40;">
           <td>Time taken to color last canvas</td>
           <td id="lastTiming">0.000</td>
         </tr>
       </table>
     </div>
-    <div class="otherInfo" style="">
-      <h5>Created with HTML, CSS, Boostrap, p5.js</h5>
+    <div class="otherInfo" style="margin-top:50px;">
+      <h5>Created with HTML, CSS, Bootstrap, p5.js</h5>
     </div>
   </div>
   <div class="footer" style="">
