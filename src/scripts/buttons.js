@@ -15,7 +15,7 @@ $(document).ready(function () {
   $("#redo").css("cursor", "not-allowed");
   
   $("#pointBrush").addClass("active");
-  console.log("Polytomizator v50")
+  console.log("Polytomizator v52")
   $("#grid_accuracy").val(20)
   $("#flower_effect_speed").val(1);
 

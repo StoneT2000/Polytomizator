@@ -298,7 +298,7 @@ p {
 
 #options_menu_gear {
   position: fixed;
-  top: 30px;
+  top: 20px;
   right: 30px;
   font-size: 30px;
   cursor: pointer;
@@ -311,7 +311,7 @@ p {
   width: 300px;
   height: 500px;
   right: 15px;
-  top: 75px;
+  top: 65px;
   background-color:#343a40;
   z-index: 9999;
   opacity: 0;
@@ -328,7 +328,7 @@ p {
 #options_menu:after {
   content: "";
   position: absolute;
-  right: 16px;
+  right: 14.5px;
   top: -12px;
   width: 0;
   height: 0;
@@ -486,4 +486,3 @@ tr {
   font-size: 20px;
   color: white;
 }
-
