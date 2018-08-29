@@ -1,5 +1,5 @@
 var completedFilters = false;
-$(document).on('ready', function () {
+$(document).ready(function () {
 
   document.addEventListener("keydown", function (zEvent) {
     if (zEvent.metaKey && zEvent.shiftKey && zEvent.code === "KeyZ") {
@@ -10,9 +10,19 @@ $(document).on('ready', function () {
     }
   });
   $("#pointBrush").css("background-color", "RGB(140,140,140)")
-  console.log("Polytomizator v45")
+  console.log("Polytomizator v50")
   $("#grid_accuracy").val(20)
+  $("#flower_effect_speed").val(1);
 
+  //Initialize popover stuff
+  $(function () {
+    $('[data-toggle="popover"]').popover()
+  })
+  //Initialize tool tips
+  $(function () {
+    $('[data-toggle="tooltip"]').tooltip()
+  })
+  
   $("#displayColor").on("click", function () {
     if (noColors === true) {
       noColors = false;
@@ -123,6 +133,7 @@ $(document).on('ready', function () {
     $("#eraser").css("background-color", "")
   });
   $("#file").on('change', function () {
+    console.log("change")
     completedFilters = false;
     img1 = loadImage(window.URL.createObjectURL(document.getElementById("file").files[0]), function () {
       //make image have height 600
@@ -224,38 +235,22 @@ $(document).on('ready', function () {
   $("#polytomize").on("click", function () {
 
     //Should be the exact same as pressing the D key
-    triangulize();
-    finishedColoring = false;
-    image(img1, 0, 0, cWidth, cHeight);
-    
-    
-    if (flowerEffect === true){
-      flower_step = 0;
-      flowering = true;
-    }
-    noColors = false;
-    css_buttons.displayColor(true);
-    
-    loadPixels();
-    tColors = [];
-    sTime = millis();
-    css_buttons.displayPoints(false);
-    displayPoints = false;
+    triangulate_and_display();
   })
 
   //Save or load vertices
   $("#saveThis").on("click", function () {
     saveData();
-    $("#saveThis").text("Saved data!");
+    $("#saveThis").html("Saved<br>data!");
     window.setTimeout(function () {
-      $("#saveThis").text("Save this canvas");
+      $("#saveThis").html("Save this<br>canvas");
     }, 2000)
   });
   $("#loadThis").on("click", function () {
     loadData(JSON.parse(localStorage.getItem("art1")))
-    $("#loadThis").text("Loaded Data!");
+    $("#loadThis").html("Loaded<br>Data!");
     window.setTimeout(function () {
-      $("#loadThis").text("Load last saved");
+      $("#loadThis").html("Load last<br>canvas");
     }, 2000)
   });
 
@@ -376,9 +371,40 @@ $(document).on('ready', function () {
       return;
     }
     flowering_speed = newspeed;
-  })
+  });
+  var selected_mode_num = 2;
+  $("#display_mode_selection").on("change", function () {
+    var selected_mode = $("#display_mode_selection").val();
 
-})
+    if (selected_mode == "circles") {
+      selected_mode_num = 2;
+    }
+    else if (selected_mode == "rectangles") {
+      selected_mode_num = 1;
+    }
+    else if (selected_mode == "distorted_triangles") {
+      selected_mode_num = 3;
+    }
+    if (display_mode_on === true){
+      displayMode = selected_mode_num;
+      triangulate_and_display();
+    }
+  });
+  $("#display_mode_check").on("change", function () {
+    if ($("#display_mode_check")[0].checked) {
+      displayMode = selected_mode_num;
+      display_mode_on = true;
+      triangulate_and_display();
+    } else {
+      displayMode = 0;
+      display_mode_on = false;
+      triangulate_and_display();
+      
+    }
+  });
+
+});
+var display_mode_on = false;
 var options_menu_open = false;
 
 function display_options(value) {

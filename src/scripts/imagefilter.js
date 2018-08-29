@@ -53,20 +53,21 @@ function ind(x,y){
   return (y*d*cWidth + x)*d*4;
 }
 
-function changePixels3(filter,storedPixelData){
+function changePixels3(filter_mode,storedPixelData){
   displayImage=true;
   displayTriangulation=false;
   displayPoints=false;
   edgePoints = [];
-  if (!filter){
-    filter = "smooth"
+
+  if (!filter_mode){
+    filter_mode = "smooth"
   }
   var pixelsCopy = JSON.parse(JSON.stringify(storedPixelData));
   for (k=0;k<=cWidth;k+=1){
     for (j=0;j<=cHeight;j+=1){
       //var loc = [ind(k,j-1),ind(k-1,j),ind(k,j),ind(k+1,j),ind(k,j+1)];
       var loc = [ind(k-1,j-1),ind(k,j-1),ind(k+1,j-1),ind(k-1,j),ind(k,j),ind(k+1,j),ind(k-1,j+1),ind(k,j+1),ind(k+1,j+1)];
-      var rgb = smoothAvg3(k,j,storedPixelData,filter)
+      var rgb = smoothAvg3(k,j,storedPixelData,filter_mode)
       pixelsCopy[loc[4]]= rgb[0];
       pixelsCopy[loc[4]+1]= rgb[1]
       pixelsCopy[loc[4]+2]= rgb[2]
@@ -80,16 +81,16 @@ function changePixels3(filter,storedPixelData){
   //displayPoints=true;
   return pixelsCopy;
 }
-function smoothAvg3(x,y,data,filter){
+function smoothAvg3(x,y,data,filter_mode){
   var loc =  [ind(x-1,y-1),ind(x,y-1),ind(x+1,y-1),ind(x-1,y),ind(x,y),ind(x+1,y),ind(x-1,y+1),ind(x,y+1),ind(x+1,y+1)];
   var weight = [1,1,1,
                 1,1,1,
                 1,1,1];
-  weight = operator3[filter].arr;
+  weight = operator3[filter_mode].arr;
   var colors = [0,0,0]
   var totalWeight = 1;
   
-  if (operator3[filter].type == 'blur'){
+  if (operator3[filter_mode].type == 'blur'){
     for (ic=0;ic<weight.length;ic++){
       totalWeight+=Math.abs(weight[ic]);
     }
@@ -103,8 +104,12 @@ function smoothAvg3(x,y,data,filter){
   colors[0]/=totalWeight;
   colors[1]/=totalWeight;
   colors[2]/=totalWeight;
-  if (filter == "edge" && colors[0]>=10 && Math.random(0,1) < 0.2){
-    edgePoints.push([x,y,colors[0]]);
+  
+  gray_value = (0.2126*colors[0] + 0.7152*colors[1] + 0.0722*colors[2])
+  
+  //Add all points that are at least this bright.
+  if (filter_mode == "edge" && gray_value>=10){
+    edgePoints.push([x,y,gray_value]);
   }
   return colors;
 }

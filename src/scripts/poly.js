@@ -18,15 +18,14 @@ var displayImage = true;
 
 var display_grid = false;
 
-var stepDelaunate = true; //Whether to allow coloring to proceed when using flower effect
-
 var noColors = false; //Wheter or not the colors, tColors, are used.
 
-var flowing = true; //Flowing: true, points can be placed anywhere, when false, points are on fixed vertices.
+var flowing = true; //Flowing: true, points can be placed anywhere, when false, points are on fixed vertices. For cubic poly
+
 var brushSize = 100; //Radius of brush
 
-var downloading = false;
-//var magnification = 1;
+
+
 
 //Whether or not the current canvas is done coloring. Usually when it is not done, its usually due to the flower effect being turned on.
 var finishedColoring = true;
@@ -139,10 +138,11 @@ function setup() {
   }
   loadPixels();
 
-  //generateHashSpace();
   frameRate(60);
 
-
+  //Disable anti-aliasing? Doesn't seem to work
+  //noSmooth();
+  
   //Initialize storedVertices array with 50 empty slots
   for (var slot_index = 0; slot_index < max_undo; slot_index++) {
     storedVertices.push([]);
@@ -164,7 +164,13 @@ function setup() {
     if (finishedColoring === false) {
       alert("Please wait until the coloring is finished before enlargining the work and downloading it");
     } else if (triangulations[triangulations.length - 1].length > 0) {
-      downloadSVG(cWidth, cHeight);
+      if (display_mode_on === true) {
+        alert("At the moment, you can't download SVGs of the different display modes. Turn display mode off in settings to download SVG of the triangulation")
+      }
+      else{
+        downloadSVG(cWidth, cHeight);
+      }
+      
     } else {
       alert("Make some poly art first");
     }
@@ -181,7 +187,7 @@ function setup() {
   $("#brushSize")[0].value = brushSize;
   $("#brushDensity")[0].value = pointDensity + 1;
 
-  //Detect when it is on the canvas
+  //Detect when cursor is on the canvas
   $("#defaultCanvas0").on("mouseenter", function () {
     active_canvas = true;
   })
@@ -197,6 +203,7 @@ var oldY = 0;
 var critDist = 10;
 var stepD = 0;
 
+//Finds the colors for all triangles in the current triangulation
 function colorIn() {
   image(img1, 0, 0, cWidth, cHeight);
   loadPixels();
@@ -204,7 +211,8 @@ function colorIn() {
   for (stepD1 = 0; stepD1 < triangulations[0].length - 1; stepD1 += 3) {
     //NOTE, this uses verticesHashTableFlat, not triangulatedVerticesFlat?
     var tAC = [0, 0, 0];
-    tAC = averageColor(verticesHashTableFlat[triangulations[triangulations.length - 1][stepD1]][0], verticesHashTableFlat[triangulations[triangulations.length - 1][stepD1]][1], verticesHashTableFlat[triangulations[triangulations.length - 1][stepD1 + 1]][0], verticesHashTableFlat[triangulations[triangulations.length - 1][stepD1 + 1]][1], verticesHashTableFlat[triangulations[triangulations.length - 1][stepD1 + 2]][0], verticesHashTableFlat[triangulations[triangulations.length - 1][stepD1 + 2]][1], colorAccuracy);
+
+    tAC = averageColor(triangulatedVerticesFlat[triangulations[triangulations.length - 1][stepD1]][0], triangulatedVerticesFlat[triangulations[triangulations.length - 1][stepD1]][1], triangulatedVerticesFlat[triangulations[triangulations.length - 1][stepD1 + 1]][0], triangulatedVerticesFlat[triangulations[triangulations.length - 1][stepD1 + 1]][1], triangulatedVerticesFlat[triangulations[triangulations.length - 1][stepD1 + 2]][0], triangulatedVerticesFlat[triangulations[triangulations.length - 1][stepD1 + 2]][1], colorAccuracy);
     tColors.push(tAC[0], tAC[1], tAC[2]);
 
   }
@@ -212,22 +220,19 @@ function colorIn() {
   fTime = millis();
   console.log("Coloring took:" + ((fTime - sTime) / 1000).toFixed(3) + " secs");
 }
-var iterStep = 4;
-var fs = 0;
-var ff = 0;
-var fr = 0;
-var fc = 0;
-var flowerEffectTime = 10;
+//Currently drawing flower effect?
 var flowering = false;
+
+//Step of flowering effect
 var flower_step = 0;
+
+//Speed of flowering effect
 var flowering_speed = 1;
+
+//Just to display the triangles without colors of triangulatedVerticesFlat
 var uncoloredTriangleCanvasLayer;
 function draw() {
   totalpoints = 0;
-  if (fc === 0) {
-    fs = millis();
-  }
-
   background("#FFFFFF");
 
   if (displayImage === true) {
@@ -236,39 +241,7 @@ function draw() {
 
 
   if (flowerEffect === true) {
-    /*
-    iterStep = ceil(((triangulations[triangulations.length - 1].length) / (fr)) / flowerEffectTime);
-    for (iter = 0; iter < iterStep; iter++) {
-      if (iter === 0) {
-        image(img1, 0, 0, cWidth, cHeight);
-        loadPixels();
-      }
-      if (stepDelaunate === true && triangulations.length > 0 && finishedColoring === false) {
-        if (triangulations[triangulations.length - 1].length > 0 && stepD <= triangulations[triangulations.length - 1].length - 1) {
-          if (stepD === 0) {
-            sTime = millis();
-          }
-          var tAC = [0, 0, 0];
-          tAC = averageColor(triangulatedVerticesFlat[triangulations[triangulations.length - 1][stepD]][0], triangulatedVerticesFlat[triangulations[triangulations.length - 1][stepD]][1], triangulatedVerticesFlat[triangulations[triangulations.length - 1][stepD + 1]][0], triangulatedVerticesFlat[triangulations[triangulations.length - 1][stepD + 1]][1], triangulatedVerticesFlat[triangulations[triangulations.length - 1][stepD + 2]][0], triangulatedVerticesFlat[triangulations[triangulations.length - 1][stepD + 2]][1], colorAccuracy);
-          tColors.push(tAC[0], tAC[1], tAC[2]);
 
-          stepD += 3;
-
-        } else {
-          finishedColoring = true;
-          fTime = millis();
-          console.log("Coloring took:" + ((fTime - sTime) / 1000).toFixed(3) + " secs");
-
-          //Once finished coloring, re color the off screen graphics in case
-          for (j = 0; j < triangulations.length; j++) {
-            delaunayDisplay(triangulations[j], triangleCanvasLayer);
-
-          }
-        }
-
-      }
-    }
-    */
     if (flowering === true){
       delaunayDisplay(triangulations[0], triangleCanvasLayer, triangulatedVerticesFlat, true, flower_step, flowering_speed)
       flower_step+= flowering_speed;
@@ -319,17 +292,6 @@ function draw() {
 
   }
 
-  //Procedurally display those triangles only when it is still coloring
-  if (flowerEffect === true && finishedColoring !== true && displayTriangulation === true) {
-
-    for (j = 0; j < triangulations.length; j++) {
-      //We use this function becasue its faster than transfering from the off screen graphics to the on screen canvas.
-      //delaunayDisplay_flower_effect(triangulations[j]);
-
-    }
-
-  }
-
 
   fill(256, 256, 256);
   stroke(0, 0, 0);
@@ -365,12 +327,11 @@ function draw() {
   var dy = oldY - mouseY;
   accDist = sqrt(dx * dx + dy * dy);
   if (mode === 2 && active_canvas) {
-    if (downloading === false) {
-      noFill();
-      stroke(2);
-      stroke(200, 200, 200);
-      ellipse(mouseX, mouseY, brushSize * 2, brushSize * 2);
-    }
+
+    noFill();
+    stroke(2);
+    stroke(200, 200, 200);
+    ellipse(mouseX, mouseY, brushSize * 2, brushSize * 2);
     if (accDist >= critDist && mouseIsPressed) {
 
 
@@ -422,30 +383,24 @@ function draw() {
   }
 
   //Erase points
-  if (mode === 3) {
-    if (downloading === false) {
-      noFill();
-      stroke(2);
-      stroke(200, 200, 200);
-      ellipse(mouseX, mouseY, brushSize * 2, brushSize * 2);
-    }
+  if (mode === 3 && active_canvas === true) {
+    noFill();
+    stroke(2);
+    stroke(200, 200, 200);
+    ellipse(mouseX, mouseY, brushSize * 2, brushSize * 2);
     if (mouseIsPressed) {
       erase_vertices(mouseX, mouseY, brushSize)
     }
   }
 
-
-  fc++;
-  if (fc === 5) {
-    ff = millis();
-    fr = ceil(4 / ((ff - fs) / 1000));
-    fc = 0;
-  }
   if (filteringView === true) {
+    pixels = filteredPixels;
     updatePixels();
   }
 }
 var filteredPixels = [];
+var detected_edge_vertices = [];
+//Of form [[x,y, brightness],[x,y, brightness],...]
 
 function generate_normal_poly(values) {
   noLoop();
@@ -478,8 +433,16 @@ function generate_normal_poly(values) {
         updateHashSpace(artResult[0][iv][0], artResult[0][iv][1], true);
       }
       for (var iv = 0; iv < artResult[1].length; iv++){
-        updateHashSpace(artResult[1][iv][0], artResult[1][iv][1], true);
+        //updateHashSpace(artResult[1][iv][0], artResult[1][iv][1], true);
+        detected_edge_vertices.push([artResult[1][iv][0],artResult[1][iv][1],artResult[1][iv][2]]);
       }
+      
+      for (var i = 0; i< detected_edge_vertices.length; i++){
+        if (detected_edge_vertices[i][2] >= colorThreshold){
+          updateHashSpace(detected_edge_vertices[i][0], detected_edge_vertices[i][1], true);
+        }
+      }
+      
 
       copyTo(artResult[2], pixels)
 
@@ -488,14 +451,13 @@ function generate_normal_poly(values) {
       }
       splitSquare(20)
       generateRandomSquares(20, 0.4)
-      //pushEdgePointsToAll();
-      triangulize();
-      finishedColoring = false;
-
-      tColors = [];
-
-      css_buttons.displayPoints(false);
-      displayPoints = false;
+      
+      //Then clean up the edge points
+      
+      
+      
+      
+      triangulate_and_display();
       completedFilters = true;
 
       window.setTimeout(function () {
@@ -540,15 +502,21 @@ function generate_normal_poly(values) {
 
     }
     generateRandomSquares(20, 0.4)
-    //pushEdgePointsToAll();
-    triangulize();
-    finishedColoring = false;
-
-    //generateHashSpace();
-    tColors = [];
-
-    css_buttons.displayPoints(false);
-    displayPoints = false;
+    
+    for (var i = 0; i< detected_edge_vertices.length; i++){
+      if (detected_edge_vertices[i][2] >= colorThreshold){
+        updateHashSpace(detected_edge_vertices[i][0], detected_edge_vertices[i][1], true);
+      }
+    }
+    
+    
+    //Then clean up the edge points a little.
+    //Heuristic: if a very bright point has lots of points nearby, remove nearby ones, radius 10?
+    
+    
+    
+    
+    triangulate_and_display();
     completedFilters = true;
     $("#loadingScreen").css("opacity", "0");
     $("#loadingText").css("opacity", "0");

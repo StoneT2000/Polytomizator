@@ -1,11 +1,13 @@
 body,
 html {
   width: 100%;
-  background-image: url('images/PolyBackground.jpg');
+  background-color:whitesmoke;
   position: relative;
   height: auto;
 }
-
+.flex-container {
+  background-color:whitesmoke;
+}
 .main {
   position: relative;
   display: inline;
@@ -20,10 +22,10 @@ html {
 }
 
 #loadingScreen {
-  background-color: RGBA(40, 40, 40, 0.6);
-  height: 100%;
+  background-color: RGBA(40,40,40, 0.6);
   width: 100%;
   bottom: 0px;
+  height:100%;
   position: fixed;
   z-index: 1000;
   display: block;
@@ -48,7 +50,7 @@ html {
 
 #downloadSVG,
 #expandImage {
-  background-color: RGB(40, 40, 40);
+  background-color: #343a40;
   color: white;
   border: none;
   width: 350px;
@@ -68,7 +70,7 @@ html {
 
 }
 
-.container {
+.flex-container {
   padding: 0px;
   margin: 0px;
   text-align: center;
@@ -79,26 +81,16 @@ html {
 
 }
 
-#buttonList {}
-
-.buttonRow li {
-  font-size: 15px;
-  display: inline-block;
-  background-color: RGB(40, 40, 40);
-  border: 1px solid RGB(40, 40, 40);
-  border-radius: 5px;
-  margin-top: 10px;
-  color: white;
-  width: 90px;
-  height: 50px;
-  cursor: pointer;
+.buttonRow button {
+  width: 100px;
 }
+
 
 #polytomize {
   display: inline-block;
   color: white;
   margin-left: 50px;
-  background-color: RGB(40, 40, 40);
+  background-color: #343a40;
   width: 350px;
   cursor: pointer;
   font-weight: 400;
@@ -116,8 +108,8 @@ html {
 
 .brushes li {
   display: inline-block;
-  background-color: RGB(40, 40, 40);
-  border: 1px solid RGB(40, 40, 40);
+  background-color: #343a40;
+  border: 1px solid #343a40;
   border-radius: 5px;
   margin-top: 10px;
   color: white;
@@ -128,20 +120,33 @@ html {
   font-size: 15px;
   vertical-align: top;
 }
-
+.brushes button {
+  display: inline-block;
+  margin-top: 10px;
+  width: 90px;
+  height: 50px;
+  line-height: 20px;
+  cursor: pointer;
+  font-size: 15px;
+  vertical-align: top;  
+}
 .brushes input {
-  width: 50px;
+  width: 55px;
   line-height: 20px;
   vertical-align: middle;
   text-align: center;
   margin-left: 10px;
+  display:inline;
+  border:none;
+  margin-right:10px;
 }
 
 .brushes #sizing1,
 #sizing2 {
-  width: 170px;
+  width: auto;
   line-height: 45px;
   cursor: default;
+  padding-left:10px;
 }
 
 .brushes #eraser {
@@ -154,7 +159,7 @@ html {
   margin-bottom: 50px;
   font-size: 25px;
 
-  background-color: RGB(40, 40, 40);
+  background-color: #343a40;
   color: white;
 }
 
@@ -214,7 +219,7 @@ td {
 }
 
 #popUp {
-  background-color: RGB(230, 230, 230);
+  background-color: #343a40;
   display: block;
   border: 1px solid black;
   border-radius: 4px;
@@ -240,94 +245,6 @@ td {
 #otherOptionsHeader {
   margin-bottom: 20px;
 }
-
-#flowerEffect,
-#autoGen {
-  position: relative;
-  display: inline-block;
-  color: white;
-  background-color: RGB(40, 40, 40);
-  width: 515px;
-  height: 32px;
-  z-index: 5;
-  cursor: pointer;
-  font-weight: 400;
-  line-height: 32px;
-}
-
-#autogen {
-  line-height: 32px;
-  width: 400px;
-}
-
-#colorThreshold {}
-
-#flowerEffectTime {
-  position: relative;
-  transform: translate(0, -39px);
-  -webkit-transform: translate(0, -39px);
-  -moz-transform: translate(0, -39px);
-  -ms-transform: translate(0, -39px);
-  -o-transform: translate(0, -39px);
-  -webkit-transition: -webkit-transform 1s;
-  transition: -webkit-transform 1s;
-  transition: transform 1s;
-  transition: transform 1s, -webkit-transform 1s;
-  -webkit-transition: transform 1s;
-  -moz-transition: transform 1s;
-  -ms-transition: transform 1s;
-  -o-transition: transform 1s;
-  z-index: 0;
-  font-size: 25px;
-}
-
-#durationOfFlowerEffect {
-  position: relative;
-
-  transform: translate(0, -75px);
-  -webkit-transform: translate(0, -75px);
-  -moz-transform: translate(0, -75px);
-  -ms-transform: translate(0, -75px);
-  -o-transform: translate(0, -75px);
-  z-index: 0;
-  height: 30px;
-  font-size: 20px;
-  -webkit-transition: z-index 1s, -webkit-transform 1s;
-  transition: z-index 1s, -webkit-transform 1s;
-  transition: transform 1s, z-index 1s;
-  transition: transform 1s, z-index 1s, -webkit-transform 1s;
-  -webkit-transition: transform 1s, z-index 1s;
-  -moz-transition: transform 1s, z-index 1s;
-  -ms-transition: transform 1s, z-index 1s;
-  -o-transition: transform 1s, z-index 1s;
-}
-
-#popUp2,
-#flowerEffectTimePopUp {
-
-  position: absolute;
-  background-color: RGB(230, 230, 230);
-  border: 1px solid black;
-  border-radius: 4px;
-  padding: 0 10 0 10;
-  font-size: 13px;
-  display: none;
-}
-
-#popUp2 {
-  margin-top: -50px;
-  width: 300px;
-  margin-left: 660px;
-
-}
-
-#flowerEffectTimePopUp {
-  display: none;
-  width: 400px;
-  margin-left: 515px;
-  margin-top: -35px;
-}
-
 .otherInfo {
   width: 400px;
   position: relative;
@@ -338,12 +255,10 @@ td {
   padding-bottom: 200px;
 }
 
-
-
 h3,
 h4,
 h1,
-h2,
+h2,h5,
 p {
   font-weight: 300;
 }
@@ -355,7 +270,7 @@ p {
   bottom: 0px;
   margin: none;
   text-align: center;
-  background-color: RGB(50, 50, 50);
+  background-color: #343a40;
   color: white;
 }
 
@@ -397,6 +312,7 @@ p {
   font-size: 30px;
   cursor: pointer;
   z-index:9999;
+  color: RGB(33, 37, 41);
 }
 
 #options_menu {
@@ -405,7 +321,7 @@ p {
   height: 500px;
   right: 15px;
   top: 75px;
-  background-color: RGBA(40, 40, 40, 1);
+  background-color:#343a40;
   z-index: 9999;
   opacity: 0;
   display: none;
@@ -428,7 +344,7 @@ p {
   height: 0;
   border-style: solid;
   border-width: 0 12px 12px 12px;
-  border-color: transparent transparent RGB(40, 40, 40, 1) transparent;
+  border-color: transparent transparent #343a40 transparent;
   z-index: 9998;
 }
 
@@ -462,9 +378,6 @@ tr {
   background-color: white;
   width: 240px;
 }
-#options_table{
-  border:none;
-}
 #options_table tr{
   height:30px;
   border-bottom: 0px;
@@ -480,7 +393,7 @@ tr {
   color:white;
   text-align: center;
 }
-.option_input_title_tr td{
+.option_input_title_tr, .option_input_title_tr td{
   height:10px  !important;
   vertical-align: text-bottom;
   color:white;
@@ -488,13 +401,14 @@ tr {
 .option_name{
   color:white;
   font-weight:300;
-  width: 100px;
+  width: 120px;
   font-size:16px;
   line-height: 10px;
   text-align: center;
 }
 #options_table .inputs{
   text-align: center;
+  vertical-align: middle;
 }
 #options_table .inputs input{
   width: 50px;
@@ -502,6 +416,14 @@ tr {
   text-align: center;
   height:20px;
 }
+#options_table .inputs select{
+  line-height: 20px;
+  font-size:13px;
+  margin-top:5px;
+  text-align: center;
+  height:20px;
+}
+/*CSS for pop up menu for setting params for functions*/
 #options_menu_additional {
   position: fixed;
   width: 400px;
@@ -511,7 +433,7 @@ tr {
   top: 50%;
   z-index: 100;
   margin-top: -100px;
-  background-color: RGB(40, 40, 40);
+  background-color: RGBA(33, 37, 41, 0.8);
   border-radius: 5px;
   display: none;
   -webkit-box-shadow: 0px 0px 5px 0px black;
