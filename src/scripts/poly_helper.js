@@ -753,48 +753,42 @@ function autoGenerateArt() {
 //Constructor for buttons display functions
 function construct_css_buttons() {
   this.displayPoints = function (a) {
-    if (a === false) {
-      $("#displayPoints").html("Show<br>Points<br>");
-      $("#displayPoints").css("color", "black");
-      $("#displayPoints").css("background-color", "RGB(255,255,255)");
+    if (a === true) {
+      $("#displayPoints").removeClass("active");
+      $("#displayPoints").html("Hide<br>Points");
     } else {
-      $("#displayPoints").html("Hide<br>Points<br>");
-      $("#displayPoints").css("color", "white");
-      $("#displayPoints").css("background-color", "RGB(40,40,40)");
+      $("#displayPoints").addClass("active");
+      $("#displayPoints").html("Show<br>Points");
     }
   }
   this.displayColor = function (a) {
-    if (a === false) {
-      $("#displayColor").html("Show<br>Colors<br>");
-      $("#displayColor").css("color", "black");
-      $("#displayColor").css("background-color", "RGB(255,255,255)");
+    if (a === true) {
+      $("#displayColor").removeClass("active");
+      $("#displayColor").html("Hide<br>Colors");
 
     } else {
-      $("#displayColor").html("Hide<br>Colors<br>");
-      $("#displayColor").css("color", "white");
-      $("#displayColor").css("background-color", "RGB(40,40,40)");
+      $("#displayColor").html("Show<br>Colors");
+      $("#displayColor").addClass("active");
     }
   }
   this.displayTriangulation = function (a) {
     if (a === true) {
       $("#displayTriangulation").html("Hide<br>Triangles<br>");
-      $("#displayTriangulation").css("color", "white");
-      $("#displayTriangulation").css("background-color", "RGB(40,40,40)");
+      $("#displayTriangulation").removeClass("active");
     } else {
       $("#displayTriangulation").html("Show<br>Triangles<br>");
-      $("#displayTriangulation").css("color", "black");
-      $("#displayTriangulation").css("background-color", "RGB(255,255,255)");
+      $("#displayTriangulation").addClass("active");
     }
   }
   this.displayImage = function (a) {
     if (a === true) {
-      $("#displayImage").html("Hide<br>Image<br>");
-      $("#displayImage").css("color", "white");
-      $("#displayImage").css("background-color", "RGB(40,40,40)");
-    } else {
-      $("#displayImage").html("Show<br>Image<br>");
-      $("#displayImage").css("color", "black");
-      $("#displayImage").css("background-color", "RGB(255,255,255)");
+      
+      $("#displayImage").removeClass("active");
+      $("#displayImage").html("Hide<br>Image");
+    }
+    else {
+      $("#displayImage").html("Show<br>Image");
+      $("#displayImage").addClass("active");
     }
   }
 
