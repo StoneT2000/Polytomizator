@@ -14,6 +14,15 @@ $(document).ready(function () {
   $("#grid_accuracy").val(20)
   $("#flower_effect_speed").val(1);
 
+  //Initialize popover stuff
+  $(function () {
+    $('[data-toggle="popover"]').popover()
+  })
+  //Initialize tool tips
+  $(function () {
+    $('[data-toggle="tooltip"]').tooltip()
+  })
+  
   $("#displayColor").on("click", function () {
     if (noColors === true) {
       noColors = false;

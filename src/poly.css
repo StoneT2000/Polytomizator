@@ -22,9 +22,10 @@ html {
 }
 
 #loadingScreen {
-  background-color: rgba(33, 37, 41, 0.6);
+  background-color: RGBA(40,40,40, 0.6);
   width: 100%;
   bottom: 0px;
+  height:100%;
   position: fixed;
   z-index: 1000;
   display: block;

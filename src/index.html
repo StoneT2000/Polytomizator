@@ -15,20 +15,17 @@
   <script src="scripts/delaunatormin.js"></script>
 
   <!--Local Scripts-->
-  <script language="javascript" type="text/javascript" src="scripts/poly.js?version=50"></script>
-  <script language="javascript" type="text/javascript" src="scripts/poly_helper.js?version=50"></script>
+  <script language="javascript" type="text/javascript" src="scripts/poly.js?version=51"></script>
+  <script language="javascript" type="text/javascript" src="scripts/poly_helper.js?version=51"></script>
   <script language="javascript" type="text/javascript" src="scripts/buttons.js?version=51"></script>
-  <script language="javascript" type="text/javascript" src="scripts/otherEffects.js?version=50"></script>
-  <script language="javascript" type="text/javascript" src="scripts/imagefilter.js?version=50"></script>
-  <script language="javascript" type="text/javascript" src="scripts/exportSVG.js?version=50"></script>
+  <script language="javascript" type="text/javascript" src="scripts/otherEffects.js?version=51"></script>
+  <script language="javascript" type="text/javascript" src="scripts/imagefilter.js?version=51"></script>
+  <script language="javascript" type="text/javascript" src="scripts/exportSVG.js?version=51"></script>
   <script language="javascript" type="text/javascript" src="scripts/FileSaver.js"></script>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
-  <link rel="stylesheet" href="poly.css?version=50">
-  <link rel="stylesheet" href="popuphelpers.css?version=50">
- 
-  <!--When updating this html file, also update the index one-->
-  <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">-->
+  <link rel="stylesheet" href="poly.css?version=51">
+  <link rel="stylesheet" href="popuphelpers.css?version=51">
 
 </head>
 
@@ -108,17 +105,17 @@
     </div>
     <div class="brushes noselect">
       <ul style="padding:0px;">
-        <li id="pointBrush"><img src="icons/pointIcon.png" width="50px"></li>
-        <li id="lineBrush"><img src="icons/brushIcon.png" width="50px"></li>
-        <li id="eraser"><img src="icons/EraserIcon.png" width="50px"></li>
+        <li id="pointBrush" data-toggle="tooltip" data-placement="top" data-title="Pointer: Place one point (P)" data-delay='1000'><img src="icons/pointIcon.png" width="50px"></li>
+        <li id="lineBrush" data-toggle="tooltip" data-placement="top" data-title="Brush: Place multiple points at once (B)" data-delay='1000'><img src="icons/brushIcon.png" width="50px"></li>
+        <li id="eraser" data-toggle="tooltip" data-placement="top" data-title="Eraser: Erase points (E)" data-delay='1000'><img src="icons/EraserIcon.png" width="50px"></li>
 
         <!--<li id="triangleMover"><img src="icons/triangleMover.png" width="50px"></li>-->
-        <li id="sizing1">Brush Size<input id="brushSize" class="form-control" type="text" placeholder="100"></li>
-        <li id="sizing2">Brush Density<input id="brushDensity" type="text" class="form-control" placeholder="5"></li>
-        <button id="undo" class="btn btn-dark" style="vertical-align: top;line-height: 25px" onclick="undo()">Undo</button>
-        <button id="redo" class="btn btn-dark" style="vertical-align: top;line-height: 25px" onclick="redo()">Redo</button>
-        <button id="saveThis" class="btn btn-dark" style="">Save this<br>canvas</button>
-        <button id="loadThis" class="btn btn-dark" style="text-align: center;">Load last<br>canvas</button>
+        <li id="sizing1" data-toggle="tooltip" data-placement="top" data-title="Size of brush and eraser" data-delay='1000'>Brush Size<input id="brushSize" class="form-control" type="text" placeholder="100"></li>
+        <li id="sizing2" data-toggle="tooltip" data-placement="top" data-title="Number of points placed with brush at once" data-delay='1000'>Brush Density<input id="brushDensity" type="text" class="form-control" placeholder="5"></li>
+        <button id="undo" class="btn btn-dark" style="vertical-align: top;line-height: 25px" onclick="undo()" data-toggle="tooltip" data-placement="top" data-title="Undo the last step" data-delay='1000'>Undo</button>
+        <button id="redo" class="btn btn-dark" style="vertical-align: top;line-height: 25px" onclick="redo()" data-toggle="tooltip" data-placement="top" data-title="Redo the next step" data-delay='1000'>Redo</button>
+        <button id="saveThis" class="btn btn-dark" data-toggle="tooltip" data-placement="top" data-title="Save the vertices for this canvas for next time" data-delay='1000'>Save this<br>canvas</button>
+        <button id="loadThis" class="btn btn-dark" data-toggle="tooltip" data-placement="top" data-title="Load previously saved vertices. NOTE: It is best this is done on the same image used last time" data-delay='1000'>Load last<br>canvas</button>
 
       </ul>
     </div>
@@ -160,7 +157,7 @@
       </table>
     </div>
     <div class="otherInfo" style="">
-      <h5>Created using p5.js, HTML, CSS</h5>
+      <h5>Created with HTML, CSS, Boostrap, p5.js</h5>
     </div>
   </div>
   <div class="footer" style="">
