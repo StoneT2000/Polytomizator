@@ -119,7 +119,7 @@ function keyPressed(event) {
   }
 }
 
-//Equivalent to pressing polytomize or D.
+//Equivalent to pressing polytomize or D. Triangulate the data, tell draw() to begin coloring, check for flower effect option, load image into background, reset colors, and undisplay things.
 function triangulate_and_display() {
   triangulize();
 
@@ -137,7 +137,8 @@ function triangulate_and_display() {
   image(img1, 0, 0, cWidth, cHeight);
   noColors = false;
   css_buttons.displayColor(true);
-
+  displayPoints = false;
+  css_buttons.displayPoints(false);
   //Load the pixels of said image
   loadPixels();
 
