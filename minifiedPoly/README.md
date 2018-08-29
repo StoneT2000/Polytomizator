@@ -8,7 +8,7 @@ A working link to this program is provided here https://stonet2000.github.io/Pol
 
 Or...
 
-Simply download the repository's zip file, open it, and then open index.html. This local method is compatible on Firefox only.
+Simply download the repository's zip file, open it, and then open the folder Polytomizator (local), and open index.html with Firefox. This local method is compatible on Firefox only.
 
 
 ## Features
@@ -23,7 +23,7 @@ Simply download the repository's zip file, open it, and then open index.html. Th
 - Can undo or redo placement of vertices
 ### Downloading and Loading Work
 - Creates poly art from triangulization and can be downloaded at high resolutions
-- Save created points and colors in between browsing sessions (Just don't clear cache)
+- Save created points, triangles, and colors in between browsing sessions (Just don't clear cache)
 - Save poly art to a .svg file for further editing or manual scaling
 
 

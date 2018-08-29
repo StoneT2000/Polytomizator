@@ -87,35 +87,27 @@ function keyPressed(event) {
   //P
   else if (keyCode === 80) {
     mode = 1;
-    $("#pointBrush").css("background-color", "RGB(140,140,140)")
-    $("#lineBrush").css("background-color", "")
-    $("#eraser").css("background-color", "")
-    $("#triangleMover").css("background-color", "")
+    removeClassFromBrushes("active");
+    $("#pointBrush").addClass("active");
 
   }
   //E
   else if (keyCode === 69) {
     mode = 3;
-    $("#eraser").css("background-color", "RGB(140,140,140)")
-    $("#pointBrush").css("background-color", "")
-    $("#lineBrush").css("background-color", "")
-    $("#triangleMover").css("background-color", "")
+    removeClassFromBrushes("active");
+    $("#eraser").addClass("active");
   }
   //B
   else if (keyCode === 66) {
     mode = 2;
-    $("#lineBrush").css("background-color", "RGB(140,140,140)")
-    $("#pointBrush").css("background-color", "")
-    $("#eraser").css("background-color", "")
-    $("#triangleMover").css("background-color", "")
+    removeClassFromBrushes("active");
+    $("#lineBrush").addClass("active");
   }
   //T
   else if (keyCode === 84) {
     mode = 4;
-    $("#triangleMover").css("background-color", "RGB(140,140,140)")
-    $("#pointBrush").css("background-color", "")
-    $("#lineBrush").css("background-color", "")
-    $("#eraser").css("background-color", "")
+    removeClassFromBrushes("active");
+    $("#triangleMove").addClass("active");
   }
 }
 
@@ -759,8 +751,9 @@ function construct_css_buttons() {
 var css_buttons = new construct_css_buttons();
 
 
-
-var indexPos = -1;
+var maxStepBackDist = 0;
+//max step back is how far u can undo, before you must stop or u might end up undoing to a different branch that was not overwritten yet
+var indexPos = -1; //Index pos is essentially where we are currently going to write to data in storeVertices
 var stepBackNum = 0;
 var undoState = 0;
 //Undostate = 0 means currently displaying an un-redoable layer
@@ -768,32 +761,64 @@ var undoState = 0;
 //Store vertices up to 50 steps
 function undo() {
   stepBackNum++;
-  if (indexPos - stepBackNum < 0 || stepBackNum > max_undo - 1) {
+  if (indexPos - stepBackNum <= 0 || stepBackNum >= max_undo - 1 || stepBackNum >= maxStepBackDist){
+    console.log("disbaled")
+    $("#undo").addClass("disabled");
+    $("#undo").css("cursor", "not-allowed");
+    $("#redo").removeClass("disabled");
+    $("#redo").css("cursor", "pointer");
+  }
+  else {
+    $("#undo").removeClass("disabled");
+    $("#undo").css("cursor", "pointer");
+    $("#redo").removeClass("disabled");
+    $("#redo").css("cursor", "pointer");
+  }
+  
+  if (indexPos - stepBackNum < 0 || stepBackNum > max_undo - 1 || stepBackNum > maxStepBackDist) {
     stepBackNum--;
+    //can't undo anymore
+
     return;
   }
+
   undoState = 1;
   verticesHashTable = JSON.parse(JSON.stringify(storedVertices[(indexPos - stepBackNum) % max_undo]));
   verticesHashTableFlat = verticesHashTable.reduce(function (acc, curr) {
     return acc.concat(curr)
   });
 
-  //console.log(storedVertices, indexPos, stepBackNum)
 
 }
 
 function redo() {
   stepBackNum--;
+  if (stepBackNum <= 0){
+    $("#redo").addClass("disabled");
+    $("#redo").css("cursor", "not-allowed");
+    $("#undo").removeClass("disabled");
+    $("#undo").css("cursor", "pointer");
+  }
+  else {
+    $("#redo").removeClass("disabled");
+    $("#redo").css("cursor", "pointer"); 
+    $("#undo").removeClass("disabled");
+    $("#undo").css("cursor", "pointer");
+  }
   if (stepBackNum < 0) {
     stepBackNum++;
+    undoState = 0;
+    
     return;
   }
+
   verticesHashTable = JSON.parse(JSON.stringify(storedVertices[(indexPos - stepBackNum) % max_undo]));
 
   verticesHashTableFlat = verticesHashTable.reduce(function (acc, curr) {
     return acc.concat(curr)
   });
-  //console.log(storedVertices, indexPos, stepBackNum)
+
+
 }
 
 function recordVertices() {
@@ -806,17 +831,28 @@ function recordVertices() {
       //Don't let it get too big in case that one user spends forever (like very very long) time making poly art...
       indexPos = indexPos % max_undo + max_undo;
     }
+    if (maxStepBackDist >= 50){
+      
+    }
+    else {
+      maxStepBackDist++;
+    }
+    $("#undo").removeClass("disabled");
+    $("#undo").css("cursor", "pointer");
+    $("#redo").addClass("disabled");
+    $("#redo").css("cursor", "not-allowed");
 
   } else {
-
-    //In the event that we start a new path during command z, the new vertice is at indexPos = 1 now
-    //With indexPos = 0 representing where we command z'd all the way to.
-    //Thus, we set storedVertices[0] = to the canvas where we command z'd all the way to
-    storedVertices[0] = JSON.parse(JSON.stringify(storedVertices[(indexPos - stepBackNum) % max_undo]));
-
+    $("#redo").addClass("disabled");
+    $("#redo").css("cursor", "not-allowed");
+    $("#undo").removeClass("disabled");
+    $("#undo").css("cursor", "pointer");
+    //In the event that we start a new path during command z, we set indexPos at that current position
+    indexPos = indexPos - stepBackNum;
+    maxStepBackDist = max_undo - stepBackNum;
     //storedVertices.splice(indexPos-stepBackNum+1);
     //indexPos = indexPos - stepBackNum;
-    indexPos = 0;
+    //indexPos = 0;
     stepBackNum = 0;
     undoState = 0;
     indexPos++;

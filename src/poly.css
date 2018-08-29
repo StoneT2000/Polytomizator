@@ -17,8 +17,8 @@ html {
 }
 
 #defaultCanvas0 {
-  -webkit-box-shadow: 0px 0px 4px 4px #888888;
-  box-shadow: 0px 0px 4px 4px #888888;
+  -webkit-box-shadow: 0 .125rem .25rem rgba(0,0,0,0.7);
+  box-shadow: 0 .125rem .25rem rgba(0,0,0,0.7);
 }
 
 #loadingScreen {
@@ -50,9 +50,6 @@ html {
 
 #downloadSVG,
 #expandImage {
-  background-color: #343a40;
-  color: white;
-  border: none;
   width: 350px;
   font-size: 20px;
   cursor: pointer;
@@ -60,7 +57,14 @@ html {
   margin: 10px;
   margin-bottom: 30px;
 }
-
+#polytomize {
+  display: inline-block;
+  color: white;
+  width: 350px;
+  font-size: 20px;
+  cursor: pointer;
+  font-weight: 300;
+}
 #gamedisplay {
   margin: auto;
 
@@ -69,7 +73,10 @@ html {
   position: relative;
 
 }
-
+.btn-outline-dark:hover {
+  background-color:#6c757d;
+  border-color:#6c757d;
+}
 .flex-container {
   padding: 0px;
   margin: 0px;
@@ -86,18 +93,6 @@ html {
 }
 
 
-#polytomize {
-  display: inline-block;
-  color: white;
-  margin-left: 50px;
-  background-color: #343a40;
-  width: 350px;
-  cursor: pointer;
-  font-weight: 400;
-  height: 32px;
-  line-height: 32px;
-}
-
 .brushes {
   position: relative;
   display: inline-block;
@@ -105,7 +100,9 @@ html {
   left: 0px;
   margin-top: 20px;
 }
-
+.brushes i{
+  font-size: 22px;
+}
 .brushes li {
   display: inline-block;
   background-color: #343a40;
@@ -178,46 +175,40 @@ html {
   border: 1px solid black;
   padding-bottom: 10px;
 }
-
-#statsTable {
-  margin-left: 25%;
-  margin-right: 25%;
+#stats_for_nerds {
+  width:400px;
+  margin:auto;
+  height:300px;
+  display: none;
 }
-
-#statsHeader {}
-
-th {
-  width: 50%;
-  font-size: 34px;
-  padding-bottom: 20px;
-  font-weight: 500;
+#statsHeader {
+  font-size:32px;
+  margin-bottom: 20px;
 }
-
-tr {
+#stats_for_nerds_table{
+  width: 400px;
+  margin: auto;
+}
+#stats_for_nerds_table tr{
+  border-bottom: 1px solid black;
+}
+#stats_for_nerds_table th{
+  padding: 10px;
   font-size: 25px;
+  color:white;
+  font-weight: 300;
+  background-color:#6c757d;
+  border-top:5px solid #343a40;
+  border-right:5px solid #343a40;
+  border-left:5px solid #343a40;
+  
 }
-
-td {
-
-  height: 50px;
-  line-height: 25px;
+#stats_for_nerds_table td{
+  padding: 6px;
+  font-size: 20px;
+  border-right:5px solid #343a40;
+  border-left:5px solid #343a40;
 }
-
-th:nth-child(even) {
-  text-align: center;
-}
-
-td:nth-child(even) {
-  text-align: center;
-}
-
-td:nth-child(odd) {}
-
-th,
-td {
-  border-bottom: solid black 1px;
-}
-
 #popUp {
   background-color: #343a40;
   display: block;
@@ -307,7 +298,7 @@ p {
 
 #options_menu_gear {
   position: fixed;
-  top: 30px;
+  top: 20px;
   right: 30px;
   font-size: 30px;
   cursor: pointer;
@@ -320,16 +311,15 @@ p {
   width: 300px;
   height: 500px;
   right: 15px;
-  top: 75px;
+  top: 65px;
   background-color:#343a40;
   z-index: 9999;
   opacity: 0;
   display: none;
   border-radius: 5px;
 
-  -webkit-box-shadow: 0px 0px 5px 0px black;
-
-  box-shadow: 0px 0px 5px 0px black;
+  -webkit-box-shadow: 0 .125rem .25rem rgba(0,0,0,0.6);
+  box-shadow: 0 .125rem .25rem rgba(0,0,0,0.6);
   -webkit-transition: opacity 0.2s;
   -o-transition: opacity 0.2s;
   transition: opacity 0.2s;
@@ -338,7 +328,7 @@ p {
 #options_menu:after {
   content: "";
   position: absolute;
-  right: 16px;
+  right: 14.5px;
   top: -12px;
   width: 0;
   height: 0;
@@ -355,7 +345,9 @@ p {
   padding-top: 15px;
   margin-top: 10px;
 }
-
+#options_menu input {
+  border:none;
+}
 #function_options td,
 tr {
   border: none;
@@ -375,7 +367,6 @@ tr {
   font-size: 14px;
   margin-top: 10px;
   cursor: pointer;
-  background-color: white;
   width: 240px;
 }
 #options_table tr{
@@ -415,6 +406,7 @@ tr {
   font-size:13px;
   text-align: center;
   height:20px;
+  display:inherit;
 }
 #options_table .inputs select{
   line-height: 20px;
@@ -436,26 +428,29 @@ tr {
   background-color: RGBA(33, 37, 41, 0.8);
   border-radius: 5px;
   display: none;
-  -webkit-box-shadow: 0px 0px 5px 0px black;
-  box-shadow: 0px 0px 5px 0px black;
+  -webkit-box-shadow: 0 .125rem .25rem rgba(0,0,0,0.6);
+  box-shadow: 0 .125rem .25rem rgba(0,0,0,0.6);
 
 }
 
 #options_menu_additional h4 {
   color: white;
   margin-top: 10px;
-  font-weight: 400;
+  font-weight: 300;
 }
 
 #options_menu_additional button {
-  background-color: white;
   cursor: pointer;
   display: block;
-  width: 150px;
-  position: absolute;
+  width: 100px;
+  margin:auto;
   margin-top: 20px;
-  margin-left: -75px;
-  left: 50%;
+}
+#options_menu_additional button:hover{
+  background-color:#fff;
+}
+#options_menu_additional input{
+  border:none;
 }
 
 #options_menu_additional span {

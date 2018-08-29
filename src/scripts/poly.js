@@ -85,14 +85,9 @@ var triangleCanvasLayer; //Off screen graphics layer for drawing on
 //active_canvas is when user is hovering over canvas
 var active_canvas = false
 
-
-
-function preload() {
-  img1 = loadImage('images/white.jpg');
-}
-
 function setup() {
   //pixel density is important for screens with different resolutions (e.g old vs new macbooks)
+  img1 = createImage(1200, 800)
   d = pixelDensity();
   loadPixels();
 
@@ -108,6 +103,14 @@ function setup() {
   //Initialize points on corners and sides
 
   generateHashSpace();
+  
+  //Initialize storedVertices array with 50 empty slots
+  for (var slot_index = 0; slot_index < max_undo; slot_index++) {
+    storedVertices.push([]);
+  }
+  //Store empty vertices
+  recordVertices();
+  
   updateHashSpace(0, 0, true)
   updateHashSpace(cWidth, 0, true)
   updateHashSpace(0, cHeight, true)
@@ -143,10 +146,7 @@ function setup() {
   //Disable anti-aliasing? Doesn't seem to work
   //noSmooth();
   
-  //Initialize storedVertices array with 50 empty slots
-  for (var slot_index = 0; slot_index < max_undo; slot_index++) {
-    storedVertices.push([]);
-  }
+
 
   //Store initial vertices
   recordVertices();
@@ -319,7 +319,14 @@ function draw() {
   }
 
   $("#numberPoints").text(totalpoints + " points");
-  $("#numberTriangles").text(parseInt(triangulations[triangulations.length - 1].length / 3) + " triangles");
+  var num_of_triangles_temp = parseInt(triangulations[triangulations.length - 1].length) / 3;
+  if (!isNaN(num_of_triangles_temp)){
+    $("#numberTriangles").text(num_of_triangles_temp + " triangles");
+  }
+  else {
+    $("#numberTriangles").text(0 + " triangles");
+  }
+  
   if (finishedColoring === true) {
     $("#lastTiming").text(((fTime - sTime) / 1000).toFixed(3) + " seconds");
   }
