@@ -103,14 +103,14 @@ function setup() {
   //Initialize points on corners and sides
 
   generateHashSpace();
-  
+
   //Initialize storedVertices array with 50 empty slots
   for (var slot_index = 0; slot_index < max_undo; slot_index++) {
     storedVertices.push([]);
   }
   //Store empty vertices
   recordVertices();
-  
+
   updateHashSpace(0, 0, true)
   updateHashSpace(cWidth, 0, true)
   updateHashSpace(0, cHeight, true)
@@ -145,7 +145,7 @@ function setup() {
 
   //Disable anti-aliasing? Doesn't seem to work
   //noSmooth();
-  
+
 
 
   //Store initial vertices
@@ -166,11 +166,10 @@ function setup() {
     } else if (triangulations[triangulations.length - 1].length > 0) {
       if (display_mode_on === true) {
         alert("At the moment, you can't download SVGs of the different display modes. Turn display mode off in settings to download SVG of the triangulation")
-      }
-      else{
+      } else {
         downloadSVG(cWidth, cHeight);
       }
-      
+
     } else {
       alert("Make some poly art first");
     }
@@ -231,6 +230,7 @@ var flowering_speed = 1;
 
 //Just to display the triangles without colors of triangulatedVerticesFlat
 var uncoloredTriangleCanvasLayer;
+
 function draw() {
   totalpoints = 0;
   background("#FFFFFF");
@@ -242,10 +242,10 @@ function draw() {
 
   if (flowerEffect === true) {
 
-    if (flowering === true){
+    if (flowering === true) {
       delaunayDisplay(triangulations[0], triangleCanvasLayer, triangulatedVerticesFlat, true, flower_step, flowering_speed)
-      flower_step+= flowering_speed;
-      if (flower_step + 1 > triangulations[0].length / 3){
+      flower_step += flowering_speed;
+      if (flower_step + 1 > triangulations[0].length / 3) {
         flowering = false;
         fTime = millis();
         console.log("Coloring took:" + ((fTime - sTime) / 1000).toFixed(3) + " secs");
@@ -253,7 +253,7 @@ function draw() {
       }
     }
 
-    
+
   } else {
     if (finishedColoring === false) {
       colorIn();
@@ -280,11 +280,10 @@ function draw() {
 
 
   if (displayTriangulation === true && finishedColoring === true) {
-    if (flowerEffect === true && noColors === true){
+    if (flowerEffect === true && noColors === true) {
       //Thisis for the one case when the user selects to hide colors while flowering is in progress.
       image(uncoloredTriangleCanvasLayer, 0, 0);
-    }
-    else {
+    } else {
       image(triangleCanvasLayer, 0, 0);
     }
     //Each time an option is enacted, run through delaunayDisdplay to show that option
@@ -310,23 +309,22 @@ function draw() {
   if (display_grid === true) {
     strokeWeight(1);
     stroke(150);
-    for (j = 0; j < cWidth/snappingAccuracy; j++){
-      line(j*snappingAccuracy, 0, j*snappingAccuracy, cHeight);
+    for (j = 0; j < cWidth / snappingAccuracy; j++) {
+      line(j * snappingAccuracy, 0, j * snappingAccuracy, cHeight);
     }
-    for (j = 0; j < cHeight/snappingAccuracy; j++){
-      line(0, j*snappingAccuracy, cWidth, j*snappingAccuracy);
+    for (j = 0; j < cHeight / snappingAccuracy; j++) {
+      line(0, j * snappingAccuracy, cWidth, j * snappingAccuracy);
     }
   }
 
   $("#numberPoints").text(totalpoints + " points");
   var num_of_triangles_temp = parseInt(triangulations[triangulations.length - 1].length) / 3;
-  if (!isNaN(num_of_triangles_temp)){
+  if (!isNaN(num_of_triangles_temp)) {
     $("#numberTriangles").text(num_of_triangles_temp + " triangles");
-  }
-  else {
+  } else {
     $("#numberTriangles").text(0 + " triangles");
   }
-  
+
   if (finishedColoring === true) {
     $("#lastTiming").text(((fTime - sTime) / 1000).toFixed(3) + " seconds");
   }
@@ -424,7 +422,7 @@ function generate_normal_poly(values) {
     filter(GRAY);
     loadPixels();
   }
-  if (flowerEffect === true){
+  if (flowerEffect === true) {
     flower_step = 0;
     flowering = true;
   }
@@ -436,20 +434,20 @@ function generate_normal_poly(values) {
       var artResult = e.data;
 
       generateHashSpace();
-      for (var iv = 0; iv < artResult[0].length; iv++){
+      for (var iv = 0; iv < artResult[0].length; iv++) {
         updateHashSpace(artResult[0][iv][0], artResult[0][iv][1], true);
       }
-      for (var iv = 0; iv < artResult[1].length; iv++){
+      for (var iv = 0; iv < artResult[1].length; iv++) {
         //updateHashSpace(artResult[1][iv][0], artResult[1][iv][1], true);
-        detected_edge_vertices.push([artResult[1][iv][0],artResult[1][iv][1],artResult[1][iv][2]]);
+        detected_edge_vertices.push([artResult[1][iv][0], artResult[1][iv][1], artResult[1][iv][2]]);
       }
-      
-      for (var i = 0; i< detected_edge_vertices.length; i++){
-        if (detected_edge_vertices[i][2] >= colorThreshold){
+
+      for (var i = 0; i < detected_edge_vertices.length; i++) {
+        if (detected_edge_vertices[i][2] >= colorThreshold) {
           updateHashSpace(detected_edge_vertices[i][0], detected_edge_vertices[i][1], true);
         }
       }
-      
+
 
       copyTo(artResult[2], pixels)
 
@@ -458,12 +456,12 @@ function generate_normal_poly(values) {
       }
       splitSquare(20)
       generateRandomSquares(20, 0.4)
-      
+
       //Then clean up the edge points
-      
-      
-      
-      
+
+
+
+
       triangulate_and_display();
       completedFilters = true;
 
@@ -509,20 +507,20 @@ function generate_normal_poly(values) {
 
     }
     generateRandomSquares(20, 0.4)
-    
-    for (var i = 0; i< detected_edge_vertices.length; i++){
-      if (detected_edge_vertices[i][2] >= colorThreshold){
+
+    for (var i = 0; i < detected_edge_vertices.length; i++) {
+      if (detected_edge_vertices[i][2] >= colorThreshold) {
         updateHashSpace(detected_edge_vertices[i][0], detected_edge_vertices[i][1], true);
       }
     }
-    
-    
+
+
     //Then clean up the edge points a little.
     //Heuristic: if a very bright point has lots of points nearby, remove nearby ones, radius 10?
-    
-    
-    
-    
+
+
+
+
     triangulate_and_display();
     completedFilters = true;
     $("#loadingScreen").css("opacity", "0");

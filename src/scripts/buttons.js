@@ -13,7 +13,7 @@ $(document).ready(function () {
   $("#redo").addClass("disabled");
   $("#undo").css("cursor", "not-allowed");
   $("#redo").css("cursor", "not-allowed");
-  
+
   $("#pointBrush").addClass("active");
   console.log("Polytomizator v52")
   $("#grid_accuracy").val(20)
@@ -27,7 +27,7 @@ $(document).ready(function () {
   $(function () {
     $('[data-toggle="tooltip"]').tooltip()
   })
-  
+
   $("#displayColor").on("click", function () {
     if (noColors === true) {
       noColors = false;
@@ -37,10 +37,9 @@ $(document).ready(function () {
       noColors = true;
       css_buttons.displayColor(false);
     }
-    if (flowerEffect){
-      
-    }
-    else {
+    if (flowerEffect) {
+
+    } else {
       for (j = 0; j < triangulations.length; j++) {
         delaunayDisplay(triangulations[j], triangleCanvasLayer);
       }
@@ -106,7 +105,7 @@ $(document).ready(function () {
       $("#colorThreshold")[0].value = colorThreshold;
     } else {
       colorThreshold = colorThresholdTemp;
-      
+
     }
   })
   $("#pointBrush").on("click", function () {
@@ -325,7 +324,7 @@ $(document).ready(function () {
       close_a_options();
     });
   });
-  
+
   $("#snapping").on("change", function () {
     //console.log($("#snapping")[0].checked);
     if ($("#snapping")[0].checked) {
@@ -374,14 +373,12 @@ $(document).ready(function () {
 
     if (selected_mode == "circles") {
       selected_mode_num = 2;
-    }
-    else if (selected_mode == "rectangles") {
+    } else if (selected_mode == "rectangles") {
       selected_mode_num = 1;
-    }
-    else if (selected_mode == "distorted_triangles") {
+    } else if (selected_mode == "distorted_triangles") {
       selected_mode_num = 3;
     }
-    if (display_mode_on === true){
+    if (display_mode_on === true) {
       displayMode = selected_mode_num;
       triangulate_and_display();
     }
@@ -395,15 +392,14 @@ $(document).ready(function () {
       displayMode = 0;
       display_mode_on = false;
       triangulate_and_display();
-      
+
     }
   });
   $("#stats_mode_check").on("change", function () {
     if ($("#stats_mode_check")[0].checked) {
-      $("#stats_for_nerds").css("display","block");
-    }
-    else {
-      $("#stats_for_nerds").css("display","none");
+      $("#stats_for_nerds").css("display", "block");
+    } else {
+      $("#stats_for_nerds").css("display", "none");
     }
   })
 
@@ -433,7 +429,7 @@ function display_options(value) {
     }, 1);
     $("#options_menu_gear > i").removeClass("fa-cog")
     $("#options_menu_gear > i").addClass("fa-times")
-    $("#options_menu_gear").css("right","31px")
+    $("#options_menu_gear").css("right", "31px")
     options_menu_open = true;
   } else {
     window.setTimeout(function () {
@@ -443,7 +439,7 @@ function display_options(value) {
     options_menu_open = false;
     $("#options_menu_gear > i").addClass("fa-cog")
     $("#options_menu_gear > i").removeClass("fa-times")
-    $("#options_menu_gear").css("right","30px")
+    $("#options_menu_gear").css("right", "30px")
     //"fa fa-cog"
     //fa fa-times
   }
