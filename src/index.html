@@ -6,11 +6,11 @@
   <link rel="shortcut icon" type="image/x-icon" href="images/websiteLogo.ico" />
   <!--Libraries Used-->
   <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-    
+
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
-  
+
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
-  
+
   <script src="libraries/p5.js"></script>
   <script src="scripts/delaunatormin.js"></script>
 
@@ -32,12 +32,11 @@
   <div id="loadingScreen">
     <h1 id="loadingText" style="position: fixed;text-align: center;width: 100%;">Loading Content<img src="images/loadingSymbol.gif" style="margin-left: 10px" width="32px" height="auto"></h1>
   </div>
-  <div class='flex-container' style="">
-    <!--<button type="button" class="btn btn-primary" data-toggle='popover' data-content='hello there'>Press</button>-->
+  <div class='flex-container'>
     <h1 style="margin-top:10px">Polytomizator</h1>
     <h5 style="font-size:15px;margin-bottom: 30px;width:80%;margin-left:50%;transform:translate(-50%,0)">It is <b>highly highly</b> suggested to use Firefox for maximum experience. Cannot download art on Safari at the moment.</h5>
     <h3 style="width:70%;margin-left:50%;transform:translate(-50%,0);margin-bottom:50px;padding-bottom: 50px; border-bottom: 2px solid RGB(40,40,40)">Add points with the brushes. Then click polytomize to make art! Then download the poly art as an image or SVG.</h3>
-        <h3 id="uploadText">Upload your own image to work with here:</h3>
+    <h3 id="uploadText">Upload your own image to work with here:</h3>
     <input style="display:block" id="file" type="file">
     <div>
       <button id="polytomize" class="btn btn-dark" data-toggle="tooltip" title="Triangulize the canvas and color it in" data-delay="1000">Polytomize</button>
@@ -48,7 +47,7 @@
     <div class="main">
       <div id="gamedisplay"></div>
     </div>
-    <div id="options_menu_gear"><i class="fa fa-cog"><!--<div style="width:25px;height:25px;border-radius:50%;background-color:RGB(50,50,50)"></div>--></i></div>
+    <div id="options_menu_gear"><i class="fa fa-cog"></i></div>
     <div id="options_menu">
       <h4 style="border:none">Options</h4>
       <table id="options_table" style="width:100%;">
@@ -104,7 +103,7 @@
         <button class="btn btn-light" id="displaysnapvertices">Snap Vertices</button>
         <button class="btn btn-light" id="displaygencubicpoly">Generate cubic poly art</button>
         <button class="btn btn-light" id="displaygennormalpoly">Generate normal poly art</button>
-        
+
       </div>
 
     </div>
@@ -115,8 +114,6 @@
         <button id="pointBrush" class="btn btn-outline-dark" data-toggle="tooltip" data-placement="top" data-title="Pen: Place one point (P)" data-delay='1000'><i class="fa fa-pen"></i></button>
         <button id="lineBrush" class="btn btn-outline-dark" data-toggle="tooltip" data-placement="top" data-title="Brush: Place multiple points at once (B)" data-delay='1000'><i class="fa fa-paint-brush"></i></button>
         <button id="eraser" class="btn btn-outline-dark" data-toggle="tooltip" data-placement="top" data-title="Eraser: Erase points (E)" data-delay='1000'><i class="fa fa-eraser"></i></button>
-
-        <!--<li id="triangleMover"><img src="icons/triangleMover.png" width="50px"></li>-->
         <li id="sizing1" data-toggle="tooltip" data-placement="top" data-title="Size of brush and eraser" data-delay='1000'>Brush Size<input id="brushSize" class="form-control" type="text" placeholder="100"></li>
         <li id="sizing2" data-toggle="tooltip" data-placement="top" data-title="Number of points placed with brush at once" data-delay='1000'>Brush Density<input id="brushDensity" type="text" class="form-control" placeholder="5"></li>
         <button id="undo" class="btn btn-dark" style="vertical-align: top;line-height: 25px" onclick="undo()" data-toggle="tooltip" data-placement="top" data-title="Undo the last step (Cmd + Z)" data-delay='1000'>Undo</button>
@@ -133,7 +130,6 @@
           <button id="displayColor" class="btn btn-outline-dark">Hide<br>Colors</button>
           <button id="displayTriangulation" class="btn btn-outline-dark">Hide<br>Triangles</button>
           <button id="displayImage" class="btn btn-outline-dark">Hide<br>Image</button>
-          <!--<li id="displayImage">Hide<br>Image<br></li>-->
         </ul>
       </div>
 

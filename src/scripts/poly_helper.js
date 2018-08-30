@@ -75,10 +75,9 @@ function keyPressed(event) {
       noColors = false;
       css_buttons.displayColor(true);
     }
-    if (flowerEffect){
-      
-    }
-    else {
+    if (flowerEffect) {
+
+    } else {
       for (j = 0; j < triangulations.length; j++) {
         delaunayDisplay(triangulations[j], triangleCanvasLayer);
       }
@@ -120,7 +119,7 @@ function triangulate_and_display() {
 
 
   //Settings for flower effect
-  if (flowerEffect){
+  if (flowerEffect) {
     flower_step = 0;
     flowering = true;
   }
@@ -188,44 +187,44 @@ function mouseClicked() {
 
 }
 
-function erase_vertices(x,y,radius) {
-  
+function erase_vertices(x, y, radius) {
+
   //Find top left corner of the square eraser is in
-  var px = floor(round(x)/hashing_size) * hashing_size;
-  var py = floor(round(y)/hashing_size) * hashing_size;
-  var eraser_index = findIndexFromHash(hashCoordinate(px,py));
-  
+  var px = floor(round(x) / hashing_size) * hashing_size;
+  var py = floor(round(y) / hashing_size) * hashing_size;
+  var eraser_index = findIndexFromHash(hashCoordinate(px, py));
+
   //Proceed to search around this eraser_index
   //Basically, +,- hashing_size around it depending on radius
   var search_indices = [];
-  for (var t = -ceil(radius/hashing_size); t <= ceil(radius/hashing_size); t++){
-    for (var k = -ceil(radius/hashing_size); k <= ceil(radius/hashing_size); k++){
+  for (var t = -ceil(radius / hashing_size); t <= ceil(radius / hashing_size); t++) {
+    for (var k = -ceil(radius / hashing_size); k <= ceil(radius / hashing_size); k++) {
       //Take some point, hashing_size multiple away from eraser, check if its in canvas still
       var cx = px + hashing_size * t;
       var cy = py + hashing_size * k;
-      if (inCanvas(cx,cy)) {
-        search_indices.push(findIndexFromHash(hashCoordinate(cx,cy)));
+      if (inCanvas(cx, cy)) {
+        search_indices.push(findIndexFromHash(hashCoordinate(cx, cy)));
       }
     }
   }
 
   var flagged_to_erase = [];
-  for (var t = 0; t < search_indices.length; t++){
+  for (var t = 0; t < search_indices.length; t++) {
 
-    for (var k = 0; k < verticesHashTable[search_indices[t]].length; k++){
+    for (var k = 0; k < verticesHashTable[search_indices[t]].length; k++) {
       var vhtk = verticesHashTable[search_indices[t]][k];
 
-      if (squaredist(vhtk[0], vhtk[1], x, y) <= radius * radius){
+      if (squaredist(vhtk[0], vhtk[1], x, y) <= radius * radius) {
         //Flag for erase so we don't end up not erasing some because we dynamically removed it from the array.
         flagged_to_erase.push(vhtk[0], vhtk[1]);
       }
     }
   }
-  for (var t = 0; t < flagged_to_erase.length; t+=2){
-    updateHashSpace(flagged_to_erase[t],flagged_to_erase[t+1], false)
+  for (var t = 0; t < flagged_to_erase.length; t += 2) {
+    updateHashSpace(flagged_to_erase[t], flagged_to_erase[t + 1], false)
   }
-  
-  
+
+
 }
 
 function snapVertices(acc) {
@@ -276,21 +275,20 @@ function delaunayDisplay(tng, ctx, vertices_set, flower_effect, flowering_step, 
   }
   //ctx.fill('RGBA(255,255,255,0)');
   //ctx.rect(0,0,cWidth,cHeight)
-  
+
   if (flower_step === 0 && flower_effect) {
     //First display empty triangles
-    uncoloredTriangleCanvasLayer = createGraphics(cWidth,cHeight);
+    uncoloredTriangleCanvasLayer = createGraphics(cWidth, cHeight);
     colorIn();
     sTime = millis();
-    if (displayImage === true){
+    if (displayImage === true) {
       ctx.image(img1, 0, 0, cWidth, cHeight);
       uncoloredTriangleCanvasLayer.image(img1, 0, 0, cWidth, cHeight);
-    }
-    else {
+    } else {
       ctx.fill(255);
-      ctx.rect(0,0,cWidth,cHeight)
+      ctx.rect(0, 0, cWidth, cHeight)
       uncoloredTriangleCanvasLayer.fill(255);
-      uncoloredTriangleCanvasLayer.rect(0,0,cWidth,cHeight)
+      uncoloredTriangleCanvasLayer.rect(0, 0, cWidth, cHeight)
     }
     ctx.fill(256, 256, 256);
     ctx.stroke(10, 10, 10);
@@ -299,21 +297,21 @@ function delaunayDisplay(tng, ctx, vertices_set, flower_effect, flowering_step, 
     if (verticesarr.length > 0) {
       for (var i = 0; i < tng.length; i += 3) {
         construct_shape_from_vertices(verticesarr, ctx, tng, i);
-        
+
         construct_shape_from_vertices(verticesarr, uncoloredTriangleCanvasLayer, tng, i);
       }
     }
-    
+
   }
-  if (flower_effect){
+  if (flower_effect) {
     var coloring_speed = 1;
-    if (flower_speed){
+    if (flower_speed) {
       coloring_speed = flower_speed;
     }
     //console.log(coloring_speed);
-    for (i = flowering_step * 3; i < (flowering_step*3) + 3*coloring_speed;i+=3){
+    for (i = flowering_step * 3; i < (flowering_step * 3) + 3 * coloring_speed; i += 3) {
       //console.log(i);
-      if (i < tng.length){
+      if (i < tng.length) {
         if (tColors[i] >= 0) {
 
           ctx.fill(tColors[i], tColors[i + 1], tColors[i + 2]);
@@ -326,32 +324,29 @@ function delaunayDisplay(tng, ctx, vertices_set, flower_effect, flowering_step, 
         if (verticesarr.length > 0) {
           construct_shape_from_vertices(verticesarr, ctx, tng, i);
         }
-          
+
       }
     }
-    
-  }
-  else {
+
+  } else {
     //Clear background, then draw
-    if (displayImage === true){
+    if (displayImage === true) {
       ctx.image(img1, 0, 0, cWidth, cHeight);
 
-    }
-    else {
+    } else {
       ctx.fill(255);
-      ctx.rect(0,0,cWidth,cHeight)
+      ctx.rect(0, 0, cWidth, cHeight)
     }
     var iteration_max;
     var iteration_start;
     var coloring_speed = 1;
     if (flower_effect) {
-      
-      if (flower_speed){
+
+      if (flower_speed) {
         coloring_speed = flower_speed;
-        iteration_max = (flowering_step*3) + 3*coloring_speed;
+        iteration_max = (flowering_step * 3) + 3 * coloring_speed;
       }
-    }
-    else {
+    } else {
       iteration_start = 0;
       iteration_max = tng.length;
     }
@@ -380,7 +375,7 @@ function delaunayDisplay(tng, ctx, vertices_set, flower_effect, flowering_step, 
 }
 
 //Construct a shape based on display mode onto canvas ctx, given teh vertices and trianglulation and iteration values.
-function construct_shape_from_vertices(verticesarr, ctx, tng, i){
+function construct_shape_from_vertices(verticesarr, ctx, tng, i) {
   if (displayMode == 0) {
     ctx.triangle(verticesarr[tng[i]][0], verticesarr[tng[i]][1], verticesarr[tng[i + 1]][0], verticesarr[tng[i + 1]][1], verticesarr[tng[i + 2]][0], verticesarr[tng[i + 2]][1]);
   }
@@ -500,7 +495,7 @@ function loadData(dataStored) {
 
 function saveData(location) {
   var location_name = "art1";
-  if (location){
+  if (location) {
     location_name = location;
   }
   //image(img1, 0, 0, cWidth, cHeight);
@@ -546,10 +541,10 @@ function expandImage(mvalue, save) {
 
   var expandedWidth = cWidth * mvalue;
   var expandedHeight = cHeight * mvalue;
-  
+
   //Change the sd value to accomodate new size for those downloading the distorted triangulations
   sd *= mvalue;
-  
+
   //Save method by creating off screen graphics
   downloadcanvas = createGraphics(expandedWidth, expandedHeight);
 
@@ -596,7 +591,7 @@ function expandImage(mvalue, save) {
     downloading = false;
     //console.log("Finished downloading")
   }
-  sd/=mvalue;
+  sd /= mvalue;
 }
 var testCanvas;
 //Take the vertices and creates a flattend version
@@ -737,11 +732,10 @@ function construct_css_buttons() {
   }
   this.displayImage = function (a) {
     if (a === true) {
-      
+
       $("#displayImage").removeClass("active");
       $("#displayImage").html("Hide<br>Image");
-    }
-    else {
+    } else {
       $("#displayImage").html("Show<br>Image");
       $("#displayImage").addClass("active");
     }
@@ -761,20 +755,19 @@ var undoState = 0;
 //Store vertices up to 50 steps
 function undo() {
   stepBackNum++;
-  if (indexPos - stepBackNum <= 0 || stepBackNum >= max_undo - 1 || stepBackNum >= maxStepBackDist){
+  if (indexPos - stepBackNum <= 0 || stepBackNum >= max_undo - 1 || stepBackNum >= maxStepBackDist) {
     console.log("disbaled")
     $("#undo").addClass("disabled");
     $("#undo").css("cursor", "not-allowed");
     $("#redo").removeClass("disabled");
     $("#redo").css("cursor", "pointer");
-  }
-  else {
+  } else {
     $("#undo").removeClass("disabled");
     $("#undo").css("cursor", "pointer");
     $("#redo").removeClass("disabled");
     $("#redo").css("cursor", "pointer");
   }
-  
+
   if (indexPos - stepBackNum < 0 || stepBackNum > max_undo - 1 || stepBackNum > maxStepBackDist) {
     stepBackNum--;
     //can't undo anymore
@@ -793,22 +786,21 @@ function undo() {
 
 function redo() {
   stepBackNum--;
-  if (stepBackNum <= 0){
+  if (stepBackNum <= 0) {
     $("#redo").addClass("disabled");
     $("#redo").css("cursor", "not-allowed");
     $("#undo").removeClass("disabled");
     $("#undo").css("cursor", "pointer");
-  }
-  else {
+  } else {
     $("#redo").removeClass("disabled");
-    $("#redo").css("cursor", "pointer"); 
+    $("#redo").css("cursor", "pointer");
     $("#undo").removeClass("disabled");
     $("#undo").css("cursor", "pointer");
   }
   if (stepBackNum < 0) {
     stepBackNum++;
     undoState = 0;
-    
+
     return;
   }
 
@@ -831,10 +823,9 @@ function recordVertices() {
       //Don't let it get too big in case that one user spends forever (like very very long) time making poly art...
       indexPos = indexPos % max_undo + max_undo;
     }
-    if (maxStepBackDist >= 50){
-      
-    }
-    else {
+    if (maxStepBackDist >= 50) {
+
+    } else {
       maxStepBackDist++;
     }
     $("#undo").removeClass("disabled");
