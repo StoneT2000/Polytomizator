@@ -20,7 +20,6 @@ onmessage = function (e) {
   cWidth = e.data[0][0];
   cHeight = e.data[0][1];
   d = e.data[3]
-
   colorThreshold = e.data[4]
   if (e.data[2] == false) {
     //checks if a filter has already been done

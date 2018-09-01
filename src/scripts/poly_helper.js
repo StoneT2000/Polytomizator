@@ -593,7 +593,7 @@ function expandImage(mvalue, save) {
     });
     $("#downloadthiscanvas").remove();
     downloading = false;
-    //console.log("Finished downloading")
+    console.log("Finished downloading")
   }
   sd /= mvalue;
 }
