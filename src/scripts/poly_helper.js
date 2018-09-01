@@ -12,9 +12,10 @@ function findIndexFromHash(hash) {
 
 //Genearte verticesHashTable array, which is the array containing the coords of every vertice in a hashed array index.
 function generateHashSpace() {
+  totalpoints = 0;
   verticesHashTable = [];
   //hashing_size x hashing_size squares in grid
-  for (i = 0; i <= ceil(cWidth / hashing_size) * ceil(cHeight / hashing_size); i++) {
+  for (i = 0; i <= ceil((cWidth / hashing_size)+1) * ceil((cHeight / hashing_size)+1); i++) {
     verticesHashTable.push([]);
 
   }
@@ -29,6 +30,7 @@ function updateHashSpace(x, y, add) {
   if (add == true) {
     //console.log("x: " + x,"y: "+ y,"hashValue: " + hashVal, "index:" + index);
     verticesHashTable[index].push([x, y])
+    totalpoints++;
   }
   if (add == false) {
     //If deleting, we find the proper index, then proceed to search for that vertex with that coordinate and splice it
@@ -36,6 +38,7 @@ function updateHashSpace(x, y, add) {
 
       if (verticesHashTable[index][i][0] == x && verticesHashTable[index][i][1] == y) {
         verticesHashTable[index].splice(i, 1)
+        totalpoints--;
       }
     }
   }
@@ -108,6 +111,16 @@ function keyPressed(event) {
     removeClassFromBrushes("active");
     $("#triangleMove").addClass("active");
   }
+  /*
+  //=
+  else if (keyCode === 61) {
+    resize_poly_canvas(1.2);
+  }
+  //-
+  else if (keyCode === 173){
+    resize_poly_canvas(1/1.2)
+  }
+  */
 }
 
 //Equivalent to pressing polytomize or D. Triangulate the data, tell draw() to begin coloring, check for flower effect option, load image into background, reset colors, and undisplay things.
@@ -479,7 +492,8 @@ function loadData(dataStored) {
   cWidth = dataStored[4];
   cHeight = dataStored[5];
   myCanvas = resizeCanvas(cWidth, cHeight);
-  $("#gamedisplay").css("right", (cWidth / 2).toString() + "px");
+  $("#gamedisplay").css("width", cWidth);
+  $("#gamedisplay").css("margin-left", -cWidth/2);
   triangulize();
 
 
@@ -506,18 +520,8 @@ function saveData(location) {
 }
 
 function expandVertex(vertex, expandValue) {
-  if (expandValue < 1) {
-    expandValue *= -1;
-    expandValue = 1 / expandValue;
-    expandValue++;
-  } else {
-    expandValue--;
-  }
-  var cx = 0;
-  var ch = 0;
-  var dx = vertex[0] - cx;
-  var dy = vertex[1] - ch;
-  return [vertex[0] + dx * (expandValue), vertex[1] + dy * (expandValue)];
+  
+  return [vertex[0] * expandValue, vertex[1] * expandValue];
 
 }
 
@@ -589,7 +593,7 @@ function expandImage(mvalue, save) {
     });
     $("#downloadthiscanvas").remove();
     downloading = false;
-    //console.log("Finished downloading")
+    console.log("Finished downloading")
   }
   sd /= mvalue;
 }
@@ -601,6 +605,7 @@ function triangulize() {
   verticesHashTableFlat = verticesHashTable.reduce(function (acc, curr) {
     return acc.concat(curr)
   });
+  console.log(verticesHashTableFlat);
   delaunay = (Delaunator.from(verticesHashTableFlat))
   stepD = 0;
 
@@ -776,7 +781,8 @@ function undo() {
   }
 
   undoState = 1;
-  verticesHashTable = JSON.parse(JSON.stringify(storedVertices[(indexPos - stepBackNum) % max_undo]));
+  verticesHashTable = JSON.parse(JSON.stringify(storedVertices[(indexPos - stepBackNum) % max_undo][0]));
+  totalpoints = storedVertices[(indexPos - stepBackNum) % max_undo][1];
   verticesHashTableFlat = verticesHashTable.reduce(function (acc, curr) {
     return acc.concat(curr)
   });
@@ -804,8 +810,8 @@ function redo() {
     return;
   }
 
-  verticesHashTable = JSON.parse(JSON.stringify(storedVertices[(indexPos - stepBackNum) % max_undo]));
-
+  verticesHashTable = JSON.parse(JSON.stringify(storedVertices[(indexPos - stepBackNum) % max_undo][0]));
+  totalpoints = storedVertices[(indexPos - stepBackNum) % max_undo][1]
   verticesHashTableFlat = verticesHashTable.reduce(function (acc, curr) {
     return acc.concat(curr)
   });
@@ -817,8 +823,8 @@ function recordVertices() {
   if (undoState == 0) {
     indexPos++;
 
-    storedVertices[indexPos % max_undo] = JSON.parse(JSON.stringify(verticesHashTable));
-
+    storedVertices[indexPos % max_undo][0] = JSON.parse(JSON.stringify(verticesHashTable));
+    storedVertices[indexPos % max_undo][1] = totalpoints;
     if (indexPos >= max_undo * 4) {
       //Don't let it get too big in case that one user spends forever (like very very long) time making poly art...
       indexPos = indexPos % max_undo + max_undo;
@@ -841,13 +847,61 @@ function recordVertices() {
     //In the event that we start a new path during command z, we set indexPos at that current position
     indexPos = indexPos - stepBackNum;
     maxStepBackDist = max_undo - stepBackNum;
-    //storedVertices.splice(indexPos-stepBackNum+1);
-    //indexPos = indexPos - stepBackNum;
-    //indexPos = 0;
     stepBackNum = 0;
     undoState = 0;
     indexPos++;
-    storedVertices[indexPos % max_undo] = JSON.parse(JSON.stringify(verticesHashTable));
+    storedVertices[indexPos % max_undo][0] = JSON.parse(JSON.stringify(verticesHashTable));
+    storedVertices[indexPos % max_undo][1] = totalpoints;
   }
   //console.log(storedVertices, indexPos, stepBackNum)
+}
+//Function for resizing the canvas at will of user
+
+var origcWidth;
+var origcHeight;
+var canvasScale = 1;
+function resize_poly_canvas(scale) {
+  //!!!: We should always scale from original cWidth and cHeight next time
+  //canvasScale += amount;
+  
+  cWidth = floor(cWidth * scale);
+  cHeight = floor(cHeight * scale);
+  
+  /*
+  cWidth = floor(origcWidth * canvasScale);
+  cHeight = floor(origcHeight * canvasScale);
+  */
+  triangleCanvasLayer = createGraphics(cWidth, cHeight)
+  
+  resizeCanvas(cWidth,cHeight);
+  
+  //CSS, center canvas back to middle
+  $("#gamedisplay").css("width", cWidth);
+  $("#gamedisplay").css("margin-left", -cWidth/2);
+  
+  if (cWidth > 0.9 * window.innerWidth) {
+    $("body").width(cWidth+100);
+  }
+  else {
+    $("body").css("width","auto");
+  }
+  
+  
+  //Store the current vertices positions
+  verticesHashTableFlat = verticesHashTable.reduce(function (acc, curr) {
+    return acc.concat(curr)
+  });
+  var expandedVerticesHashTableFlat = JSON.parse(JSON.stringify(verticesHashTableFlat));
+  
+  //Regenerate hash space
+  generateHashSpace();
+  
+  //Fill the hashspace up with the old vertices
+  for (var p = 0; p < expandedVerticesHashTableFlat.length; p++) {
+    var exv = expandVertex(expandedVerticesHashTableFlat[p], scale);
+    expandedVerticesHashTableFlat[p] = exv;
+    updateHashSpace(floor(exv[0]),floor(exv[1]),true);
+  }
+  //Set this as false, forcing the page to use the filters again to generate poly art. Otherwise, the displayed vertices won't be correct.
+  completedFilters = false;
 }

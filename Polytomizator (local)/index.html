@@ -6,7 +6,7 @@
   <link rel="shortcut icon" type="image/x-icon" href="images/websiteLogo.ico" />
   <!--Libraries Used-->
   <script src="local-js-css/jquery-3.3.1.min.js"></script>
-    
+  <script src="local-js-css/popper.min.js"></script>
   <script src="local-js-css/bootstrap.bundle.min.js"></script>
   
   <script src="libraries/p5.min.js"></script>
@@ -21,7 +21,6 @@
   <script language="javascript" type="text/javascript" src="scripts/exportSVG.min.js"></script>
   <script language="javascript" type="text/javascript" src="scripts/FileSaver.min.js"></script>
   <link rel="stylesheet" href="local-js-css/bootstrap.min.css">
-  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
   <link rel="stylesheet" href="local-js-css/all.min.css">
   <link rel="stylesheet" href="poly.min.css">
 
@@ -31,18 +30,20 @@
   <div id="loadingScreen">
     <h1 id="loadingText" style="position: fixed;text-align: center;width: 100%;">Loading Content<img src="images/loadingSymbol.gif" style="margin-left: 10px" width="32px" height="auto"></h1>
   </div>
-  <div class='flex-container' style="">
-    <!--<button type="button" class="btn btn-primary" data-toggle='popover' data-content='hello there'>Press</button>-->
+  <div class='flex-container'>
     <h1 style="margin-top:10px">Polytomizator</h1>
     <h5 style="font-size:15px;margin-bottom: 30px;width:80%;margin-left:50%;transform:translate(-50%,0)">It is <b>highly highly</b> suggested to use Firefox for maximum experience. Cannot download art on Safari at the moment.</h5>
-    <h3 style="width:70%;margin-left:50%;transform:translate(-50%,0);margin-bottom:50px;padding-bottom: 50px; border-bottom: 2px solid RGB(40,40,40)">Add points with the brushes. Then click polytomize to make art! Then download the poly art as an image or SVG.</h3>
-        <h3 id="uploadText">Upload your own image to work with here:</h3>
-    <input style="display:block" id="file" type="file">
+    <h3 style="width:70%;margin-left:50%;transform:translate(-50%,0);margin-bottom:50px;padding-bottom: 50px; border-bottom: 2px solid RGB(40,40,40)">Add points with the brushes. Then click polytomize to make art! Then download the poly art as a high quality image or SVG.</h3>
+    <h3 id="uploadText">Upload your own image to work with here:</h3>
+    <div class="custom-file" id="images-file-div" style="width:485px;margin-bottom:30px;">
+      <input type="file" class="custom-file-input" id="file" accept="image/*">
+      <label class="custom-file-label" for="file" id="label_file" style="padding-right:78.333333px">Choose images...</label>
+    </div>
     <div>
       <button id="polytomize" class="btn btn-dark" data-toggle="tooltip" title="Triangulize the canvas and color it in" data-delay="1000">Polytomize</button>
     </div>
     <div id="download_elements">
-      <button type="button" id="downloadSVG" class="btn btn-dark">Download poly art as an SVG file</button><button type="button" id="expandImage" class="btn btn-dark">Download poly art as an image (png)</button>
+      <button type="button" id="downloadSVG" class="btn btn-dark">Download poly art as an SVG file</button><button type="button" id="expandImage" class="btn btn-dark" data-toggle="tooltip" data-placement="top" data-title="Download the poly art in extremely high detail" data-delay="1000">Download poly art as an image (png)</button>
     </div>
     <div class="main">
       <div id="gamedisplay"></div>
@@ -59,7 +60,7 @@
         <tr>
           <td class="option_name">Grid</td>
           <td><input type="checkbox" style="" id="display_grid"></td>
-          <td class="inputs"><input type="text" class="form-control" id="grid_accuracy" placeholder="≥ 2"></td>
+          <td class="inputs"><input type="text" class="form-control" id="grid_accuracy" placeholder="≥ 2" style="width: 100px;"></td>
         </tr>
         <tr class="option_input_title_tr">
         </tr>
@@ -76,7 +77,7 @@
         <tr>
           <td class="option_name">Flower effect</td>
           <td><input type="checkbox" style="height:auto;" id="flower_effect"></td>
-          <td class="inputs"><input class="form-control" type="text" id="flower_effect_speed" placeholder="≥ 1"></td>
+          <td class="inputs"><input class="form-control" type="text" id="flower_effect_speed" placeholder="≥ 1" style="width: 100px;"></td>
         </tr>
         <tr class="option_input_title_tr">
         </tr>
@@ -97,13 +98,25 @@
           <td class="option_name">Display stats</td>
           <td><input type="checkbox" style="height:auto;" id="stats_mode_check"></td>
         </tr>
+        <tr class="option_input_title_tr">
+          <td></td>
+          <td></td>
+          <td class="option_input_title">Size (Megapixels)</td>
+        </tr>
+        <tr>
+          <td class="option_name" style="height:40px;line-height: 20px;">Downloaded<br>Image Size</td>
+          <td></td>
+          <td class="inputs"><input class="form-control" type="text" id="downloaded_poly_size" style="width: 100px;"></td>
+        </tr>
       </table>
       <h4 style="">Functions</h4>
       <div id="function_options">
         <button class="btn btn-light" id="displaysnapvertices">Snap Vertices</button>
         <button class="btn btn-light" id="displaygencubicpoly">Generate cubic poly art</button>
         <button class="btn btn-light" id="displaygennormalpoly">Generate normal poly art</button>
-        
+        <button class="btn btn-light" id="increase_canvas" onclick="resize_poly_canvas(1.2)">Increase Canvas Size</button>
+        <button class="btn btn-light" id="decrease_canvas" onclick="resize_poly_canvas(1/1.2)">Decrease Canvas Size</button>
+
       </div>
 
     </div>
@@ -135,7 +148,7 @@
 
     </div>
     <div id="stats_for_nerds" style="margin-top:50px;">
-      <h3 id="statsHeader"> Some stats for nerds</h3>
+      <h3 id="statsHeader">Some stats for nerds</h3>
       <table id="stats_for_nerds_table">
         <tr>
           <th>Metric</th>
@@ -159,10 +172,8 @@
       <h5>Created with HTML, CSS, Bootstrap, p5.js</h5>
     </div>
   </div>
-  <div class="footer" style="">
-    <h6>Github </h6> <a href="https://github.com/StoneT2000"><i class="fab fa-github"></i></a>
-    <h6 style="font-size:30px;margin-right: 15px;margin-left: 15px">|</h6>
-    <h6>Email</h6> <a href="mailto:stoneztao@gmail.com"><i class="fa fa-envelope"></i></a>
+  <div class="footer">
+    <span style="margin-right:4px;">By Stone T. @ Github</span><a href="https://github.com/StoneT2000"><i class="fab fa-github"></i></a><span style="border-right: 1px solid #212529;margin:0px 10px 0px 10px;"></span><span style="margin-right:4px;">Email</span><a href="mailto:stoneztao@gmail.com"><i class="fa fa-envelope"></i></a>
   </div>
 
 </body>

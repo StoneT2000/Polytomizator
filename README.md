@@ -21,6 +21,9 @@ Simply download the repository's zip file, open it, and then open the folder Pol
 - Can auto-generate two kinds of poly art, normal, and cubic like
 - Can snap vertices or draw vertices on to a set grid
 - Can undo or redo placement of vertices
+- Has other display modes of the triangulation
+- Can download at varying sizes depending on desired number of megapixels
+- Can adjust canvas size to work on for bigger or smaller screens
 ### Downloading and Loading Work
 - Creates poly art from triangulization and can be downloaded at high resolutions
 - Save created points, triangles, and colors in between browsing sessions (Just don't clear cache)

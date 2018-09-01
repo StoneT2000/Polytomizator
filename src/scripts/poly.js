@@ -95,8 +95,15 @@ function setup() {
   var factor = img1.height / 620;
   cWidth = round(img1.width / factor);
   cHeight = round(img1.height / factor);
+  if (cWidth > window.innerWidth * 0.9) {
+    var factor = img1.width / (window.innerWidth * 0.9);
+    cWidth = round(img1.width / factor);
+    cHeight = round(img1.height / factor);
+  }
   myCanvas = createCanvas(cWidth, cHeight);
-
+  origcWidth = cWidth;
+  origcHeight = cHeight;
+  canvasScale = 1;
   //create off screen triangle generating layer
   triangleCanvasLayer = createGraphics(cWidth, cHeight);
 
@@ -106,7 +113,7 @@ function setup() {
 
   //Initialize storedVertices array with 50 empty slots
   for (var slot_index = 0; slot_index < max_undo; slot_index++) {
-    storedVertices.push([]);
+    storedVertices.push([0,0]);
   }
   //Store empty vertices
   recordVertices();
@@ -156,7 +163,8 @@ function setup() {
 
 
 
-  $("#gamedisplay").css("right", (cWidth / 2).toString() + "px");
+  $("#gamedisplay").css("width", cWidth);
+  $("#gamedisplay").css("margin-left", -cWidth/2);
   //$("body").css("width",(cWidth+100).toString()+"px")
   myCanvas.parent('gamedisplay');
   angleMode(DEGREES);
@@ -179,7 +187,7 @@ function setup() {
   $("#loadingText").css("opacity", "0");
   $("#loadingScreen").css("opacity", "0");
   window.setTimeout(function () {
-    $("#loadingScreen").css("display", "none");
+    $("#loadingScreen").css("z-index", "-10");
 
     $("#loadingText").html("Patience, we are making art <img src=\"images/loadingSymbol.gif\" style=\"margin-left: 10px\" width=\"32px\" height=\"auto\">");
   }, 1500);
@@ -232,7 +240,6 @@ var flowering_speed = 1;
 var uncoloredTriangleCanvasLayer;
 
 function draw() {
-  totalpoints = 0;
   background("#FFFFFF");
 
   if (displayImage === true) {
@@ -294,17 +301,15 @@ function draw() {
 
   fill(256, 256, 256);
   stroke(0, 0, 0);
+  if (displayPoints === true) {
+    for (j = 0; j < verticesHashTable.length; j++) {
+      //ellipse(verticesHashTableFlat[j][0], verticesHashTableFlat[j][1], 5, 5);
 
-  for (j = 0; j < verticesHashTable.length; j++) {
-    //ellipse(verticesHashTableFlat[j][0], verticesHashTableFlat[j][1], 5, 5);
-
-    for (k = 0; k < verticesHashTable[j].length; k++) {
-      if (displayPoints === true) {
+      for (k = 0; k < verticesHashTable[j].length; k++) {
         ellipse(verticesHashTable[j][k][0], verticesHashTable[j][k][1], 5, 5);
       }
-      totalpoints++;
-    }
 
+    }
   }
   if (display_grid === true) {
     strokeWeight(1);
@@ -409,13 +414,12 @@ var detected_edge_vertices = [];
 
 function generate_normal_poly(values) {
   noLoop();
-  $("#loadingScreen").css("display", "block");
+  $("#loadingScreen").css("z-index", "10");
   $("#loadingScreen").css("opacity", "1");
-  window.setTimeout(function () {
     $("#loadingText").css("top", "50%");
     $("#loadingText").css("opacity", "1");
-  }, 0)
-  if (filteredPixels.length > 0) {
+
+  if (filteredPixels.length > 0 && completedFilters == true) {
     copyTo(filteredPixels, pixels);
   } else {
     image(img1, 0, 0, cWidth, cHeight);
@@ -428,11 +432,12 @@ function generate_normal_poly(values) {
   }
   var artWorker = new Worker('scripts/webworkerArtGen.js')
   if (completedFilters == false) {
-
+    var artWorkerstime = millis();
+    detected_edge_vertices = [];
     artWorker.postMessage([[values[0], values[1]], pixels, values[2], values[3], values[4]])
     artWorker.onmessage = function (e) {
       var artResult = e.data;
-
+      var artWorkerftime = millis();
       generateHashSpace();
       for (var iv = 0; iv < artResult[0].length; iv++) {
         updateHashSpace(artResult[0][iv][0], artResult[0][iv][1], true);
@@ -441,7 +446,7 @@ function generate_normal_poly(values) {
         //updateHashSpace(artResult[1][iv][0], artResult[1][iv][1], true);
         detected_edge_vertices.push([artResult[1][iv][0], artResult[1][iv][1], artResult[1][iv][2]]);
       }
-
+      //console.log(values[0], values[1], artResult[1])
       for (var i = 0; i < detected_edge_vertices.length; i++) {
         if (detected_edge_vertices[i][2] >= colorThreshold) {
           updateHashSpace(detected_edge_vertices[i][0], detected_edge_vertices[i][1], true);
@@ -470,11 +475,12 @@ function generate_normal_poly(values) {
         $("#loadingText").css("opacity", "0");
         $("#loadingText").css("top", "30%");
         window.setTimeout(function () {
-          $("#loadingScreen").css("display", "none");
+          $("#loadingScreen").css("z-index", "-10");
         }, 1800);
       }, 0)
       loop();
       recordVertices();
+      console.log("Webworker took " + ((artWorkerftime - artWorkerstime)/1000) + "s", "Area: " + (cWidth*cHeight), detected_edge_vertices);
     }
   } else {
     generateHashSpace()
@@ -527,7 +533,7 @@ function generate_normal_poly(values) {
     $("#loadingText").css("opacity", "0");
     $("#loadingText").css("top", "30%");
     window.setTimeout(function () {
-      $("#loadingScreen").css("display", "none");
+      $("#loadingScreen").css("z-index", "-10");
     }, 1500);
     loop();
     recordVertices();
