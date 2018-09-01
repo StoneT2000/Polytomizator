@@ -1,6 +1,9 @@
 var completedFilters = false;
-$(document).ready(function () {
+//Size in MP of downloaded poly art.
+var size_megapixels = 22
 
+$(document).ready(function () {
+  var confirmed_size_risk = false;
   document.addEventListener("keydown", function (zEvent) {
     if (zEvent.metaKey && zEvent.shiftKey && zEvent.code === "KeyZ") {
       redo();
@@ -15,10 +18,12 @@ $(document).ready(function () {
   $("#redo").css("cursor", "not-allowed");
 
   $("#pointBrush").addClass("active");
-  console.log("Polytomizator v52")
+  console.log("Polytomizator v53")
+  
+  //Default values
   $("#grid_accuracy").val(20)
   $("#flower_effect_speed").val(1);
-
+  $("#downloaded_poly_size").val(22);
   //Initialize popover stuff
   $(function () {
     $('[data-toggle="popover"]').popover()
@@ -129,7 +134,7 @@ $(document).ready(function () {
     $("#triangleMove").addClass("active");
   });
   $("#file").on('change', function () {
-    console.log("change")
+    $('#label_file').text(this.files && this.files.length ? this.files[0].name.split('.')[0] : '');
     completedFilters = false;
     img1 = loadImage(window.URL.createObjectURL(document.getElementById("file").files[0]), function () {
       //make image have height 600
@@ -213,11 +218,16 @@ $(document).ready(function () {
       alert("Please wait until the coloring is finished before enlargining the work and downloading it")
     } else {
       var factor = 2;
+      
+      var current_canvas_area = cWidth * cHeight;
+      var factor = sqrt(pow(2,20) * size_megapixels / current_canvas_area);
+      /*
       if (cWidth > cHeight) {
         factor = ceil(6000 / cWidth);
       } else {
         factor = ceil(6000 / cHeight);
       }
+      */
 
       expandImage(factor, true);
     }
@@ -352,6 +362,7 @@ $(document).ready(function () {
       return;
     }
     snappingAccuracy = newacc;
+    $("#grid_accuracy").val(snappingAccuracy);
   });
   $("#flower_effect").on("change", function () {
     if ($("#flower_effect")[0].checked) {
@@ -369,6 +380,7 @@ $(document).ready(function () {
       return;
     }
     flowering_speed = newspeed;
+    $("#flower_effect_speed").val(newspeed)
   });
   var selected_mode_num = 2;
   $("#display_mode_selection").on("change", function () {
@@ -405,7 +417,39 @@ $(document).ready(function () {
       $("#stats_for_nerds").css("display", "none");
     }
   })
-
+  $("#downloaded_poly_size").on("change", function () {
+    var old_size_value = $("#downloaded_poly_size").val();
+    var new_size_value = parseFloat($("#downloaded_poly_size").val());
+    if (confirmed_size_risk == false){
+      var confirming_size_risk = confirm("Are you sure you want to change this value? If the image size is too high, the poly art may not download correctly. By default, it is set at 22MP");
+      if (confirming_size_risk){
+        if (!isNaN(new_size_value) && new_size_value >= 1) {
+          $("#downloaded_poly_size").val(new_size_value);
+          size_megapixels = new_size_value;
+          confirmed_size_risk = true;
+        }
+        else {
+          confirmed_size_risk = true;
+          $("#downloaded_poly_size").val(old_size_value);
+          alert("Please enter a positive number greater or equal to 1 for image size")
+        }
+      }
+      else {
+        $("#downloaded_poly_size").val(old_size_value);
+      }
+    }
+    else {
+      if (!isNaN(new_size_value) && new_size_value >= 1) {
+        $("#downloaded_poly_size").val(new_size_value);
+        size_megapixels = new_size_value;
+      }
+      else {
+        $("#downloaded_poly_size").val(old_size_value);
+        alert("Please enter a positive number greater or equal to 1 for image size")
+      }
+    }
+  })
+  
 });
 var display_mode_on = false;
 var options_menu_open = false;

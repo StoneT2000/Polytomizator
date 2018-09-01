@@ -271,38 +271,31 @@ p {
   font-weight: 300;
 }
 
-.footer {
-  position: absolute;
-  width: 100%;
-  height: 50px;
+.footer{
+  position: relative;
+  width:100%;
+  height: 30px;
   bottom: 0px;
-  margin: none;
-  text-align: center;
-  background-color: #343a40;
-  color: white;
-}
+  margin-top:10px;
 
-.footer a {
-  color: white;
-  font-size: 30px;
+  z-index:9999;
+  color:rgb(52,58,64);
+  text-align: center;
+}
+.footer a{
+  color: RGB(52,58,64);
+  font-size: 20px;
+  line-height: 25px;
   margin-left: 5px;
 }
-
-.footer h6 {
-  display: inline-block;
-  line-height: 40px;
-  margin-bottom: 0px;
-  margin-top: 0px;
-  font-size: 20px;
+.footer span{
+  display: inline;
+  font-size: 12px;
   font-weight: 300;
-  -webkit-transform: translate(0, -3px);
-  -ms-transform: translate(0, -3px);
-  transform: translate(0, -3px);
+  vertical-align: text-top;
 }
-
-.footer a:hover {
-  border-radius: 50%;
-  color: #0275d8;
+.footer a:hover{
+  color: RGB(26,29,32);
 }
 
 .noselect {
@@ -326,7 +319,7 @@ p {
 #options_menu {
   position: fixed;
   width: 300px;
-  height: 580px;
+  height: 620px;
   right: 15px;
   top: 65px;
   background-color: #343a40;
