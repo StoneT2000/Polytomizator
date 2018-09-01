@@ -92,9 +92,14 @@ function setup() {
   loadPixels();
 
   //Fix the height of the uploaded image based on height, it can't be too large
-  var factor = img1.height / 0.9*window.innerWidth;
+  var factor = img1.height / 620;
   cWidth = round(img1.width / factor);
   cHeight = round(img1.height / factor);
+  if (cWidth > window.innerWidth * 0.9) {
+    var factor = img1.width / (window.innerWidth * 0.9);
+    cWidth = round(img1.width / factor);
+    cHeight = round(img1.height / factor);
+  }
   myCanvas = createCanvas(cWidth, cHeight);
   origcWidth = cWidth;
   origcHeight = cHeight;
@@ -160,7 +165,6 @@ function setup() {
 
   $("#gamedisplay").css("width", cWidth);
   $("#gamedisplay").css("margin-left", -cWidth/2);
-  $("body").width(cWidth+100);
   //$("body").css("width",(cWidth+100).toString()+"px")
   myCanvas.parent('gamedisplay');
   angleMode(DEGREES);

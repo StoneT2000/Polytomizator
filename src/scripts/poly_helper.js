@@ -15,7 +15,7 @@ function generateHashSpace() {
   totalpoints = 0;
   verticesHashTable = [];
   //hashing_size x hashing_size squares in grid
-  for (i = 0; i <= ceil(cWidth / hashing_size) * ceil(cHeight / hashing_size); i++) {
+  for (i = 0; i <= ceil((cWidth / hashing_size)+1) * ceil((cHeight / hashing_size)+1); i++) {
     verticesHashTable.push([]);
 
   }
@@ -111,6 +111,16 @@ function keyPressed(event) {
     removeClassFromBrushes("active");
     $("#triangleMove").addClass("active");
   }
+  /*
+  //=
+  else if (keyCode === 61) {
+    resize_poly_canvas(1.2);
+  }
+  //-
+  else if (keyCode === 173){
+    resize_poly_canvas(1/1.2)
+  }
+  */
 }
 
 //Equivalent to pressing polytomize or D. Triangulate the data, tell draw() to begin coloring, check for flower effect option, load image into background, reset colors, and undisplay things.
@@ -868,7 +878,14 @@ function resize_poly_canvas(scale) {
   //CSS, center canvas back to middle
   $("#gamedisplay").css("width", cWidth);
   $("#gamedisplay").css("margin-left", -cWidth/2);
-  $("body").width(cWidth+100);
+  
+  if (cWidth > 0.9 * window.innerWidth) {
+    $("body").width(cWidth+100);
+  }
+  else {
+    $("body").css("width","auto");
+  }
+  
   
   //Store the current vertices positions
   verticesHashTableFlat = verticesHashTable.reduce(function (acc, curr) {

@@ -142,14 +142,7 @@ $(document).ready(function () {
         cHeight = round(img1.height / factor);
       }
       //makes sure we have proper hashing for those images that have perfect grid alignments
-
-      //Temporary fix for when width is 0 mod 50, the hashmap doesn't work.
-      if (cWidth % 50 == 0) {
-        cWidth++;
-      }
-      if (cHeight % 50 == 0) {
-        cHeight++;
-      }
+      
       myCanvas = createCanvas(cWidth, cHeight);
       origcWidth = cWidth;
       origcHeight = cHeight;
@@ -316,6 +309,14 @@ $(document).ready(function () {
       if (isNaN(ct) || ct < 10) {
         alert("Enter a number larger than 10 for the color threshold");
         return;
+      }
+      var canvas_area = cWidth*cHeight
+      if (canvas_area > 3000000) {
+        var predicted_time = 1.013 * pow(10, -5) * canvas_area
+        var proceed_or_not = confirm("The canvas size is rather large and this process will take approximately " + predicted_time.toFixed(2) + " seconds");
+        if (!proceed_or_not){
+          return;
+        }
       }
       colorThreshold = ct;
       close_a_options();
