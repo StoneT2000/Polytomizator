@@ -187,7 +187,7 @@ function setup() {
   $("#loadingText").css("opacity", "0");
   $("#loadingScreen").css("opacity", "0");
   window.setTimeout(function () {
-    $("#loadingScreen").css("display", "none");
+    $("#loadingScreen").css("z-index", "-10");
 
     $("#loadingText").html("Patience, we are making art <img src=\"images/loadingSymbol.gif\" style=\"margin-left: 10px\" width=\"32px\" height=\"auto\">");
   }, 1500);
@@ -414,12 +414,11 @@ var detected_edge_vertices = [];
 
 function generate_normal_poly(values) {
   noLoop();
-  $("#loadingScreen").css("display", "block");
+  $("#loadingScreen").css("z-index", "10");
   $("#loadingScreen").css("opacity", "1");
-  window.setTimeout(function () {
     $("#loadingText").css("top", "50%");
     $("#loadingText").css("opacity", "1");
-  }, 0)
+
   if (filteredPixels.length > 0 && completedFilters == true) {
     copyTo(filteredPixels, pixels);
   } else {
@@ -434,7 +433,7 @@ function generate_normal_poly(values) {
   var artWorker = new Worker('scripts/webworkerArtGen.js')
   if (completedFilters == false) {
     var artWorkerstime = millis();
-    var detected_edge_vertices = [];
+    detected_edge_vertices = [];
     artWorker.postMessage([[values[0], values[1]], pixels, values[2], values[3], values[4]])
     artWorker.onmessage = function (e) {
       var artResult = e.data;
@@ -476,12 +475,12 @@ function generate_normal_poly(values) {
         $("#loadingText").css("opacity", "0");
         $("#loadingText").css("top", "30%");
         window.setTimeout(function () {
-          $("#loadingScreen").css("display", "none");
+          $("#loadingScreen").css("z-index", "-10");
         }, 1800);
       }, 0)
       loop();
       recordVertices();
-      console.log("Webworker took " + ((artWorkerftime - artWorkerstime)/1000) + "s", "Area: " + (cWidth*cHeight));
+      console.log("Webworker took " + ((artWorkerftime - artWorkerstime)/1000) + "s", "Area: " + (cWidth*cHeight), detected_edge_vertices);
     }
   } else {
     generateHashSpace()
@@ -534,7 +533,7 @@ function generate_normal_poly(values) {
     $("#loadingText").css("opacity", "0");
     $("#loadingText").css("top", "30%");
     window.setTimeout(function () {
-      $("#loadingScreen").css("display", "none");
+      $("#loadingScreen").css("z-index", "-10");
     }, 1500);
     loop();
     recordVertices();

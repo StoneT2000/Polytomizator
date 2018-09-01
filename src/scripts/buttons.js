@@ -215,7 +215,7 @@ $(document).ready(function () {
   $("#expandImage").on("click", function () {
 
     if (finishedColoring == false) {
-      alert("Please wait until the coloring is finished before enlargining the work and downloading it")
+      alert("Please wait until the coloring is finished before downloading it")
     } else {
       var factor = 2;
       
