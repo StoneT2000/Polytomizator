@@ -8,8 +8,9 @@ A working link to this program is provided here https://stonet2000.github.io/Pol
 
 Or...
 
-Simply download the repository's zip file, open it, and then open the folder Polytomizator (local), and open index.html with Firefox. This local method is compatible on Firefox only.
+Simply download the repository's zip file, open it, and then open the folder Polytomizator (local), and open index.html.
 
+For maximum experience, it is suggested to use Firefox. The normal poly art auto-generator doesn't work on Chrome or Safari, but everything else does.
 
 ## Features
 ### Making Poly Art
