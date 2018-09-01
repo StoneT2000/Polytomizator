@@ -71,9 +71,7 @@ html {
 
 #gamedisplay {
   margin: auto;
-
-  margin-left: 50%;
-  right: 1504px;
+  left:50%;
   position: relative;
 
 }

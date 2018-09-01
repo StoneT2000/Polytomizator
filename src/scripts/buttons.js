@@ -151,9 +151,11 @@ $(document).ready(function () {
         cHeight++;
       }
       myCanvas = createCanvas(cWidth, cHeight);
-
-      $("#gamedisplay").css("right", (cWidth / 2).toString() + "px")
-      //$("body").css("width",(cWidth+500).toString()+"px")
+      origcWidth = cWidth;
+      origcHeight = cHeight;
+      canvasScale = 1;
+      $("#gamedisplay").css("width", cWidth);
+      $("#gamedisplay").css("margin-left", -cWidth/2);
 
       myCanvas.parent('gamedisplay');
 
@@ -165,7 +167,7 @@ $(document).ready(function () {
       d = pixelDensity();
       storedVertices = [];
       for (var slot_index = 0; slot_index < max_undo; slot_index++) {
-        storedVertices.push([]);
+        storedVertices.push([0,0]);
       }
       generateHashSpace();
       recordVertices();
