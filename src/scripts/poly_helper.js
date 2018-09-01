@@ -542,7 +542,7 @@ function lineAngle(x1, y1, x2, y2) {
 var downloadcanvas;
 
 function expandImage(mvalue, save) {
-  
+
   var expandedWidth = cWidth * mvalue;
   var expandedHeight = cHeight * mvalue;
 
@@ -595,7 +595,6 @@ function expandImage(mvalue, save) {
     downloading = false;
     console.log("Finished downloading")
   }
-  
   sd /= mvalue;
 }
 var testCanvas;
