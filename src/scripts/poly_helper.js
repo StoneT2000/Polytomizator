@@ -605,7 +605,6 @@ function triangulize() {
   verticesHashTableFlat = verticesHashTable.reduce(function (acc, curr) {
     return acc.concat(curr)
   });
-  console.log(verticesHashTableFlat);
   delaunay = (Delaunator.from(verticesHashTableFlat))
   stepD = 0;
 
@@ -761,7 +760,7 @@ var undoState = 0;
 function undo() {
   stepBackNum++;
   if (indexPos - stepBackNum <= 0 || stepBackNum >= max_undo - 1 || stepBackNum >= maxStepBackDist) {
-    console.log("disbaled")
+    //console.log("disbaled")
     $("#undo").addClass("disabled");
     $("#undo").css("cursor", "not-allowed");
     $("#redo").removeClass("disabled");

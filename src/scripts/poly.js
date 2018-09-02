@@ -447,9 +447,27 @@ function generate_normal_poly(values) {
         detected_edge_vertices.push([artResult[1][iv][0], artResult[1][iv][1], artResult[1][iv][2]]);
       }
       //console.log(values[0], values[1], artResult[1])
+      
+      
+      
       for (var i = 0; i < detected_edge_vertices.length; i++) {
         if (detected_edge_vertices[i][2] >= colorThreshold) {
-          updateHashSpace(detected_edge_vertices[i][0], detected_edge_vertices[i][1], true);
+          //Randomly add
+          if (random(0,1) > 0.5) {
+            //Then randomly add jitter instead
+            var ox = detected_edge_vertices[i][0];
+            var oy = detected_edge_vertices[i][1];
+            var random_num_jitter = random(0,1)*5 + 1;
+            for (var ik = 0; ik < random_num_jitter; ik++){
+              var vx = round(random(-jitter_deviation, jitter_deviation) + ox);
+              var vy = round(random(-jitter_deviation, jitter_deviation) + oy);
+              if (inCanvas(vx,vy)){
+                updateHashSpace(vx,vy,true);
+              }
+            }
+          }
+          
+          //updateHashSpace(detected_edge_vertices[i][0], detected_edge_vertices[i][1], true);
         }
       }
 
@@ -512,11 +530,26 @@ function generate_normal_poly(values) {
 
 
     }
-    generateRandomSquares(20, 0.4)
+    generateRandomSquares(30, 0.4)
 
     for (var i = 0; i < detected_edge_vertices.length; i++) {
       if (detected_edge_vertices[i][2] >= colorThreshold) {
-        updateHashSpace(detected_edge_vertices[i][0], detected_edge_vertices[i][1], true);
+        //Randomly add
+        if (random(0,1) > jitter_prob) {
+          //Then randomly add jitter instead
+          var ox = detected_edge_vertices[i][0];
+          var oy = detected_edge_vertices[i][1];
+          var random_num_jitter = random(0,1)*max_jitter_count + 1;
+          for (var ik = 0; ik < random_num_jitter; ik++){
+            var vx = round(random(-jitter_deviation, jitter_deviation) + ox);
+            var vy = round(random(-jitter_deviation, jitter_deviation) + oy);
+            if (inCanvas(vx,vy)){
+              updateHashSpace(vx,vy,true);
+            }
+          }
+        }
+
+        //updateHashSpace(detected_edge_vertices[i][0], detected_edge_vertices[i][1], true);
       }
     }
 
@@ -540,3 +573,6 @@ function generate_normal_poly(values) {
 
   }
 }
+var jitter_deviation = 20;
+var max_jitter_count = 3;
+var jitter_prob = 0.85;
