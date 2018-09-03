@@ -333,6 +333,8 @@ p {
 
   -webkit-box-shadow: 0 .125rem .25rem rgba(0, 0, 0, 0.6);
   box-shadow: 0 .125rem .25rem rgba(0, 0, 0, 0.6);
+  -webkit-transition: opacity 0.2s, height 0.4s;
+  -o-transition: opacity 0.2s, height 0.4s;
   transition: opacity 0.2s, height 0.4s;
 }
 
