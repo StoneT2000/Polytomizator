@@ -18,7 +18,7 @@ $(document).ready(function () {
   $("#redo").css("cursor", "not-allowed");
 
   $("#pointBrush").addClass("active");
-  console.log("Polytomizator v53")
+  console.log("Polytomizator v55")
   
   //Default values
   $("#grid_accuracy").val(20)
