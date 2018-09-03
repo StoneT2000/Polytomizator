@@ -456,30 +456,26 @@ var options_menu_open = false;
 function display_options(value) {
   if (value) {
     if (value === true) {
-      $("#options_menu").css("display", "block");
-      window.setTimeout(function () {
+      $("#options_menu").css("z-index", "100");
         $("#options_menu").css("opacity", "1")
-      }, 1);
     } else {
       window.setTimeout(function () {
-        $("#options_menu").css("display", "none");
+        $("#options_menu").css("z-index", "-100");
       }, 200);
       $("#options_menu").css("opacity", "0");
       options_menu_open = false;
     }
   }
   if (options_menu_open === false) {
-    $("#options_menu").css("display", "block");
-    window.setTimeout(function () {
+    $("#options_menu").css("z-index", "100");
       $("#options_menu").css("opacity", "1")
-    }, 1);
     $("#options_menu_gear > i").removeClass("fa-cog")
     $("#options_menu_gear > i").addClass("fa-times")
     $("#options_menu_gear").css("right", "31px")
     options_menu_open = true;
   } else {
     window.setTimeout(function () {
-      $("#options_menu").css("display", "none");
+      $("#options_menu").css("z-index", "-100");
     }, 200);
     $("#options_menu").css("opacity", "0");
     options_menu_open = false;

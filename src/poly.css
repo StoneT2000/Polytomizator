@@ -57,7 +57,6 @@ html {
   cursor: pointer;
   font-weight: 300;
   margin: 10px;
-  margin-bottom: 30px;
 }
 
 #polytomize {
@@ -66,11 +65,14 @@ html {
   width: 350px;
   font-size: 20px;
   cursor: pointer;
+  margin:10px;
   font-weight: 300;
 }
 
 #gamedisplay {
+  
   margin: auto;
+  margin-top:20px;
   left:50%;
   position: relative;
 
@@ -325,14 +327,13 @@ p {
   background-color: #343a40;
   z-index: 9999;
   opacity: 0;
-  display: none;
+  display: block;
+  z-index:-100;
   border-radius: 5px;
 
   -webkit-box-shadow: 0 .125rem .25rem rgba(0, 0, 0, 0.6);
   box-shadow: 0 .125rem .25rem rgba(0, 0, 0, 0.6);
-  -webkit-transition: opacity 0.2s;
-  -o-transition: opacity 0.2s;
-  transition: opacity 0.2s;
+  transition: opacity 0.2s, height 0.4s;
 }
 
 #options_menu:after {
@@ -510,4 +511,14 @@ tr {
   cursor: pointer;
   font-size: 20px;
   color: white;
+}
+
+@media only screen and (max-height: 720px){
+  #options_menu {
+    height:400px;
+    overflow-y:scroll;
+  }
+  #function_options {
+    padding-bottom: 10px;
+  }
 }
