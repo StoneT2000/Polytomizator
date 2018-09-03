@@ -534,6 +534,8 @@ function loadData(dataStored) {
 
   }
   recordVertices();
+  verticesCanvasLayer.clear();
+  draw_all_points(verticesCanvasLayer, verticesHashTable);
 }
 
 function saveData(location) {
@@ -787,6 +789,7 @@ var undoState = 0;
 //Undostate = 1 means there are redos available. Also implies that if a new path is taken, we must remove the stored veritces up to indexPos - stepBackNum
 //Store vertices up to 50 steps
 function undo() {
+  
   stepBackNum++;
   if (indexPos - stepBackNum <= 0 || stepBackNum >= max_undo - 1 || stepBackNum >= maxStepBackDist) {
     //console.log("disbaled")
@@ -815,6 +818,8 @@ function undo() {
     return acc.concat(curr)
   });
 
+  verticesCanvasLayer.clear();
+  draw_all_points(verticesCanvasLayer, verticesHashTable);
 
 }
 
@@ -843,6 +848,8 @@ function redo() {
   verticesHashTableFlat = verticesHashTable.reduce(function (acc, curr) {
     return acc.concat(curr)
   });
+  verticesCanvasLayer.clear();
+  draw_all_points(verticesCanvasLayer, verticesHashTable);
 
 
 }
