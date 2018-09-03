@@ -385,7 +385,6 @@ function draw() {
             }
             if (unique_vertex(vpx, vpy)) {
               updateHashSpace(vpx, vpy, true);
-              verticesCanvasLayer.ellipse(vpx, vpy, 5, 5);
             }
 
           }
@@ -406,9 +405,36 @@ function draw() {
     stroke(200, 200, 200);
     ellipse(mouseX, mouseY, brushSize * 2, brushSize * 2);
     if (mouseIsPressed) {
-      erase_vertices(mouseX, mouseY, brushSize)
-      verticesCanvasLayer.clear();
-      draw_all_points(verticesCanvasLayer, verticesHashTable)
+      var mx = mouseX
+      var my = mouseY
+      erase_vertices(mx, my, brushSize)
+      //Look at indices at four corners + 5px
+      var redraw_indices = [];
+      var px1 = floor(round(mx) / hashing_size) * hashing_size;
+      var py1 = floor(round(my) / hashing_size) * hashing_size;
+      var eraser_index = findIndexFromHash(hashCoordinate(px1, py1));
+      var redraw_indices = [];
+      for (var t = -ceil(brushSize / hashing_size); t <= ceil(brushSize / hashing_size); t++) {
+        for (var k = -ceil(brushSize / hashing_size); k <= ceil(brushSize / hashing_size); k++) {
+          //Take some point, hashing_size multiple away from eraser, check if its in canvas still
+          var cx1 = px1 + hashing_size * t;
+          var cy1 = py1 + hashing_size * k;
+          if (inCanvas(cx1, cy1)) {
+            redraw_indices.push(findIndexFromHash(hashCoordinate(cx1, cy1)));
+          }
+        }
+      }
+      //console.log(redraw_indices);
+      //THIS can be massively improved. The redraw indices can be shortened later. But in actaul fact, the extra squares we search in the middle of the brush have no vertices anyway, so its good.
+      for (var j = 0; j < redraw_indices.length; j++) {
+        var redraw_vertices = verticesHashTable[redraw_indices[j]];
+        for (var k = 0; k < redraw_vertices.length; k++) {
+          verticesCanvasLayer.ellipse(redraw_vertices[k][0], redraw_vertices[k][1], 5 ,5)
+        }
+      }
+      
+      //verticesCanvasLayer.clear();
+      //draw_all_points(verticesCanvasLayer, verticesHashTable)
 
     }
   }

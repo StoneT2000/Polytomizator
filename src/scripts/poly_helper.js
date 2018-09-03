@@ -45,6 +45,11 @@ function updateHashSpace(x, y, add) {
         
         //To delete vertice from verticesCanvasLayer, we draw a subsection of the triangleCanvasLayer using the hash map to determine which section
         //Then we redraw all the vertices in the surrounding area.
+        var ctx = verticesCanvasLayer.elt;
+        var vctx = ctx.getContext('2d');
+        vctx.clearRect(x-5,y-5, 10, 10);
+        
+        
         //ctx.ellipse(verticesarr[j][k][0], verticesarr[j][k][1], 5, 5);
       }
     }
