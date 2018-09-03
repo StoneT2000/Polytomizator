@@ -418,18 +418,17 @@ $(document).ready(function () {
     }
   })
   $("#downloaded_poly_size").on("change", function () {
-    var old_size_value = $("#downloaded_poly_size").val();
+    var old_size_value = size_megapixels;
     var new_size_value = parseFloat($("#downloaded_poly_size").val());
     if (confirmed_size_risk == false){
       var confirming_size_risk = confirm("Are you sure you want to change this value? If the image size is too high, the poly art may not download correctly. By default, it is set at 22MP");
       if (confirming_size_risk){
+        confirmed_size_risk = true;
         if (!isNaN(new_size_value) && new_size_value >= 1) {
           $("#downloaded_poly_size").val(new_size_value);
           size_megapixels = new_size_value;
-          confirmed_size_risk = true;
         }
         else {
-          confirmed_size_risk = true;
           $("#downloaded_poly_size").val(old_size_value);
           alert("Please enter a positive number greater or equal to 1 for image size")
         }
