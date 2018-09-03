@@ -13,6 +13,7 @@ function findIndexFromHash(hash) {
 //Genearte verticesHashTable array, which is the array containing the coords of every vertice in a hashed array index.
 function generateHashSpace() {
   totalpoints = 0;
+  verticesCanvasLayer.clear();
   verticesHashTable = [];
   //hashing_size x hashing_size squares in grid
   for (i = 0; i <= ceil((cWidth / hashing_size)+1) * ceil((cHeight / hashing_size)+1); i++) {
@@ -299,6 +300,8 @@ function snapVertices(acc) {
     }
   }
   recordVertices();
+  verticesCanvasLayer.clear();
+  draw_all_points(verticesCanvasLayer, verticesHashTable);
 }
 
 //Deviation of triangle coords for animated triangles
