@@ -85,6 +85,10 @@ var triangleCanvasLayer; //Off screen graphics layer for drawing on
 //active_canvas is when user is hovering over canvas
 var active_canvas = false
 
+//Array of vertices to be pushed to offscreen layer
+var verticesCanvasLayer; //Off screen graphics layer for putting vertices on and off.
+
+
 function setup() {
   //pixel density is important for screens with different resolutions (e.g old vs new macbooks)
   img1 = createImage(1200, 800)
@@ -106,7 +110,7 @@ function setup() {
   canvasScale = 1;
   //create off screen triangle generating layer
   triangleCanvasLayer = createGraphics(cWidth, cHeight);
-
+  verticesCanvasLayer = createGraphics(cWidth, cHeight);
   //Initialize points on corners and sides
 
   generateHashSpace();
@@ -202,7 +206,7 @@ function setup() {
     active_canvas = false;
   })
 
-
+  //draw_all_points(verticesCanvasLayer, verticesHashTable)
 }
 var accDist = 0;
 var oldX = 0;
@@ -306,10 +310,11 @@ function draw() {
       //ellipse(verticesHashTableFlat[j][0], verticesHashTableFlat[j][1], 5, 5);
 
       for (k = 0; k < verticesHashTable[j].length; k++) {
-        ellipse(verticesHashTable[j][k][0], verticesHashTable[j][k][1], 5, 5);
+        //ellipse(verticesHashTable[j][k][0], verticesHashTable[j][k][1], 5, 5);
       }
 
     }
+    image(verticesCanvasLayer, 0, 0);
   }
   if (display_grid === true) {
     strokeWeight(1);
@@ -380,10 +385,12 @@ function draw() {
             }
             if (unique_vertex(vpx, vpy)) {
               updateHashSpace(vpx, vpy, true);
+              verticesCanvasLayer.ellipse(vpx, vpy, 5, 5);
             }
 
           }
         }
+        //draw_all_points(verticesCanvasLayer, verticesHashTable)
       }
 
     } else if (!mouseIsPressed) {
@@ -400,6 +407,9 @@ function draw() {
     ellipse(mouseX, mouseY, brushSize * 2, brushSize * 2);
     if (mouseIsPressed) {
       erase_vertices(mouseX, mouseY, brushSize)
+      verticesCanvasLayer.clear();
+      draw_all_points(verticesCanvasLayer, verticesHashTable)
+
     }
   }
 

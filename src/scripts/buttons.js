@@ -206,7 +206,8 @@ $(document).ready(function () {
       //resetAutoGenListener([cWidth, cHeight, completedFilters, d, colorThreshold], artstyle);
 
       triangleCanvasLayer = createGraphics(cWidth, cHeight)
-
+      verticesCanvasLayer = createGraphics(cWidth, cHeight);
+      draw_all_points(verticesCanvasLayer, verticesHashTable)
       //Store initial vertices
       recordVertices();
     });

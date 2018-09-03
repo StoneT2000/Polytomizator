@@ -30,6 +30,9 @@ function updateHashSpace(x, y, add) {
   if (add == true) {
     //console.log("x: " + x,"y: "+ y,"hashValue: " + hashVal, "index:" + index);
     verticesHashTable[index].push([x, y])
+    
+    //Draw on new vertices onto layer
+    verticesCanvasLayer.ellipse(x,y, 5, 5);
     totalpoints++;
   }
   if (add == false) {
@@ -39,9 +42,27 @@ function updateHashSpace(x, y, add) {
       if (verticesHashTable[index][i][0] == x && verticesHashTable[index][i][1] == y) {
         verticesHashTable[index].splice(i, 1)
         totalpoints--;
+        
+        //To delete vertice from verticesCanvasLayer, we draw a subsection of the triangleCanvasLayer using the hash map to determine which section
+        //Then we redraw all the vertices in the surrounding area.
+        //ctx.ellipse(verticesarr[j][k][0], verticesarr[j][k][1], 5, 5);
       }
     }
   }
+}
+
+function draw_all_points(ctx, verticesarr) {
+  ctx.fill(255);
+  ctx.stroke(1);
+  for (j = 0; j < verticesarr.length; j++) {
+    for (k = 0; k < verticesarr[j].length; k++) {
+      ctx.ellipse(verticesarr[j][k][0], verticesarr[j][k][1], 5, 5);
+    }
+
+  }
+}
+function clear_all_points(ctx) {
+  
 }
 
 function unique_vertex(x, y) {
@@ -871,7 +892,7 @@ function resize_poly_canvas(scale) {
   cHeight = floor(origcHeight * canvasScale);
   */
   triangleCanvasLayer = createGraphics(cWidth, cHeight)
-  
+  verticesCanvasLayer = createGraphics(cWidth, cHeight);
   resizeCanvas(cWidth,cHeight);
   
   //CSS, center canvas back to middle
@@ -903,4 +924,7 @@ function resize_poly_canvas(scale) {
   }
   //Set this as false, forcing the page to use the filters again to generate poly art. Otherwise, the displayed vertices won't be correct.
   completedFilters = false;
+  
+  //redraw vertices
+  //draw_all_points(verticesCanvasLayer, verticesHashTable)
 }
