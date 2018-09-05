@@ -23,7 +23,7 @@ For maximum experience, it is suggested to use Firefox. The normal poly art auto
 - Can snap vertices or draw vertices on to a set grid
 - Can undo or redo placement of vertices
 - Has other display modes of the triangulation
-- Can download at varying sizes depending on desired number of megapixels
+- Can download at varying sizes depending on desired number of megapixels. (On a MacBook Air 2017, I was able to create a 111MP sized poly art image)
 - Can adjust canvas size to work on for bigger or smaller screens
 ### Downloading and Loading Work
 - Creates poly art from triangulization and can be downloaded at high resolutions
