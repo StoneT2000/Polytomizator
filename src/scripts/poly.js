@@ -588,9 +588,6 @@ function generate_normal_poly(values) {
     //Then clean up the edge points a little.
     //Heuristic: if a very bright point has lots of points nearby, remove nearby ones, radius 10?
 
-
-
-
     triangulate_and_display();
     completedFilters = true;
     $("#loadingScreen").css("opacity", "0");
