@@ -189,8 +189,17 @@ function mouseClicked() {
           var vpx = round(mouseX);
           var vpy = round(mouseY);
           if (snapping == true) {
-            vpx = vpx - vpx % snappingAccuracy;
-            vpy = vpy - vpy % snappingAccuracy;
+            if (vpx % snappingAccuracy < snappingAccuracy / 2) {
+              vpx = vpx - (vpx % snappingAccuracy)
+
+            } else {
+              vpx = vpx + snappingAccuracy - (vpx % snappingAccuracy)
+            }
+            if (vpy % snappingAccuracy < snappingAccuracy / 2) {
+              vpy = vpy - (vpy % snappingAccuracy)
+            } else {
+              vpy = vpy + snappingAccuracy - (vpy % snappingAccuracy)
+            }
           }
           if (unique_vertex(vpx, vpy)) {
             updateHashSpace(vpx, vpy, true)
@@ -269,33 +278,41 @@ function erase_vertices(x, y, radius) {
 
 function snapVertices(acc) {
   //acc is snapping accuracy
+  var original_verticesHashTable = JSON.parse(JSON.stringify(verticesHashTable));
+  generateHashSpace();
   if (!acc) {
     acc = 20;
   }
-  for (in1 = 0; in1 < verticesHashTable.length; in1++) {
-    for (in2 = 0; in2 < verticesHashTable[in1].length; in2++) {
+  for (var in1 = 0; in1 < original_verticesHashTable.length; in1++) {
+    for (var in2 = 0; in2 < original_verticesHashTable[in1].length; in2++) {
       var fixx = true;
       var fixy = true;
-      if (verticesHashTable[in1][in2][0] == cWidth) {
+      var vertex = original_verticesHashTable[in1][in2];
+      var new_vertex = [vertex[0],vertex[1]];
+      //Don't change the x or y pos depending if vertice is on edge of canvas or not. Gives better look.
+      if (vertex[0] == cWidth) {
         fixx = false;
       }
-      if (verticesHashTable[in1][in2][1] == cHeight) {
+      if (vertex[1] == cHeight) {
         fixy = false;
       }
       if (fixx) {
-        if (verticesHashTable[in1][in2][0] % acc < acc / 2) {
-          verticesHashTable[in1][in2][0] = verticesHashTable[in1][in2][0] - (verticesHashTable[in1][in2][0] % acc)
+        if (vertex[0] % acc < acc / 2) {
+          new_vertex[0] = vertex[0] - (vertex[0] % acc)
 
         } else {
-          verticesHashTable[in1][in2][0] = verticesHashTable[in1][in2][0] + 20 - (verticesHashTable[in1][in2][0] % acc)
+          new_vertex[0] = vertex[0] + acc - (vertex[0] % acc)
         }
       }
       if (fixy) {
-        if (verticesHashTable[in1][in2][1] % acc < acc / 2) {
-          verticesHashTable[in1][in2][1] = verticesHashTable[in1][in2][1] - (verticesHashTable[in1][in2][1] % acc)
+        if (vertex[1] % acc < acc / 2) {
+          new_vertex[1] = vertex[1] - (vertex[1] % acc)
         } else {
-          verticesHashTable[in1][in2][1] = verticesHashTable[in1][in2][1] + 20 - (verticesHashTable[in1][in2][1] % acc)
+          new_vertex[1] = vertex[1] + acc - (vertex[1] % acc)
         }
+      }
+      if (unique_vertex(new_vertex[0], new_vertex[1])) {
+        updateHashSpace(new_vertex[0], new_vertex[1], true);
       }
     }
   }
@@ -637,17 +654,12 @@ function triangulize() {
     return acc.concat(curr)
   });
   delaunay = (Delaunator.from(verticesHashTableFlat))
-  stepD = 0;
 
   var triangles = (delaunay.triangles)
   triangulations[0] = triangles;
 
-  //displayPoints=false;
-  //displayTriangulation=false;
-  //displayPoints=true;
   displayTriangulation = true;
   css_buttons.displayTriangulation(true);
-  stepD = 0;
 
   //Store the corresponding flat vertices for use by other functions
   triangulatedVerticesFlat = JSON.parse(JSON.stringify(verticesHashTableFlat));

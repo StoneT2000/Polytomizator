@@ -15,25 +15,21 @@ var colorOfSquares = [];
 var displayTriangulation = true;
 var displayPoints = true;
 var displayImage = true;
-
 var display_grid = false;
-
 var noColors = false; //Wheter or not the colors, tColors, are used.
 
-var flowing = true; //Flowing: true, points can be placed anywhere, when false, points are on fixed vertices. For cubic poly
+var flowing = true; //Flowing: true, points can be placed anywhere, when false, points are on fixed vertices. For cubic poly only.
 
 var brushSize = 100; //Radius of brush
-
-
 
 
 //Whether or not the current canvas is done coloring. Usually when it is not done, its usually due to the flower effect being turned on.
 var finishedColoring = true;
 
-//quick color is coloring that takes RGB values at the three vertices of the triangles.
+//quick color is coloring that takes average RGB values at the three vertices of the triangles instead of the true average.
 var quickColor = false;
 
-//Calculating time stats
+//Calculating time statistics
 var sTime = 0;
 var fTime = 0;
 
@@ -42,12 +38,13 @@ var squares = false;
 var colorAccuracy = 1;
 
 //verticesHashTable(flat) are global variables edited by a bunch of functions
-//Ultimately, triangulatedVerticesFlat (and triangulations) are used by delaunayDisplay to display triangles
+//Ultimately, triangulatedVerticesFlat (and triangulations) are used by delaunayDisplay function to display triangles
 //verticesHashTable is used for quick calculations for things like erasers. It is also a real reflection of all the vertices in a canvas.
 //verticesHashTableFlat is used for various other purposes, displaying vertices etc.
 var verticesHashTable = [];
 var verticesHashTableFlat = [];
 
+//Total points/vertices on canvas
 var totalpoints = 0;
 
 //The below variable is used to store the vertices that correspond with the current triangulations array. It is basically what is downloaded. It is updated whenever triangulations is updated by triangulize();
@@ -55,7 +52,6 @@ var triangulatedVerticesFlat = [];
 
 //Number of points drawn per stroke
 var pointDensity = 4;
-//var exportSVG = false;
 
 var flowerEffect = false; //Whether or not to have the flower effect
 var filteringView = false; //Debugging purposes
@@ -78,21 +74,21 @@ var max_undo = 50;
 var myCanvas; //The canvas
 var img1; //The current loaded image
 var d; //Pixel density
-var cWidth = 400;
-var cHeight = 400;
-var triangleCanvasLayer; //Off screen graphics layer for drawing on
+var cWidth = 400; //canvas width
+var cHeight = 400; //canvas height
+var triangleCanvasLayer; //Off screen graphics layer for drawing triangles on
 
 //active_canvas is when user is hovering over canvas
 var active_canvas = false
 
-//Array of vertices to be pushed to offscreen layer
 var verticesCanvasLayer; //Off screen graphics layer for putting vertices on and off.
 
 
 function setup() {
-  //pixel density is important for screens with different resolutions (e.g old vs new macbooks)
-  img1 = createImage(1200, 800)
-  d = pixelDensity();
+  
+  
+  img1 = createImage(1200, 800) //Default white background image
+  d = pixelDensity(); //pixel density is important for screens with different resolutions (e.g old vs new macbooks)
   loadPixels();
 
   //Fix the height of the uploaded image based on height, it can't be too large
@@ -212,14 +208,13 @@ var accDist = 0;
 var oldX = 0;
 var oldY = 0;
 var critDist = 10;
-var stepD = 0;
 
 //Finds the colors for all triangles in the current triangulation
 function colorIn() {
   image(img1, 0, 0, cWidth, cHeight);
   loadPixels();
   sTime = millis();
-  for (stepD1 = 0; stepD1 < triangulations[0].length - 1; stepD1 += 3) {
+  for (var stepD1 = 0; stepD1 < triangulations[0].length - 1; stepD1 += 3) {
     //NOTE, this uses verticesHashTableFlat, not triangulatedVerticesFlat?
     var tAC = [0, 0, 0];
 
