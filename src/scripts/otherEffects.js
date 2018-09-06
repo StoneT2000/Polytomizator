@@ -1,6 +1,6 @@
 //This can only take even numbers at the moment.
 function generateCubicPoly(accuracy, density, overlay) {
-  var thisdensity = 0.5;
+  var thisdensity = 0.5; //Density of filler points
   if (density) {
     thisdensity = density;
   }
@@ -8,8 +8,10 @@ function generateCubicPoly(accuracy, density, overlay) {
     verticesHashTable = [];
 
   }
-
+  //Initialize hash space
   generateHashSpace();
+  
+  //add points onto corners and sides
   updateHashSpace(0, 0, true)
   updateHashSpace(cWidth, 0, true)
   updateHashSpace(0, cHeight, true)
@@ -45,7 +47,7 @@ function generateCubicPoly(accuracy, density, overlay) {
   recordVertices();
 
 }
-
+//Splits canvas into a grid and takes the average color under each square
 function splitSquare(accuracy) {
   colorOfSquares = [];
   image(img1, 0, 0, cWidth, cHeight);
@@ -85,6 +87,7 @@ function averageColorSquare(x1, y1, sw, sl, accuracy) {
   return [tr / totalSample, tg / totalSample, tb / totalSample]
 }
 
+//Using the splitSquare function and the colors of squares, scanSquareLR looks for high color differences from left to right and adds colors at high color differences points.
 function scanSquareLR(accuracy, degree, degree2) {
   var deg2 = 800;
   if (degree2) {
@@ -112,6 +115,7 @@ function scanSquareLR(accuracy, degree, degree2) {
   }
   //generateHashSpace();
 }
+//Using the splitSquare function and the colors of squares, scanSquareLR looks for high color differences from up to down and adds points at high color differences points. 
 
 function scanSquareUD(accuracy, degree, degree2) {
   var deg2 = 800;
@@ -138,9 +142,9 @@ function scanSquareUD(accuracy, degree, degree2) {
       }
     }
   }
-  //generateHashSpace();
 }
 
+//Randomly generate points snapping to an accuracy value and at a certain density.
 function generateRandomSquares(accuracy, density) {
   for (k = 0; k < colorOfSquares.length; k++) {
     var tsc = colorOfSquares[k];
@@ -161,7 +165,6 @@ function generateRandomSquares(accuracy, density) {
     }
 
   }
-  //generateHashSpace();
 }
 
 function autoGenPoints(accuracy, density) {

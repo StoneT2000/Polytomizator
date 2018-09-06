@@ -68,6 +68,7 @@ var artstyle = 0; //0: Normal, 1: cubic, 2: ??
 
 //Store past vertices placement
 var storedVertices = [];
+
 //Max number of undos allowed.
 var max_undo = 50;
 
@@ -86,7 +87,6 @@ var verticesCanvasLayer; //Off screen graphics layer for putting vertices on and
 
 function setup() {
   
-  
   img1 = createImage(1200, 800) //Default white background image
   d = pixelDensity(); //pixel density is important for screens with different resolutions (e.g old vs new macbooks)
   loadPixels();
@@ -95,6 +95,8 @@ function setup() {
   var factor = img1.height / 620;
   cWidth = round(img1.width / factor);
   cHeight = round(img1.height / factor);
+  
+  //If width is past window viewport width, then fix the width and height accordingly
   if (cWidth > window.innerWidth * 0.9) {
     var factor = img1.width / (window.innerWidth * 0.9);
     cWidth = round(img1.width / factor);
@@ -106,18 +108,21 @@ function setup() {
   canvasScale = 1;
   //create off screen triangle generating layer
   triangleCanvasLayer = createGraphics(cWidth, cHeight);
+  //create off screen layer for displaying vertices
   verticesCanvasLayer = createGraphics(cWidth, cHeight);
-  //Initialize points on corners and sides
-
+  
+  //Initialize hash space
   generateHashSpace();
 
   //Initialize storedVertices array with 50 empty slots
   for (var slot_index = 0; slot_index < max_undo; slot_index++) {
     storedVertices.push([0,0]);
   }
+  
   //Store empty vertices
   recordVertices();
-
+  
+  //Initialize points on corners and sides
   updateHashSpace(0, 0, true)
   updateHashSpace(cWidth, 0, true)
   updateHashSpace(0, cHeight, true)
@@ -150,7 +155,7 @@ function setup() {
 
   frameRate(60);
 
-  //Disable anti-aliasing? Doesn't seem to work
+  //Disable anti-aliasing? Doesn't seem to work anymore
   //noSmooth();
 
 
@@ -162,7 +167,7 @@ function setup() {
   });
 
 
-
+  //Center poly art canvas on screen.
   $("#gamedisplay").css("width", cWidth);
   $("#gamedisplay").css("margin-left", -cWidth/2);
 
@@ -189,6 +194,8 @@ function setup() {
   });
   
   console.log("Finished Setting Up!");
+  
+  //Hide loading screen
   $("#loadingText").css("top", "30%");
   $("#loadingText").css("opacity", "0");
   $("#loadingScreen").css("opacity", "0");
@@ -211,6 +218,7 @@ function setup() {
   })
   
 }
+//Below variables used for the brush tool to prevent user from accidentally too many points too close together, forcing them to move a certain distance before dropping another batch of points.
 var accDist = 0;
 var oldX = 0;
 var oldY = 0;
@@ -221,12 +229,12 @@ function colorIn() {
   image(img1, 0, 0, cWidth, cHeight);
   loadPixels();
   sTime = millis();
-  for (var stepD1 = 0; stepD1 < triangulations[0].length - 1; stepD1 += 3) {
+  for (var i = 0; i < triangulations[0].length - 1; i += 3) {
     //NOTE, this uses verticesHashTableFlat, not triangulatedVerticesFlat?
-    var tAC = [0, 0, 0];
+    var rgbvals = [0, 0, 0];
 
-    tAC = averageColor(triangulatedVerticesFlat[triangulations[triangulations.length - 1][stepD1]][0], triangulatedVerticesFlat[triangulations[triangulations.length - 1][stepD1]][1], triangulatedVerticesFlat[triangulations[triangulations.length - 1][stepD1 + 1]][0], triangulatedVerticesFlat[triangulations[triangulations.length - 1][stepD1 + 1]][1], triangulatedVerticesFlat[triangulations[triangulations.length - 1][stepD1 + 2]][0], triangulatedVerticesFlat[triangulations[triangulations.length - 1][stepD1 + 2]][1], colorAccuracy);
-    tColors.push(tAC[0], tAC[1], tAC[2]);
+    rgbvals = averageColor(triangulatedVerticesFlat[triangulations[triangulations.length - 1][i]][0], triangulatedVerticesFlat[triangulations[triangulations.length - 1][i]][1], triangulatedVerticesFlat[triangulations[triangulations.length - 1][i + 1]][0], triangulatedVerticesFlat[triangulations[triangulations.length - 1][i + 1]][1], triangulatedVerticesFlat[triangulations[triangulations.length - 1][i + 2]][0], triangulatedVerticesFlat[triangulations[triangulations.length - 1][i + 2]][1], colorAccuracy);
+    tColors.push(rgbvals[0], rgbvals[1], rgbvals[2]);
 
   }
   finishedColoring = true;
@@ -236,13 +244,13 @@ function colorIn() {
 //Currently drawing flower effect?
 var flowering = false;
 
-//Step of flowering effect
+//Step/Iteration of flowering effect
 var flower_step = 0;
 
 //Speed of flowering effect
 var flowering_speed = 1;
 
-//Just to display the triangles without colors of triangulatedVerticesFlat
+//Canvas used to display the triangles without colors of triangulatedVerticesFlat
 var uncoloredTriangleCanvasLayer;
 
 function draw() {
@@ -308,16 +316,9 @@ function draw() {
   fill(256, 256, 256);
   stroke(0, 0, 0);
   if (displayPoints === true) {
-    for (var j = 0; j < verticesHashTable.length; j++) {
-      //ellipse(verticesHashTableFlat[j][0], verticesHashTableFlat[j][1], 5, 5);
-
-      for (var k = 0; k < verticesHashTable[j].length; k++) {
-        //ellipse(verticesHashTable[j][k][0], verticesHashTable[j][k][1], 5, 5);
-      }
-
-    }
     image(verticesCanvasLayer, 0, 0);
   }
+  
   if (display_grid === true) {
     strokeWeight(1);
     stroke(150);
@@ -344,16 +345,20 @@ function draw() {
   if (finishedColoring === true) {
     $("#lastTiming").text(((fTime - sTime) / 1000).toFixed(3) + " seconds");
   }
+  
+  
   var dx = oldX - mouseX;
   var dy = oldY - mouseY;
+  //Calculate distance moved away from last coordinate brush placed points onto canvas
   accDist = sqrt(dx * dx + dy * dy);
+  
+  
   if (mode === 2 && active_canvas) {
 
     noFill();
     stroke(200, 200, 200);
     ellipse(mouseX, mouseY, brushSize * 2, brushSize * 2);
     if (accDist >= critDist && mouseIsPressed) {
-
 
       if (mouseX > cWidth - 1 || mouseX < 1 || mouseY > cHeight - 1 || mouseY < 1) {} else {
         accDist = 0;
@@ -461,7 +466,7 @@ var filteredPixels = [];
 //Of form [[x,y, brightness],[x,y, brightness],...]
 var detected_edge_vertices = [];
 
-
+//Generate the normal poly art
 function generate_normal_poly(values) {
   noLoop();
   $("#loadingScreen").css("z-index", "10");

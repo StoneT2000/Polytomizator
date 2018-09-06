@@ -1,7 +1,4 @@
-function exportSVG(data) {
-  $(".main").append("<svg height=" + cHeight + " width=" + cWidth + ">" + data + "</svg>");
-}
-//Stroke Weight of one
+//store all the triangle and color data into <polygon> tags suitable for svg exporting.
 function storeTrianglesToString() {
   var data = ""
   tng = triangulations[triangulations.length - 1];
@@ -25,6 +22,7 @@ function storeTrianglesToString() {
 var hexletters = ['0', '1', '2', '3', '4', '5', '6', '7',
                   '8', '9', 'A', 'B', 'C', 'D', 'E', 'F']
 
+//convert rgb to hexadecimal values
 function rgbToHex(r, g, b) {
   var r1 = r % 16;
   var g1 = g % 16;
@@ -37,7 +35,7 @@ function rgbToHex(r, g, b) {
   var d3 = hexletters[bt] + hexletters[b1];
   return "#" + d1 + d2 + d3;
 }
-
+//Generate SVG formatting with the triangle data and canvas size data
 function generateSVGFile(data, svgW, svgH) {
   var part1 = "<?xml version=\"1.0\" encoding=\"iso-8859-1\"?>"
 
@@ -49,6 +47,7 @@ function generateSVGFile(data, svgW, svgH) {
   return (part1 + part2 + part3 + part4)
 }
 
+//Send request to download SVG to browser.
 function downloadSVG(svgWidth, svgHeight) {
   var text = generateSVGFile(storeTrianglesToString(), svgWidth, svgHeight)
   //var filename = "PolyArt.svg";

@@ -1,4 +1,5 @@
-var hashing_size = 50; //shouldn't be too small
+var hashing_size = 50; //shouldn't be too small, this is the size of each square on the hash space in px
+
 //Create a hash out of the x,y coordinates
 function hashCoordinate(x, y) {
   return floor((x) / hashing_size) * 100 + floor(y / hashing_size);
@@ -10,21 +11,19 @@ function findIndexFromHash(hash) {
   return xi + yi * ceil(cWidth / hashing_size)
 }
 
-//Genearte verticesHashTable array, which is the array containing the coords of every vertice in a hashed array index.
+//Genearte verticesHashTable array, which is the array containing the coordinates of every vertex in a hashed array index.
 function generateHashSpace() {
   totalpoints = 0;
   verticesCanvasLayer.clear();
   verticesHashTable = [];
-  //hashing_size x hashing_size squares in grid
+  //hashing_size * hashing_size squares in grid
   for (var i = 0; i <= ceil((cWidth / hashing_size)+1) * ceil((cHeight / hashing_size)+1); i++) {
     verticesHashTable.push([]);
-
   }
 }
 
 //Add or delete a vertex.
 function updateHashSpace(x, y, add) {
-
 
   var hashVal = hashCoordinate(x, y);
   var index = findIndexFromHash(hashVal);
@@ -44,19 +43,16 @@ function updateHashSpace(x, y, add) {
         verticesHashTable[index].splice(i, 1)
         totalpoints--;
         
-        //To delete vertice from verticesCanvasLayer, we draw a subsection of the triangleCanvasLayer using the hash map to determine which section
-        //Then we redraw all the vertices in the surrounding area.
         var ctx = verticesCanvasLayer.elt;
         var vctx = ctx.getContext('2d');
+        //When deleting, clear a small part of the vertices canvas layer out to be redrawn.
         vctx.clearRect(x-5,y-5, 10, 10);
-        
-        
-        //ctx.ellipse(verticesarr[j][k][0], verticesarr[j][k][1], 5, 5);
       }
     }
   }
 }
 
+//Draw all vertices on to a canvas layer ctx.
 function draw_all_points(ctx, verticesarr) {
   ctx.fill(255);
   ctx.stroke(1);
@@ -64,18 +60,15 @@ function draw_all_points(ctx, verticesarr) {
     for (var k = 0; k < verticesarr[j].length; k++) {
       ctx.ellipse(verticesarr[j][k][0], verticesarr[j][k][1], 5, 5);
     }
-
   }
 }
-function clear_all_points(ctx) {
-  
-}
 
+//Check if vertex x,y is unique in verticesHashTable
 function unique_vertex(x, y) {
   //Check if vertex at x,y exists or not
   var uvindex = findIndexFromHash(hashCoordinate(x, y));
-  for (var g = 0; g < verticesHashTable[uvindex].length; g++) {
-    if (verticesHashTable[uvindex][g][0] == x && verticesHashTable[uvindex][g][1] == y) {
+  for (var i = 0; i < verticesHashTable[uvindex].length; i++) {
+    if (verticesHashTable[uvindex][i][0] == x && verticesHashTable[uvindex][i][1] == y) {
       //not unique
       return false;
     }
@@ -84,15 +77,8 @@ function unique_vertex(x, y) {
 }
 
 function keyPressed(event) {
-  //Space
-  if (keyCode === 32) {
-    downloading = true;
-    //draw();
-    //saveCanvas(myCanvas, 'myCanvas', 'jpg');
-    downloading = false;
-  }
   //D
-  else if (keyCode === 68) {
+  if (keyCode === 68) {
     triangulate_and_display();
   }
   //C
@@ -108,6 +94,7 @@ function keyPressed(event) {
     if (flowerEffect) {
 
     } else {
+      //If not doing the flowering effect, directly display the colors.
       for (var j = 0; j < triangulations.length; j++) {
         delaunayDisplay(triangulations[j], triangleCanvasLayer);
       }
@@ -118,7 +105,6 @@ function keyPressed(event) {
     mode = 1;
     removeClassFromBrushes("active");
     $("#pointBrush").addClass("active");
-
   }
   //E
   else if (keyCode === 69) {
@@ -176,6 +162,7 @@ function triangulate_and_display() {
   //Reset the colors calculated
   tColors = [];
 
+  //Start time of polytomization
   sTime = millis();
 }
 
@@ -188,6 +175,8 @@ function mouseClicked() {
         if (mode == 1) {
           var vpx = round(mouseX);
           var vpy = round(mouseY);
+          
+          //If snapping vertices is on, snap vertices
           if (snapping == true) {
             if (vpx % snappingAccuracy < snappingAccuracy / 2) {
               vpx = vpx - (vpx % snappingAccuracy)
@@ -206,26 +195,7 @@ function mouseClicked() {
 
           }
         }
-        if (mode == 2) {}
-        if (mode === 4) {
-          //triangle flipper
-          var tng = triangulations[0];
-          for (var k = 0; k < tng.length; k += 3) {
-            if (pointInTriangle(verticesHashTableFlat[tng[k]][0], verticesHashTableFlat[tng[k]][1], verticesHashTableFlat[tng[k + 1]][0], verticesHashTableFlat[tng[k + 1]][1], verticesHashTableFlat[tng[k + 2]][0], verticesHashTableFlat[tng[k + 2]][1], mouseX, mouseY)) {
-              if (tColors[k] >= 0) {
-                tColors[k] = -1;
-              } else if (tColors[k] == -1) {
-                var tAC = [0, 0, 0];
-                tAC = averageColor(verticesHashTableFlat[tng[k]][0], verticesHashTableFlat[tng[k]][1], verticesHashTableFlat[tng[k + 1]][0], verticesHashTableFlat[tng[k + 1]][1], verticesHashTableFlat[tng[k + 2]][0], verticesHashTableFlat[tng[k + 2]][1], colorAccuracy)
-                tColors[k] = tAC[0];
-                tColors[k + 1] = tAC[1];
-                tColors[k + 2] = tAC[2];
-              }
-            }
-          }
-
-        }
-        //Record past vertices sets for undoing
+        //Record past vertices sets for undoing and redoing.
         recordVertices();
 
       }
@@ -236,6 +206,8 @@ function mouseClicked() {
 
 }
 
+
+//Erase vertices in a radius of size radius around coordinate x,y
 function erase_vertices(x, y, radius) {
 
   //Find top left corner of the square eraser is in
@@ -244,7 +216,7 @@ function erase_vertices(x, y, radius) {
   var eraser_index = findIndexFromHash(hashCoordinate(px, py));
 
   //Proceed to search around this eraser_index
-  //Basically, +,- hashing_size around it depending on radius
+  //Basically, ± hashing_size around it depending on radius
   var search_indices = [];
   for (var t = -ceil(radius / hashing_size); t <= ceil(radius / hashing_size); t++) {
     for (var k = -ceil(radius / hashing_size); k <= ceil(radius / hashing_size); k++) {
@@ -318,12 +290,15 @@ function snapVertices(acc) {
     }
   }
   recordVertices();
+  
+  //Redraw all current vertices
   verticesCanvasLayer.clear();
   draw_all_points(verticesCanvasLayer, verticesHashTable);
 }
 
 //Deviation of triangle coords for animated triangles
 var sd = 15;
+
 //Display all the triangles in tng. Displays them using the variable verticesarr = verticesHashTableFlat.
 function delaunayDisplay(tng, ctx, vertices_set, flower_effect, flowering_step, flower_speed) {
 
@@ -434,7 +409,7 @@ function delaunayDisplay(tng, ctx, vertices_set, flower_effect, flowering_step, 
   }
 }
 
-//Construct a shape based on display mode onto canvas ctx, given teh vertices and trianglulation and iteration values.
+//Construct a shape based on display mode onto canvas ctx, given the vertices and trianglulation and iteration values.
 function construct_shape_from_vertices(verticesarr, ctx, tng, i) {
   if (displayMode == 0) {
     ctx.triangle(verticesarr[tng[i]][0], verticesarr[tng[i]][1], verticesarr[tng[i + 1]][0], verticesarr[tng[i + 1]][1], verticesarr[tng[i + 2]][0], verticesarr[tng[i + 2]][1]);
@@ -574,6 +549,7 @@ function expandVertex(vertex, expandValue) {
 
 }
 
+//Calculate polar angle
 function lineAngle(x1, y1, x2, y2) {
   var angleconstant = 0;
   if (x2 - x1 >= 0) {
@@ -587,9 +563,10 @@ function lineAngle(x1, y1, x2, y2) {
   return -atan((y2 - y1) / (x2 - x1)) + angleconstant;
 }
 
-//Expand the vertices to download large scale image
+//Canvas that art is drawn on for downloading at higher qualities
 var downloadcanvas;
 
+//Expand the art and download
 function expandImage(mvalue, save) {
 
   var expandedWidth = cWidth * mvalue;
@@ -633,8 +610,8 @@ function expandImage(mvalue, save) {
   }
   sd /= mvalue;
 }
-var testCanvas;
-//Take the vertices and creates a flattend version
+
+//Take the vertices and creates a flattened version
 //Then uses the delaunator to produce the order in which the vertices are connected to get triangles.
 function triangulize() {
   var delaunay;
@@ -662,6 +639,7 @@ function fget(x, y) {
   return components;
 }
 
+//Returns true/false if x,y is within canvas bounds
 function inCanvas(x, y) {
   if (x > cWidth || x < 0 || y > cHeight || y < 0) {
     return false;
@@ -670,6 +648,7 @@ function inCanvas(x, y) {
   }
 }
 
+//Used in conjunction with pointInTriangle to determine whether a point is within a triangle.
 function sign(x1, y1, x2, y2, x3, y3) {
   return (x1 - x3) * (y2 - y3) - (x2 - x3) * (y1 - y3);
 }
@@ -680,6 +659,7 @@ function pointInTriangle(x1, y1, x2, y2, x3, y3, x4, y4) {
   bc3 = sign(x4, y4, x3, y3, x1, y1) < 0;
   return ((bc1 == bc2) && (bc2 == bc3))
 }
+
 //Find average color in triangular region with accuracy as measured by pixels (best is accuracy=1)
 function averageColor(x1, y1, x2, y2, x3, y3, accuracy) {
   var xs = [x1, x2, x3];
@@ -890,11 +870,12 @@ function recordVertices() {
   }
   //console.log(storedVertices, indexPos, stepBackNum)
 }
-//Function for resizing the canvas at will of user
 
 var origcWidth;
 var origcHeight;
+
 var canvasScale = 1;
+//Function for resizing the canvas at will of user
 function resize_poly_canvas(scale) {
   //!!!: We should always scale from original cWidth and cHeight next time
   //canvasScale += amount;
