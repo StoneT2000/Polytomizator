@@ -113,10 +113,9 @@ function scanSquareLR(accuracy, degree, degree2) {
       }
     }
   }
-  //generateHashSpace();
 }
-//Using the splitSquare function and the colors of squares, scanSquareLR looks for high color differences from up to down and adds points at high color differences points. 
 
+//Using the splitSquare function and the colors of squares, scanSquareLR looks for high color differences from up to down and adds points at high color differences points. 
 function scanSquareUD(accuracy, degree, degree2) {
   var deg2 = 800;
   if (degree2) {
@@ -160,10 +159,7 @@ function generateRandomSquares(accuracy, density) {
           updateHashSpace(tsc[3] + accuracy / 2, tsc[4], true)
         }
       }
-
-
     }
-
   }
 }
 
