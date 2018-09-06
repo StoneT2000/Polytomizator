@@ -19,11 +19,12 @@ $(document).ready(function () {
 
   $("#pointBrush").addClass("active");
   console.log("Polytomizator v57")
-  
+
   //Default values
   $("#grid_accuracy").val(20)
   $("#flower_effect_speed").val(1);
   $("#downloaded_poly_size").val(22);
+
   //Initialize popover stuff
   $(function () {
     $('[data-toggle="popover"]').popover()
@@ -33,6 +34,7 @@ $(document).ready(function () {
     $('[data-toggle="tooltip"]').tooltip()
   })
 
+  //Buttons for displaying various things
   $("#displayColor").on("click", function () {
     if (noColors === true) {
       noColors = false;
@@ -50,7 +52,6 @@ $(document).ready(function () {
       }
     }
   })
-  //Buttons for displaying various things
   $("#displayPoints").on("click", function () {
     if (displayPoints == false) {
       displayPoints = true;
@@ -61,7 +62,6 @@ $(document).ready(function () {
       css_buttons.displayPoints(false);
     }
   });
-
   $("#displayTriangulation").on("click", function () {
     if (displayTriangulation == false) {
       displayTriangulation = true;
@@ -82,7 +82,8 @@ $(document).ready(function () {
       css_buttons.displayImage(false);
     }
   });
-  //Brush params.
+  
+  //Brush parameters
   $("#brushSize").on("focusout", function () {
 
     var brushSizeTemp = parseInt(document.querySelector('#brushSize').value);
@@ -104,6 +105,7 @@ $(document).ready(function () {
     }
   });
 
+  //Color threshold input, which determines how the normal poly is generated
   $("#colorThreshold").on("focusout", function () {
     var colorThresholdTemp = parseInt(document.querySelector('#colorThreshold').value);
     if (isNaN(colorThresholdTemp) === true || colorThresholdTemp < 1) {
@@ -114,6 +116,7 @@ $(document).ready(function () {
 
     }
   })
+  
   //Brush choices
   $("#pointBrush").on("click", function () {
     mode = 1;
@@ -135,11 +138,20 @@ $(document).ready(function () {
     removeClassFromBrushes("active");
     $("#triangleMove").addClass("active");
   });
+  
+  //When user uploads an image, listen for the change and update the canvas accordingly.
   $("#file").on('change', function () {
+    
+    //Rename the label with the name of the file for display purposes
     $('#label_file').text(this.files && this.files.length ? this.files[0].name.split('.')[0] : '');
+    
+    //Set this as false to force filters to be reapplied for normal poly generation
     completedFilters = false;
+    
+    //Once image is loaded
     img1 = loadImage(window.URL.createObjectURL(document.getElementById("file").files[0]), function () {
-      //make image have height 600
+      
+      //make image have height 620
       var factor = img1.height / 620;
       cWidth = round(img1.width / factor);
       cHeight = round(img1.height / factor);
@@ -148,17 +160,17 @@ $(document).ready(function () {
         cWidth = round(img1.width / factor);
         cHeight = round(img1.height / factor);
       }
-      //makes sure we have proper hashing for those images that have perfect grid alignments
-      
+
       myCanvas = createCanvas(cWidth, cHeight);
       origcWidth = cWidth;
       origcHeight = cHeight;
       canvasScale = 1;
       $("#gamedisplay").css("width", cWidth);
-      $("#gamedisplay").css("margin-left", -cWidth/2);
+      $("#gamedisplay").css("margin-left", -cWidth / 2);
 
       myCanvas.parent('gamedisplay');
 
+      //Reset values
       triangulations = [0];
       tColors = [];
       verticesHashTable = [];
@@ -167,8 +179,9 @@ $(document).ready(function () {
       d = pixelDensity();
       storedVertices = [];
       for (var slot_index = 0; slot_index < max_undo; slot_index++) {
-        storedVertices.push([0,0]);
+        storedVertices.push([0, 0]);
       }
+      
       generateHashSpace();
       recordVertices();
       updateHashSpace(0, 0, true)
@@ -201,15 +214,14 @@ $(document).ready(function () {
       }
       finishedColoring = true;
 
-      //generateHashSpace();
       image(img1, 0, 0, cWidth, cHeight);
       loadPixels();
       filteredPixels = [];
-      //resetAutoGenListener([cWidth, cHeight, completedFilters, d, colorThreshold], artstyle);
 
       triangleCanvasLayer = createGraphics(cWidth, cHeight)
       verticesCanvasLayer = createGraphics(cWidth, cHeight);
       draw_all_points(verticesCanvasLayer, verticesHashTable)
+      
       //Store initial vertices
       recordVertices();
     });
@@ -221,9 +233,9 @@ $(document).ready(function () {
       alert("Please wait until the coloring is finished before downloading it")
     } else {
       var factor = 2;
-      
+
       var current_canvas_area = cWidth * cHeight;
-      var factor = sqrt(pow(2,20) * size_megapixels / current_canvas_area);
+      var factor = sqrt(pow(2, 20) * size_megapixels / current_canvas_area);
       /*
       if (cWidth > cHeight) {
         factor = ceil(6000 / cWidth);
@@ -323,11 +335,11 @@ $(document).ready(function () {
         alert("Enter a number larger than 10 for the color threshold");
         return;
       }
-      var canvas_area = cWidth*cHeight
+      var canvas_area = cWidth * cHeight
       if (canvas_area > 3000000) {
         var predicted_time = 1.013 * pow(10, -5) * canvas_area
         var proceed_or_not = confirm("The canvas size is rather large and this process will take approximately " + predicted_time.toFixed(2) + " seconds");
-        if (!proceed_or_not){
+        if (!proceed_or_not) {
           return;
         }
       }
@@ -423,35 +435,31 @@ $(document).ready(function () {
   $("#downloaded_poly_size").on("change", function () {
     var old_size_value = size_megapixels;
     var new_size_value = parseFloat($("#downloaded_poly_size").val());
-    if (confirmed_size_risk == false){
+    if (confirmed_size_risk == false) {
       var confirming_size_risk = confirm("Are you sure you want to change this value? If the image size is too high, the poly art may not download correctly. By default, it is set at 22MP");
-      if (confirming_size_risk){
+      if (confirming_size_risk) {
         confirmed_size_risk = true;
         if (!isNaN(new_size_value) && new_size_value >= 1) {
           $("#downloaded_poly_size").val(new_size_value);
           size_megapixels = new_size_value;
-        }
-        else {
+        } else {
           $("#downloaded_poly_size").val(old_size_value);
           alert("Please enter a positive number greater or equal to 1 for image size")
         }
-      }
-      else {
+      } else {
         $("#downloaded_poly_size").val(old_size_value);
       }
-    }
-    else {
+    } else {
       if (!isNaN(new_size_value) && new_size_value >= 1) {
         $("#downloaded_poly_size").val(new_size_value);
         size_megapixels = new_size_value;
-      }
-      else {
+      } else {
         $("#downloaded_poly_size").val(old_size_value);
         alert("Please enter a positive number greater or equal to 1 for image size")
       }
     }
   })
-  
+
 });
 var display_mode_on = false;
 var options_menu_open = false;
@@ -460,7 +468,7 @@ function display_options(value) {
   if (value) {
     if (value === true) {
       $("#options_menu").css("z-index", "100");
-        $("#options_menu").css("opacity", "1")
+      $("#options_menu").css("opacity", "1")
     } else {
       window.setTimeout(function () {
         $("#options_menu").css("z-index", "-100");
@@ -471,7 +479,7 @@ function display_options(value) {
   }
   if (options_menu_open === false) {
     $("#options_menu").css("z-index", "100");
-      $("#options_menu").css("opacity", "1")
+    $("#options_menu").css("opacity", "1")
     $("#options_menu_gear > i").removeClass("fa-cog")
     $("#options_menu_gear > i").addClass("fa-times")
     $("#options_menu_gear").css("right", "31px")
