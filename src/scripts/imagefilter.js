@@ -1,6 +1,9 @@
 var edgePoints = [];
 var colorThreshold = 40;
+//Hash table storing detected edge points
 var edgePointsHashTable;
+
+//3x3 and 5x5 Operators used in filtering
 var operator3={
   smooth:{arr:[1,1,1,
           1,1,1,
@@ -63,8 +66,8 @@ function changePixels3(filter_mode,storedPixelData){
     filter_mode = "smooth"
   }
   var pixelsCopy = JSON.parse(JSON.stringify(storedPixelData));
-  for (k=0;k<=cWidth;k+=1){
-    for (j=0;j<=cHeight;j+=1){
+  for (var k=0;k<=cWidth;k+=1){
+    for (var j=0;j<=cHeight;j+=1){
       //var loc = [ind(k,j-1),ind(k-1,j),ind(k,j),ind(k+1,j),ind(k,j+1)];
       var loc = [ind(k-1,j-1),ind(k,j-1),ind(k+1,j-1),ind(k-1,j),ind(k,j),ind(k+1,j),ind(k-1,j+1),ind(k,j+1),ind(k+1,j+1)];
       var rgb = smoothAvg3(k,j,storedPixelData,filter_mode)
@@ -91,11 +94,11 @@ function smoothAvg3(x,y,data,filter_mode){
   var totalWeight = 1;
   
   if (operator3[filter_mode].type == 'blur'){
-    for (ic=0;ic<weight.length;ic++){
+    for (var ic=0;ic<weight.length;ic++){
       totalWeight+=Math.abs(weight[ic]);
     }
   }
-  for (i=0;i<loc.length;i++){
+  for (var i=0;i<loc.length;i++){
     colors[0]+=data[loc[i]]*weight[i]
     colors[1]+=data[loc[i]+1]*weight[i]
     colors[2]+=data[loc[i]+2]*weight[i]
@@ -118,8 +121,8 @@ function changePixels5(filter){
     filter = "smooth"
   }
   var pixelsCopy = JSON.parse(JSON.stringify(pixels));
-  for (k=0;k<=cWidth;k+=1){
-    for (j=0;j<=cHeight;j+=1){
+  for (var k=0;k<=cWidth;k+=1){
+    for (var j=0;j<=cHeight;j+=1){
       //var loc = [ind(k,j-1),ind(k-1,j),ind(k,j),ind(k+1,j),ind(k,j+1)];
       var loc = [ind(k-2,j-2),ind(k-1,j-2),ind(k,j-2),ind(k+1,j-2),ind(k+2,j-2),
                  ind(k-2,j-1),ind(k-1,j-1),ind(k,j-1),ind(k+1,j-1),ind(k+2,j-1),
@@ -152,7 +155,7 @@ function smoothAvg5(x,y,data,filter){
     //totalWeight = weight.reduce((acc,curr)=> acc+abs(curr));
     totalWeight = operator5[filter].sum;
   }
-  for (i=0;i<loc.length;i++){
+  for (var i=0;i<loc.length;i++){
     colors[0]+=data[loc[i]]*weight[i]
     colors[1]+=data[loc[i]+1]*weight[i]
     colors[2]+=data[loc[i]+2]*weight[i]
@@ -168,12 +171,12 @@ function smoothAvg5(x,y,data,filter){
 function copyTo(arr1,arr2,initialize){
   //copies array 1 to array 2
   if (initialize){
-    for (index=0;index<arr2.length;index++){
+    for (var index=0;index<arr2.length;index++){
       arr2.push(arr1[index]);
     }
   }
   else{
-    for (index=0;index<arr2.length;index++){
+    for (var index=0;index<arr2.length;index++){
       arr2[index] =  arr1[index];
     }
   }
@@ -218,8 +221,8 @@ function generateEGA(data){
   //change to grayscale first
   var pixelInfo = [];
   var stime = millis();
-  for (ip=0;ip<cWidth;ip++){
-    for (jp=0;jp<cHeight;jp++){
+  for (var ip=0;ip<cWidth;ip++){
+    for (var jp=0;jp<cHeight;jp++){
 
       pixelInfo.push(edgeGradientAngle(jp,ip,data));
     }
@@ -234,13 +237,13 @@ function supress(x,y,data){
   var grad = data[thisIndex][0]
   var dir = data[thisIndex][1]
   console.log(surrounding)
-  for (locIndex=0;locIndex<surrounding.length;locIndex++){
+  for (var locIndex=0;locIndex<surrounding.length;locIndex++){
     if (data[surrounding[locIndex]][1] == dir){
       surroundingSameDir.push(data[surrounding[locIndex]]);
     }
   }
   console.log(surroundingSameDir)
-  for (it=0;it<surroundingSameDir.length;it++){
+  for (var it=0;it<surroundingSameDir.length;it++){
     console.log(surroundingSameDir[0])
     if (grad < surroundingSameDir[it][0]){
       console.log("Not Local Max!",grad)
@@ -252,8 +255,8 @@ function supress(x,y,data){
 function neighborhoodIndices(x,y,r){
   var positions = [];
 
-  for (i=-r;i<=r;i++){
-    for (j=-r;j<=r;j++){
+  for (var i=-r;i<=r;i++){
+    for (var j=-r;j<=r;j++){
       positions.push(ind1(j+y,i+x));
     }
   }
@@ -261,21 +264,21 @@ function neighborhoodIndices(x,y,r){
 }
 function reduceDensity(limit){
   //iterate through all points in edgepoints within decreasing brightness order
-  for (bright = 256;bright>=limit;bright--){
+  for (var bright = 256;bright>=limit;bright--){
     var setOfPoints = edgePoints.filter(function(value){
       if (value[2] == bright){
         return true;
       }
     });
     
-    for (r=0;r<setOfPoints.length;r++){
+    for (var r=0;r<setOfPoints.length;r++){
       //console.log(setOfPoints[r])
       var thisHash = hashCoordinate(setOfPoints[r][0],setOfPoints[r][1])
       var arrayIndex = findIndexFromHash(thisHash);
       //vertices hashTable is an array that represents the grid, each sub array is the set of vertices in that square
       var checkArray = verticesHashTable[arrayIndex];
-      //console.log(verticesHashTable[arrayIndex],arrayIndex);
-      for (pindex = 0; pindex<checkArray.length;pindex++){
+
+      for (var pindex = 0; pindex<checkArray.length;pindex++){
         if (setOfPoints[r][0] != checkArray[pindex][0]){
           if (squaredist(setOfPoints[r][0],setOfPoints[r][1],checkArray[pindex][0],checkArray[pindex][1]) <= 100){
             verticesHashTable[arrayIndex][pindex][0] = -10;
@@ -301,7 +304,7 @@ function reduceDensity(limit){
   }
 }
 function basicReduceDensity(){
-  for (bright = 256;bright>=0;bright--){
+  for (var bright = 256;bright>=0;bright--){
     var setOfPoints = edgePoints.filter(function(value){
       if (value[2] == bright){
         return true;

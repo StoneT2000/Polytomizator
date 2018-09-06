@@ -18,7 +18,7 @@ $(document).ready(function () {
   $("#redo").css("cursor", "not-allowed");
 
   $("#pointBrush").addClass("active");
-  console.log("Polytomizator v55")
+  console.log("Polytomizator v57")
   
   //Default values
   $("#grid_accuracy").val(20)
@@ -45,12 +45,12 @@ $(document).ready(function () {
     if (flowerEffect) {
 
     } else {
-      for (j = 0; j < triangulations.length; j++) {
+      for (var j = 0; j < triangulations.length; j++) {
         delaunayDisplay(triangulations[j], triangleCanvasLayer);
       }
     }
   })
-
+  //Buttons for displaying various things
   $("#displayPoints").on("click", function () {
     if (displayPoints == false) {
       displayPoints = true;
@@ -82,6 +82,7 @@ $(document).ready(function () {
       css_buttons.displayImage(false);
     }
   });
+  //Brush params.
   $("#brushSize").on("focusout", function () {
 
     var brushSizeTemp = parseInt(document.querySelector('#brushSize').value);
@@ -113,6 +114,7 @@ $(document).ready(function () {
 
     }
   })
+  //Brush choices
   $("#pointBrush").on("click", function () {
     mode = 1;
     removeClassFromBrushes("active");
@@ -304,7 +306,7 @@ $(document).ready(function () {
         alert("Enter a integer larger than 0 for accuracy");
         return;
       }
-      snapVertices(2 * spaccuracy)
+      snapVertices(spaccuracy)
       close_a_options();
     })
     $("#close_a_options").on("click", function () {

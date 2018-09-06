@@ -16,7 +16,7 @@ function generateHashSpace() {
   verticesCanvasLayer.clear();
   verticesHashTable = [];
   //hashing_size x hashing_size squares in grid
-  for (i = 0; i <= ceil((cWidth / hashing_size)+1) * ceil((cHeight / hashing_size)+1); i++) {
+  for (var i = 0; i <= ceil((cWidth / hashing_size)+1) * ceil((cHeight / hashing_size)+1); i++) {
     verticesHashTable.push([]);
 
   }
@@ -38,7 +38,7 @@ function updateHashSpace(x, y, add) {
   }
   if (add == false) {
     //If deleting, we find the proper index, then proceed to search for that vertex with that coordinate and splice it
-    for (i = 0; i < verticesHashTable[index].length; i++) {
+    for (var i = 0; i < verticesHashTable[index].length; i++) {
 
       if (verticesHashTable[index][i][0] == x && verticesHashTable[index][i][1] == y) {
         verticesHashTable[index].splice(i, 1)
@@ -60,8 +60,8 @@ function updateHashSpace(x, y, add) {
 function draw_all_points(ctx, verticesarr) {
   ctx.fill(255);
   ctx.stroke(1);
-  for (j = 0; j < verticesarr.length; j++) {
-    for (k = 0; k < verticesarr[j].length; k++) {
+  for (var j = 0; j < verticesarr.length; j++) {
+    for (var k = 0; k < verticesarr[j].length; k++) {
       ctx.ellipse(verticesarr[j][k][0], verticesarr[j][k][1], 5, 5);
     }
 
@@ -108,7 +108,7 @@ function keyPressed(event) {
     if (flowerEffect) {
 
     } else {
-      for (j = 0; j < triangulations.length; j++) {
+      for (var j = 0; j < triangulations.length; j++) {
         delaunayDisplay(triangulations[j], triangleCanvasLayer);
       }
     }
@@ -210,7 +210,7 @@ function mouseClicked() {
         if (mode === 4) {
           //triangle flipper
           var tng = triangulations[0];
-          for (k = 0; k < tng.length; k += 3) {
+          for (var k = 0; k < tng.length; k += 3) {
             if (pointInTriangle(verticesHashTableFlat[tng[k]][0], verticesHashTableFlat[tng[k]][1], verticesHashTableFlat[tng[k + 1]][0], verticesHashTableFlat[tng[k + 1]][1], verticesHashTableFlat[tng[k + 2]][0], verticesHashTableFlat[tng[k + 2]][1], mouseX, mouseY)) {
               if (tColors[k] >= 0) {
                 tColors[k] = -1;
@@ -256,7 +256,7 @@ function erase_vertices(x, y, radius) {
       }
     }
   }
-
+  //Array to store vertices that should be erased
   var flagged_to_erase = [];
   for (var t = 0; t < search_indices.length; t++) {
 
@@ -264,12 +264,13 @@ function erase_vertices(x, y, radius) {
       var vhtk = verticesHashTable[search_indices[t]][k];
 
       if (squaredist(vhtk[0], vhtk[1], x, y) <= radius * radius) {
-        //Flag for erase so we don't end up not erasing some because we dynamically removed it from the array.
+        //Flag for erase so we don't end up not erasing some vertices because we dynamically removed it from the array.
         flagged_to_erase.push(vhtk[0], vhtk[1]);
       }
     }
   }
   for (var t = 0; t < flagged_to_erase.length; t += 2) {
+    //Delete vertices
     updateHashSpace(flagged_to_erase[t], flagged_to_erase[t + 1], false)
   }
 
@@ -368,7 +369,7 @@ function delaunayDisplay(tng, ctx, vertices_set, flower_effect, flowering_step, 
       coloring_speed = flower_speed;
     }
     //console.log(coloring_speed);
-    for (i = flowering_step * 3; i < (flowering_step * 3) + 3 * coloring_speed; i += 3) {
+    for (var i = flowering_step * 3; i < (flowering_step * 3) + 3 * coloring_speed; i += 3) {
       //console.log(i);
       if (i < tng.length) {
         if (tColors[i] >= 0) {
@@ -448,7 +449,7 @@ function construct_shape_from_vertices(verticesarr, ctx, tng, i) {
     var highx = -1;
     var highy = -1;
     //find top left and bottom right corners
-    for (xi = 0; xi < xcoords.length; xi++) {
+    for (var xi = 0; xi < xcoords.length; xi++) {
       if (xcoords[xi] < lowx) {
         lowx = xcoords[xi];
       }
@@ -489,7 +490,7 @@ function construct_shape_from_vertices(verticesarr, ctx, tng, i) {
     var highx = -1;
     var highy = -1;
     //find top left and bottom right corners
-    for (xi = 0; xi < xcoords.length; xi++) {
+    for (var xi = 0; xi < xcoords.length; xi++) {
       if (xcoords[xi] < lowx) {
         lowx = xcoords[xi];
       }
@@ -546,7 +547,7 @@ function loadData(dataStored) {
 
   displayPoints = true;
   css_buttons.displayPoints(true);
-  for (j = 0; j < triangulations.length; j++) {
+  for (var j = 0; j < triangulations.length; j++) {
     delaunayDisplay(triangulations[j], triangleCanvasLayer);
 
   }
@@ -602,28 +603,15 @@ function expandImage(mvalue, save) {
 
   //Perform deep copy
   var expandedVerticesHashTableFlat = JSON.parse(JSON.stringify(triangulatedVerticesFlat));
-
-  /*
-  expandedVerticesHashTable = JSON.parse(JSON.stringify(verticesHashTable));
-
-  for (p = 0; p < expandedVerticesHashTable.length; p++) {
-
-    for (l = 0; l < expandedVerticesHashTable[p].length; l++) {
-      var exv = expandVertex(expandedVerticesHashTable[p][l], mvalue);
-
-      expandedVerticesHashTable[p][l] = exv;
-
-    }
-  }
-  */
-
+  
+  //Expand vertices positions
   for (var p = 0; p < expandedVerticesHashTableFlat.length; p++) {
     var exv = expandVertex(expandedVerticesHashTableFlat[p], mvalue);
     expandedVerticesHashTableFlat[p] = exv;
   }
-  //verticesHashTableFlat = verticesHashTable.reduce(function(acc,curr){return acc.concat(curr)});
+
   downloadcanvas.noSmooth();
-  for (j = 0; j < triangulations.length; j++) {
+  for (var j = 0; j < triangulations.length; j++) {
     delaunayDisplay(triangulations[j], downloadcanvas, expandedVerticesHashTableFlat);
   }
 
@@ -715,8 +703,8 @@ function averageColor(x1, y1, x2, y2, x3, y3, accuracy) {
   var tg = 0;
   var tb = 0;
   var totalSample = 0;
-  for (i = 0; i < by2 - by1; i += accuracy) {
-    for (j = 0; j < bx2 - bx1; j += accuracy) {
+  for (var i = 0; i < by2 - by1; i += accuracy) {
+    for (var j = 0; j < bx2 - bx1; j += accuracy) {
       if (pointInTriangle(x1, y1, x2, y2, x3, y3, bx1 + j, by1 + i)) {
         var tempColor = fget(bx1 + j, by1 + i)
         tr += tempColor[0];

@@ -43,7 +43,7 @@ onmessage = function (e) {
   allVertices.push([0, cHeight]);
   allVertices.push([cWidth, cHeight]);
 
-  for (i = 0; i < cWidth / 80; i++) {
+  for (var i = 0; i < cWidth / 80; i++) {
     var tempv = i * 80 + Math.round(Math.random(0, 30));
     var tempv2 = i * 80 + Math.round(Math.random(0, 30));
     if (inCanvas(tempv, cHeight)) {
@@ -55,7 +55,7 @@ onmessage = function (e) {
 
 
   }
-  for (i = 0; i < cHeight / 80; i++) {
+  for (var i = 0; i < cHeight / 80; i++) {
     var tempv = i * 80 + Math.round(Math.random(0, 30));
     var tempv2 = i * 80 + Math.round(Math.random(0, 30));
     if (inCanvas(cWidth, tempv)) {

@@ -5,7 +5,7 @@ function exportSVG(data) {
 function storeTrianglesToString() {
   var data = ""
   tng = triangulations[triangulations.length - 1];
-  for (tInd = 0; tInd < tng.length; tInd += 3) {
+  for (var tInd = 0; tInd < tng.length; tInd += 3) {
     data += "<polygon points=\"" +
       triangulatedVerticesFlat[tng[tInd]][0] + "," +
       triangulatedVerticesFlat[tng[tInd]][1] + " " +

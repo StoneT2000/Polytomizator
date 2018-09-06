@@ -14,12 +14,12 @@ function generateCubicPoly(accuracy, density, overlay) {
   updateHashSpace(cWidth, 0, true)
   updateHashSpace(0, cHeight, true)
   updateHashSpace(cWidth, cHeight, true)
-  for (i = 0; i < cWidth / accuracy; i++) {
+  for (var i = 0; i < cWidth / accuracy; i++) {
     updateHashSpace(i * accuracy, cHeight, true)
     updateHashSpace(i * accuracy, 0, true)
 
   }
-  for (i = 0; i < cHeight / accuracy; i++) {
+  for (var i = 0; i < cHeight / accuracy; i++) {
     updateHashSpace(cWidth, i * accuracy, true)
     updateHashSpace(0, i * accuracy, true);
   }
