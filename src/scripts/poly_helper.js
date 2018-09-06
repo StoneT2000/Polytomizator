@@ -22,7 +22,7 @@ function generateHashSpace() {
   }
 }
 
-//Add or delete a vertex.
+//Add or delete a vertex from verticesHashTable
 function updateHashSpace(x, y, add) {
 
   var hashVal = hashCoordinate(x, y);
