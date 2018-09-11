@@ -1019,6 +1019,7 @@ function fliptriangles(si1, si2) {
   console.log(new_arr);
   triangulations[0].set(new_arr.slice(0,3),si1);
   triangulations[0].set(new_arr.slice(3,6),si2);
+  tColors = [];
   finishedColoring = false;
 }
 
