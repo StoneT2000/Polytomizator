@@ -137,6 +137,7 @@ function keyPressed(event) {
 }
 
 //Equivalent to pressing polytomize or D. Triangulate the data, tell draw() to begin coloring, check for flower effect option, load image into background, reset colors, and undisplay things.
+
 function triangulate_and_display() {
   triangulize();
 
@@ -165,7 +166,7 @@ function triangulate_and_display() {
   //Start time of polytomization
   sTime = millis();
 }
-
+var selected_triangles = [-1, -1];
 function mouseClicked() {
   //Check if click is within canvas
   if (active_canvas === true) {
@@ -193,6 +194,41 @@ function mouseClicked() {
           if (unique_vertex(vpx, vpy)) {
             updateHashSpace(vpx, vpy, true)
 
+          }
+        }
+        else if (mode === 4) {
+          //triangle flipper
+          var tng = triangulations[0];
+          for (var k = 0; k < tng.length; k += 3) {
+            if (pointInTriangle(verticesHashTableFlat[tng[k]][0], verticesHashTableFlat[tng[k]][1], verticesHashTableFlat[tng[k + 1]][0], verticesHashTableFlat[tng[k + 1]][1], verticesHashTableFlat[tng[k + 2]][0], verticesHashTableFlat[tng[k + 2]][1], mouseX, mouseY)) {
+              console.log("T: " + k);
+              //vertex id triangulations[0][k] corresponds with kth half edge
+              if (tColors[k] >= 0) {
+                tColors[k] = -1;
+              } else if (tColors[k] == -1) {
+                var tAC = [0, 0, 0];
+                tAC = averageColor(verticesHashTableFlat[tng[k]][0], verticesHashTableFlat[tng[k]][1], verticesHashTableFlat[tng[k + 1]][0], verticesHashTableFlat[tng[k + 1]][1], verticesHashTableFlat[tng[k + 2]][0], verticesHashTableFlat[tng[k + 2]][1], colorAccuracy)
+                tColors[k] = tAC[0];
+                tColors[k + 1] = tAC[1];
+                tColors[k + 2] = tAC[2];
+              }
+            }
+          }
+          delaunayDisplay(triangulations[0], triangleCanvasLayer);
+
+        }
+        else if (mode === 5) {
+          
+          if (selected_triangles[0] == -1) {
+            selected_triangles[0] = triangle_id_from_point(mouseX,mouseY)
+          }
+          else if (selected_triangles[1] == -1 && selected_triangles[0] != -1) {
+            selected_triangles[1] = triangle_id_from_point(mouseX,mouseY)
+          }
+          else if (selected_triangles[1] != -1) {
+            console.log(selected_triangles);
+            fliptriangles(selected_triangles[0], selected_triangles[1]);
+            selected_triangles = [-1,-1];
           }
         }
         //Record past vertices sets for undoing and redoing.
@@ -613,6 +649,7 @@ function expandImage(mvalue, save) {
 
 //Take the vertices and creates a flattened version
 //Then uses the delaunator to produce the order in which the vertices are connected to get triangles.
+var half_edges;
 function triangulize() {
   var delaunay;
   verticesHashTableFlat = verticesHashTable.reduce(function (acc, curr) {
@@ -622,7 +659,7 @@ function triangulize() {
 
   var triangles = (delaunay.triangles)
   triangulations[0] = triangles;
-
+  half_edges = delaunay.halfedges;
   displayTriangulation = true;
   css_buttons.displayTriangulation(true);
 
@@ -923,4 +960,76 @@ function resize_poly_canvas(scale) {
   
   //redraw vertices
   //draw_all_points(verticesCanvasLayer, verticesHashTable)
+}
+
+
+function fliptriangles(si1, si2) {
+  //si1 and si2 are the starting indices of the triangle in triangulations[0] array
+
+  //ISSUE: Not all flip triangle pairs are stored in sequences of 6... have to find the pair first
+  var id_arr = [];
+  id_arr.push(triangulations[0][si1]);
+  id_arr.push(triangulations[0][si1+1]);
+  id_arr.push(triangulations[0][si1+2]);
+  id_arr.push(triangulations[0][si2]);
+  id_arr.push(triangulations[0][si2+1]);
+  id_arr.push(triangulations[0][si2+2]);
+  var indexc = {};
+  var new_arr = [-1,-1,-1,-1,-1,-1];
+  for (var j = 0; j < 6; j++) {
+    if (isNaN(indexc[id_arr[j]])) {
+      indexc[id_arr[j]] = 1;
+    }
+    else {
+      indexc[id_arr[j]] ++;
+    }
+  }
+  for (var key in indexc) {
+    if (new_arr[0] == -1) {
+      if (indexc[key] == 1) {
+        new_arr[0] = parseInt(key);
+        new_arr[3] = parseInt(key);
+      }
+    }
+    else {
+      if (indexc[key] == 1) {
+        new_arr[1] = parseInt(key);
+        new_arr[4] = parseInt(key);
+      }
+    }
+    if (new_arr[2] == -1) {
+      if (indexc[key] == 2) {
+        new_arr[2] = parseInt(key);
+      }
+    }
+    else {
+      if (indexc[key] == 2) {
+        new_arr[5] = parseInt(key);
+      }
+    }
+
+  }
+  for (var j = 0; j < new_arr.length; j++) {
+    if (new_arr[j] == -1) {
+      //Issue, probably not adjacent triangles
+      console.log("not adjacent triangles")
+      return;
+    }
+  }
+  console.log(new_arr);
+  triangulations[0].set(new_arr.slice(0,3),si1);
+  triangulations[0].set(new_arr.slice(3,6),si2);
+  finishedColoring = false;
+}
+
+function triangle_id_from_point(x, y) {
+  //find the triangle vertice id's from a point x,y inside that triangle.
+  //Search from triangles in that hash square
+  var tng = triangulations[0];
+  for (var k = 0; k < tng.length; k += 3) {
+    if (pointInTriangle(verticesHashTableFlat[tng[k]][0], verticesHashTableFlat[tng[k]][1], verticesHashTableFlat[tng[k + 1]][0], verticesHashTableFlat[tng[k + 1]][1], verticesHashTableFlat[tng[k + 2]][0], verticesHashTableFlat[tng[k + 2]][1], x, y)) {
+      return k;
+    }
+  }
+  
 }

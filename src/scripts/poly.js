@@ -504,12 +504,13 @@ function generate_normal_poly(values) {
             //Then randomly add jitter instead
             var ox = detected_edge_vertices[i][0];
             var oy = detected_edge_vertices[i][1];
+            updateHashSpace(ox, oy, true);
             var random_num_jitter = random(0, 1) * 5 + 1;
             for (var ik = 0; ik < random_num_jitter; ik++) {
               var vx = round(random(-jitter_deviation, jitter_deviation) + ox);
               var vy = round(random(-jitter_deviation, jitter_deviation) + oy);
               if (inCanvas(vx, vy)) {
-                updateHashSpace(vx, vy, true);
+                //updateHashSpace(vx, vy, true);
               }
             }
           }
@@ -583,12 +584,13 @@ function generate_normal_poly(values) {
           //Then randomly add jitter instead
           var ox = detected_edge_vertices[i][0];
           var oy = detected_edge_vertices[i][1];
+          updateHashSpace(ox, oy, true);
           var random_num_jitter = random(0, 1) * max_jitter_count + 1;
           for (var ik = 0; ik < random_num_jitter; ik++) {
             var vx = round(random(-jitter_deviation, jitter_deviation) + ox);
             var vy = round(random(-jitter_deviation, jitter_deviation) + oy);
             if (inCanvas(vx, vy)) {
-              updateHashSpace(vx, vy, true);
+              //updateHashSpace(vx, vy, true);
             }
           }
         }
