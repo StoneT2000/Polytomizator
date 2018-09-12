@@ -41,7 +41,7 @@ For maximum experience, it is suggested to use Firefox. The normal poly art auto
   <img src ="https://github.com/StoneT2000/StoneT2000.github.io/blob/master/images/NasaShuttlePoly.jpg" width="399" height="auto"></img>
   <img src ="https://github.com/StoneT2000/StoneT2000.github.io/blob/master/images/MountainHimilayas.jpg" width="800" height="auto"></img>
   <img src ="https://github.com/StoneT2000/StoneT2000.github.io/blob/master/images/MountainHimilayasPoly.jpg" width="800" height="auto"></img>
-  <img src ="https://github.com/StoneT2000/StoneT2000.github.io/blob/master/images/PolytomizationFlowerEffect2.gif" width="800" height="auto"></img>
+  <img src ="https://github.com/StoneT2000/StoneT2000.github.io/blob/master/images/PolyFlowerEffectLong.gif" width="800" height="auto"></img>
 </p>
 
 ## Further Technical Details
