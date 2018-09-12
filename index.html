@@ -25,20 +25,40 @@
   <script src="scripts/delaunatormin.js"></script>
 
   <!--Local Scripts-->
-  <script language="javascript" type="text/javascript" src="scripts/poly.min.js?version=58"></script>
-  <script language="javascript" type="text/javascript" src="scripts/poly_helper.min.js?version=58"></script>
-  <script language="javascript" type="text/javascript" src="scripts/buttons.min.js?version=58"></script>
-  <script language="javascript" type="text/javascript" src="scripts/otherEffects.min.js?version=58"></script>
-  <script language="javascript" type="text/javascript" src="scripts/imagefilter.min.js?version=58"></script>
-  <script language="javascript" type="text/javascript" src="scripts/exportSVG.min.js?version=58"></script>
+  <script language="javascript" type="text/javascript" src="scripts/poly.min.js?version=59"></script>
+  <script language="javascript" type="text/javascript" src="scripts/poly_helper.min.js?version=59"></script>
+  <script language="javascript" type="text/javascript" src="scripts/buttons.min.js?version=59"></script>
+  <script language="javascript" type="text/javascript" src="scripts/otherEffects.min.js?version=59"></script>
+  <script language="javascript" type="text/javascript" src="scripts/imagefilter.min.js?version=59"></script>
+  <script language="javascript" type="text/javascript" src="scripts/exportSVG.min.js?version=59"></script>
   <script language="javascript" type="text/javascript" src="scripts/FileSaver.min.js"></script>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
-  <link rel="stylesheet" href="poly.min.css?version=58">
+  <link rel="stylesheet" href="poly.min.css?version=59">
 
 </head>
 
 <body>
+  <div id="helpScreen">
+    <div id="help_text_wrapper">
+      <p class = "help_text" id="help_text0">This is a website to help quickly and easily create (low) poly art</p>
+      <p>Upload an image first</p>
+      <p>Use the tool bar below the canvas to use different tools to add and remove points on to the canvas</p>
+      <div class="tool_explanation"><i class="fa fa-pen"></i><p>Place one point</p></div>
+      <div class="tool_explanation">
+        <i class="fa fa-paint-brush"></i><p>Place several points</p>
+      </div>
+      <div class="tool_explanation">
+        <i class="fa fa-eraser"></i><p>Erase points</p>
+      </div>
+      <p style="display:inline;">Explore other options by clicking this gear at the top right </p><i class="fa fa-cog" style="display:inline;line-height: 70px;"></i>
+      <p>Save the current work or load previous work with the 'save/load canvas' buttons</p>
+      <p>Hide/Show points, the colors, the triangles, and the image with the buttons below the toolbar</p>
+      <p>Click Polytomize (or press the D key) to make the poly art</p>
+      <p>(Click to proceed to making poly art)</p>
+    </div>
+    
+  </div>
   <div id="loadingScreen">
     <h1 id="loadingText" style="position: fixed;text-align: center;width: 100%;">Loading Content<img src="images/loadingSymbol.gif" style="margin-left: 10px" width="32px" height="auto"></h1>
   </div>
@@ -50,9 +70,6 @@
     <div class="custom-file" id="images-file-div" style="width:485px;margin-bottom:30px;">
       <input type="file" class="custom-file-input" id="file" accept="image/*">
       <label class="custom-file-label" for="file" id="label_file" style="padding-right:78.333333px">Choose images...</label>
-    </div>
-    <div>
-      <button id="polytomize" class="btn btn-dark" data-toggle="tooltip" title="Triangulize the canvas and color it in (D)" data-delay="1000">Polytomize</button>
     </div>
     <div id="download_elements">
       <button type="button" id="downloadSVG" class="btn btn-dark">Download poly art as an SVG file</button><button type="button" id="expandImage" class="btn btn-dark" data-toggle="tool-tip" data-toggle="tooltip" data-placement="top" data-title="Download the poly art in extremely high detail">Download poly art as an image (png)</button>
@@ -143,10 +160,13 @@
         <li id="sizing2" data-toggle="tooltip" data-placement="top" data-title="Number of points placed with brush at once" data-delay='1000'>Brush Density<input id="brushDensity" type="text" class="form-control" placeholder="5"></li>
         <button id="undo" class="btn btn-dark" style="vertical-align: top;line-height: 25px" onclick="undo()" data-toggle="tooltip" data-placement="top" data-title="Undo the last step (Cmd + Z)" data-delay='1000'><i class="fas fa-undo-alt"></i></button>
         <button id="redo" class="btn btn-dark" style="vertical-align: top;line-height: 25px" onclick="redo()" data-toggle="tooltip" data-placement="top" data-title="Redo the next step (Cmd + Shift + Z)" data-delay='1000'><i class="fas fa-redo-alt"></i></button>
-        <button id="saveThis" class="btn btn-dark" data-toggle="tooltip" data-placement="top" data-title="Save the vertices for this canvas for next time" data-delay='1000'>Save this<br>canvas</button>
-        <button id="loadThis" class="btn btn-dark" data-toggle="tooltip" data-placement="top" data-title="Load previously saved vertices. NOTE: It is best this is done on the same image used last time" data-delay='1000'>Load last<br>canvas</button>
+        <button id="saveThis" class="btn btn-dark" data-toggle="tooltip" data-placement="top" data-title="Save the vertices for this canvas for next time" data-delay='1000'>Save<br>canvas</button>
+        <button id="loadThis" class="btn btn-dark" data-toggle="tooltip" data-placement="top" data-title="Load previously saved vertices. NOTE: It is best this is done on the same image used last time" data-delay='1000'>Load<br>canvas</button>
 
       </ul>
+    </div>
+    <div>
+      <button id="polytomize" class="btn btn-dark" data-toggle="tooltip" title="Triangulize the canvas and color it in (D)" data-delay="1000">Polytomize</button>
     </div>
     <div class="noselect" style="display:inline-block;">
       <div class="buttonRow">
@@ -159,6 +179,7 @@
       </div>
 
     </div>
+    
     <div id="stats_for_nerds" style="margin-top:50px;">
       <h3 id="statsHeader">Some stats for nerds</h3>
       <table id="stats_for_nerds_table">
