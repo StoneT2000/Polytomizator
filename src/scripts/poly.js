@@ -346,12 +346,13 @@ function draw() {
 
 
   if (mode === 2 && active_canvas) {
-
+    
     noFill();
     stroke(200, 200, 200);
     ellipse(mouseX, mouseY, brushSize * 2, brushSize * 2);
     if (accDist >= critDist && mouseIsPressed) {
-
+      displayPoints = true;
+      css_buttons.displayPoints(true);
       if (mouseX > cWidth - 1 || mouseX < 1 || mouseY > cHeight - 1 || mouseY < 1) {} else {
         accDist = 0;
         critDist = random(15, 20);
@@ -410,10 +411,13 @@ function draw() {
 
   //Erase points
   if (mode === 3 && active_canvas === true) {
+
     noFill();
     stroke(200, 200, 200);
     ellipse(mouseX, mouseY, brushSize * 2, brushSize * 2);
     if (mouseIsPressed) {
+      displayPoints = true;
+      css_buttons.displayPoints(true);
       var mx = mouseX
       var my = mouseY
       erase_vertices(mx, my, brushSize)

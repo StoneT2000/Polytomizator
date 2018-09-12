@@ -119,12 +119,15 @@ function keyPressed(event) {
     $("#lineBrush").addClass("active");
   }
   //T
+  /*
   else if (keyCode === 84) {
     mode = 4;
     removeClassFromBrushes("active");
     $("#triangleMove").addClass("active");
   }
+  */
   /*
+  
   //=
   else if (keyCode === 61) {
     resize_poly_canvas(1.2);
@@ -174,6 +177,8 @@ function mouseClicked() {
       if (mouseY <= cHeight && mouseY >= 0) {
         //console.log(erase_vertices(mouseX,mouseY,100))
         if (mode == 1) {
+          displayPoints = true;
+          css_buttons.displayPoints(true);
           var vpx = round(mouseX);
           var vpy = round(mouseY);
           
@@ -546,15 +551,18 @@ function loadData(dataStored) {
   tColors = dataStored[1];
   verticesHashTable = dataStored[2];
   verticesHashTableFlat = dataStored[3];
+  triangulatedVerticesFlat = dataStored[3];
   //img1 = dataStored[4];
   cWidth = dataStored[4];
   cHeight = dataStored[5];
   myCanvas = resizeCanvas(cWidth, cHeight);
+  
+  triangleCanvasLayer = createGraphics(cWidth, cHeight);
+  verticesCanvasLayer = createGraphics(cWidth, cHeight);
   $("#gamedisplay").css("width", cWidth);
   $("#gamedisplay").css("margin-left", -cWidth/2);
+  
   triangulize();
-
-
 
   displayPoints = true;
   css_buttons.displayPoints(true);
@@ -565,6 +573,7 @@ function loadData(dataStored) {
   recordVertices();
   verticesCanvasLayer.clear();
   draw_all_points(verticesCanvasLayer, verticesHashTable);
+  
 }
 
 function saveData(location) {
@@ -574,7 +583,7 @@ function saveData(location) {
   }
   //image(img1, 0, 0, cWidth, cHeight);
   //loadPixels();
-  var currentData = [triangulations.slice(), tColors.slice(), verticesHashTable.slice(), verticesHashTableFlat.slice(), cWidth, cHeight];
+  var currentData = [triangulations.slice(), tColors.slice(), verticesHashTable.slice(), triangulatedVerticesFlat.slice(), cWidth, cHeight];
   localStorage.setItem(location_name, JSON.stringify(currentData));
 
 }

@@ -142,6 +142,11 @@ $(document).ready(function () {
   //When user uploads an image, listen for the change and update the canvas accordingly.
   $("#file").on('change', function () {
     
+    displayPoints = true;
+    css_buttons.displayPoints(true);
+    displayTriangulation = false;
+    css_buttons.displayTriangulation(false);
+    
     //Rename the label with the name of the file for display purposes
     $('#label_file').text(this.files && this.files.length ? this.files[0].name.split('.')[0] : '');
     
@@ -255,18 +260,48 @@ $(document).ready(function () {
 
   //Save or load vertices
   $("#saveThis").on("click", function () {
-    saveData();
-    $("#saveThis").html("Saved<br>data!");
-    window.setTimeout(function () {
-      $("#saveThis").html("Save this<br>canvas");
-    }, 2000)
+    var save_name = prompt("Enter a save name");
+    var formatted_name = save_name + "_polytomizator_art_data";
+    var existing_data = localStorage.getItem(formatted_name);
+    if (existing_data) {
+      if (confirm("There's data already saved as this name, are you sure you want to overwrite it?")) {
+        saveData(formatted_name);
+        alert("Remember this name: " + save_name + " in order to go back to this canvas");
+        $("#saveThis").html("Saved<br>data!");
+      window.setTimeout(function () {
+        $("#saveThis").html("Save this<br>canvas");
+      }, 2000)
+      }
+      else {
+      }
+    }
+    else {
+      saveData(formatted_name);
+      alert("Remember this name: " + save_name + " in order to go back to this canvas");
+      $("#saveThis").html("Saved<br>data!");
+      window.setTimeout(function () {
+        $("#saveThis").html("Save this<br>canvas");
+      }, 2000)
+    }
+
+    
   });
   $("#loadThis").on("click", function () {
-    loadData(JSON.parse(localStorage.getItem("art1")))
-    $("#loadThis").html("Loaded<br>Data!");
-    window.setTimeout(function () {
-      $("#loadThis").html("Load last<br>canvas");
-    }, 2000)
+    var save_name = prompt("Enter the save name to be loaded");
+    var formatted_name = save_name + "_polytomizator_art_data";
+    var loaded_data = localStorage.getItem(formatted_name);
+    if (loaded_data) {
+      loadData(JSON.parse(loaded_data));
+      $("#loadThis").html("Loaded<br>Data!");
+      window.setTimeout(function () {
+        $("#loadThis").html("Load last<br>canvas");
+      }, 2000)
+    }
+    else {
+      alert("There isn't a save with this name");
+    }
+    
+    
   });
 
   //options menu
