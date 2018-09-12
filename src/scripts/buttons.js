@@ -34,6 +34,10 @@ $(document).ready(function () {
     $('[data-toggle="tooltip"]').tooltip()
   })
 
+  $("#helpScreen").on('click', function(){ 
+    $("#helpScreen").css("display", "none");
+  })
+  
   //Buttons for displaying various things
   $("#displayColor").on("click", function () {
     if (noColors === true) {
@@ -266,10 +270,10 @@ $(document).ready(function () {
     if (existing_data) {
       if (confirm("There's data already saved as this name, are you sure you want to overwrite it?")) {
         saveData(formatted_name);
-        alert("Remember this name: " + save_name + " in order to go back to this canvas");
+        alert("Remember this name: \"" + save_name + "\" in order to go back to this canvas");
         $("#saveThis").html("Saved<br>data!");
       window.setTimeout(function () {
-        $("#saveThis").html("Save this<br>canvas");
+        $("#saveThis").html("Save<br>canvas");
       }, 2000)
       }
       else {
@@ -280,7 +284,7 @@ $(document).ready(function () {
       alert("Remember this name: " + save_name + " in order to go back to this canvas");
       $("#saveThis").html("Saved<br>data!");
       window.setTimeout(function () {
-        $("#saveThis").html("Save this<br>canvas");
+        $("#saveThis").html("Save<br>canvas");
       }, 2000)
     }
 
@@ -294,7 +298,7 @@ $(document).ready(function () {
       loadData(JSON.parse(loaded_data));
       $("#loadThis").html("Loaded<br>Data!");
       window.setTimeout(function () {
-        $("#loadThis").html("Load last<br>canvas");
+        $("#loadThis").html("Load<br>canvas");
       }, 2000)
     }
     else {

@@ -40,7 +40,7 @@ html {
 }
 
 #loadingText {
-  top: 50%;
+  top: 10%;
   color: RGBA(255, 255, 255, 1);
   opacity: 1;
   transition: top 2.5s, opacity 1.5s;
@@ -106,7 +106,9 @@ html {
   left: 0px;
   margin-top: 20px;
 }
-
+.brushes ul {
+  margin-bottom:0px;
+}
 .brushes i {
   font-size: 22px;
 }
@@ -514,7 +516,43 @@ tr {
   font-size: 20px;
   color: white;
 }
-
+#helpScreen { 
+  background-color: RGBA(40, 40, 40, 0.6);
+  width: 100%;
+  bottom: 0px;
+  height: 100%;
+  position: fixed;
+  z-index: 1000;
+  display: block;
+  opacity: 1;
+}
+#help_text_wrapper {
+  position: absolute;
+  top:50%;
+  transform: translate(0,-50%);
+}
+#helpScreen p, #helpScreen i {
+  color:white;
+  text-align: left;
+  font-size:25px;
+  
+}
+#helpScreen p {
+  padding-left: 40px;
+  font-weight:200;
+}
+#helpScreen i {
+  font-size:30px;
+  display:inline;
+}
+.tool_explanation { 
+  width: 100%;
+  text-align: left;
+  padding-left:40px;
+}
+.tool_explanation p {
+  display:inline;
+}
 @media only screen and (max-height: 720px){
   #options_menu {
     height:400px;

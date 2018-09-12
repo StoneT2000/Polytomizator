@@ -178,7 +178,7 @@ function setup() {
       alert("Please wait until the coloring is finished before enlargining the work and downloading it");
     } else if (triangulations[triangulations.length - 1].length > 0) {
       if (display_mode_on === true) {
-        alert("At the moment, you can't download SVGs of the different display modes. Turn display mode off in settings to download SVG of the triangulation")
+        alert("At the moment, you can't download SVGs of the different display modes. Turn display mode off in settings to download SVG of the poly art")
       } else {
         downloadSVG(cWidth, cHeight);
       }
