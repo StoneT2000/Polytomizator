@@ -367,11 +367,18 @@ $(document).ready(function () {
   $("#displaygennormalpoly").on("click", function () {
     open_a_options()
     display_options(false);
-    $("#options_menu_additional").html("<h4>Generate poly art</h4><i id=\"close_a_options\"class=\"fa fa-times\"></i><span>Color Threshold</span><input class=\"parameters form-control\" type=\"text\" placeholder=\"10 ~ 255\" id=\"color_threshold\"><button class=\"btn btn-outline-light\" id=\"gennormalpoly\">Generate</button>");
+    $("#options_menu_additional").html("<h4>Generate poly art</h4><i id=\"close_a_options\"class=\"fa fa-times\"></i><span>Level of Accuracy</span><input class=\"parameters form-control\" type=\"text\" placeholder=\"≥1\" id=\"poly_accuracy\"><button class=\"btn btn-outline-light\" id=\"gennormalpoly\">Generate</button>");
     $("#gennormalpoly").on("click", function () {
-      var ct = parseFloat($("#color_threshold").val());
+      //var ct = parseFloat($("#color_threshold").val());
+      var pacc = parseFloat($("#poly_accuracy").val());
+      /*
       if (isNaN(ct) || ct < 10) {
-        alert("Enter a number larger than 10 for the color threshold");
+        alert("Enter a integer larger than 10 for the color threshold");
+        return;
+      }
+      */
+      if (isNaN(pacc) || pacc < 2) {
+        alert("Enter a integer larger than 1 for the level of accuracy");
         return;
       }
       var canvas_area = cWidth * cHeight
@@ -382,9 +389,9 @@ $(document).ready(function () {
           return;
         }
       }
-      colorThreshold = ct;
+      colorThreshold = 10;
       close_a_options();
-      generate_normal_poly([cWidth, cHeight, completedFilters, d, colorThreshold]);
+      generate_normal_poly([cWidth, cHeight, completedFilters, d, colorThreshold, pacc]);
 
     })
     $("#close_a_options").on("click", function () {

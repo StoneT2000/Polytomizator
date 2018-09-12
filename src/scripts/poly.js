@@ -421,6 +421,7 @@ function draw() {
       var mx = mouseX
       var my = mouseY
       erase_vertices(mx, my, brushSize)
+      
       //Look at indices at four corners + 5px
       var redraw_indices = [];
       var px1 = floor(round(mx) / hashing_size) * hashing_size;
@@ -482,6 +483,9 @@ function generate_normal_poly(values) {
     flowering = true;
   }
   var artWorker = new Worker('scripts/webworkerArtGen.js')
+  var pacc = values[5]
+  var sparsity_factor = 4;
+  var rand_density = 0.2;
   if (completedFilters == false) {
     var artWorkerstime = millis();
     detected_edge_vertices = [];
@@ -491,49 +495,56 @@ function generate_normal_poly(values) {
       var artWorkerftime = millis();
       generateHashSpace();
       for (var iv = 0; iv < artResult[0].length; iv++) {
-        updateHashSpace(artResult[0][iv][0], artResult[0][iv][1], true);
+        detected_edge_vertices.push([artResult[0][iv][0], artResult[0][iv][1], artResult[0][iv][2]]);
       }
-      for (var iv = 0; iv < artResult[1].length; iv++) {
-        //updateHashSpace(artResult[1][iv][0], artResult[1][iv][1], true);
-        detected_edge_vertices.push([artResult[1][iv][0], artResult[1][iv][1], artResult[1][iv][2]]);
-      }
-      //console.log(values[0], values[1], artResult[1])
-
-
-
       for (var i = 0; i < detected_edge_vertices.length; i++) {
         if (detected_edge_vertices[i][2] >= colorThreshold) {
-          //Randomly add
-          if (random(0, 1) > 0.5) {
-            //Then randomly add jitter instead
-            var ox = detected_edge_vertices[i][0];
-            var oy = detected_edge_vertices[i][1];
-            //updateHashSpace(ox, oy, true);
-            var random_num_jitter = random(0, 1) * 5 + 1;
-            for (var ik = 0; ik < random_num_jitter; ik++) {
-              var vx = round(random(-jitter_deviation, jitter_deviation) + ox);
-              var vy = round(random(-jitter_deviation, jitter_deviation) + oy);
-              if (inCanvas(vx, vy)) {
-                updateHashSpace(vx, vy, true);
-              }
-            }
-          }
-
-          //updateHashSpace(detected_edge_vertices[i][0], detected_edge_vertices[i][1], true);
+          var ox = detected_edge_vertices[i][0];
+          var oy = detected_edge_vertices[i][1];
+          updateHashSpace(ox, oy, true, detected_edge_vertices[i][2]);
         }
       }
-
-
-      copyTo(artResult[2], pixels)
+      copyTo(artResult[1], pixels)
 
       for (var km = 0; km < pixels.length; km++) {
         filteredPixels.push(pixels[km]);
       }
-      splitSquare(20)
-      generateRandomSquares(20, 0.4)
+      
+      splitSquare(pacc * sparsity_factor)
+      generateRandomSquares(pacc * sparsity_factor, rand_density)
 
       //Then clean up the edge points
-
+      reduce_point_density(pacc * 2);
+      
+      //Initialize edge and corner points
+      updateHashSpace(0, 0, true)
+      updateHashSpace(cWidth, 0, true)
+      updateHashSpace(0, cHeight, true)
+      updateHashSpace(cWidth, cHeight, true)
+      for (var i = 0; i < cWidth / (pacc*3); i++) {
+        var tempv = i * pacc*3 + Math.round(random(0, pacc));
+        var tempv2 = i * pacc*3 + Math.round(random(0, pacc));
+        if (inCanvas(tempv, cHeight)) {
+          updateHashSpace(tempv, cHeight, true)
+        }
+        if (inCanvas(tempv2, 0)) {
+          updateHashSpace(tempv2, 0, true);
+        }
+      }
+      for (var i = 0; i < cHeight / (pacc*3); i++) {
+        var tempv = i * pacc*3 + Math.round(random(0, pacc));
+        var tempv2 = i * pacc*3 + Math.round(random(0, pacc));
+        if (inCanvas(cWidth, tempv)) {
+          updateHashSpace(cWidth, tempv, true);
+        }
+        if (inCanvas(0, tempv2)) {
+          updateHashSpace(0, tempv2, true);
+        }
+      }
+      
+      draw_all_points(verticesCanvasLayer, verticesHashTable);
+      recordVertices();
+      
       triangulate_and_display();
       completedFilters = true;
 
@@ -549,15 +560,30 @@ function generate_normal_poly(values) {
       recordVertices();
       console.log("Webworker took " + ((artWorkerftime - artWorkerstime) / 1000) + "s", "Area: " + (cWidth * cHeight));
     }
-  } else {
-    generateHashSpace()
+  } 
+  else {
+    generateHashSpace();
+    
+    for (var i = 0; i < detected_edge_vertices.length; i++) {
+      if (detected_edge_vertices[i][2] >= colorThreshold) {
+        var ox = detected_edge_vertices[i][0];
+        var oy = detected_edge_vertices[i][1];
+        updateHashSpace(ox, oy, true, detected_edge_vertices[i][2]);
+      }
+    }
+    splitSquare(pacc * sparsity_factor)
+    generateRandomSquares(pacc * sparsity_factor, rand_density)
+    //Then clean up the edge points
+    reduce_point_density(pacc * 2);
+    
+    //Initialize edge and corner points
     updateHashSpace(0, 0, true)
     updateHashSpace(cWidth, 0, true)
     updateHashSpace(0, cHeight, true)
     updateHashSpace(cWidth, cHeight, true)
-    for (var i = 0; i < cWidth / 80; i++) {
-      var tempv = i * 80 + Math.round(random(0, 30));
-      var tempv2 = i * 80 + Math.round(random(0, 30));
+    for (var i = 0; i < cWidth / (pacc*3); i++) {
+      var tempv = i * pacc*3 + Math.round(random(0, pacc));
+      var tempv2 = i * pacc*3 + Math.round(random(0, pacc));
       if (inCanvas(tempv, cHeight)) {
         updateHashSpace(tempv, cHeight, true)
       }
@@ -567,44 +593,19 @@ function generate_normal_poly(values) {
 
 
     }
-    for (var i = 0; i < cHeight / 80; i++) {
-      var tempv = i * 80 + Math.round(random(0, 30));
-      var tempv2 = i * 80 + Math.round(random(0, 30));
+    for (var i = 0; i < cHeight / (pacc*3); i++) {
+      var tempv = i * pacc*3 + Math.round(random(0, pacc));
+      var tempv2 = i * pacc*3 + Math.round(random(0, pacc));
       if (inCanvas(cWidth, tempv)) {
         updateHashSpace(cWidth, tempv, true);
       }
       if (inCanvas(0, tempv2)) {
         updateHashSpace(0, tempv2, true);
       }
-
-
     }
-    generateRandomSquares(30, 0.4)
-
-    for (var i = 0; i < detected_edge_vertices.length; i++) {
-      if (detected_edge_vertices[i][2] >= colorThreshold) {
-        //Randomly add
-        if (random(0, 1) > jitter_prob) {
-          //Then randomly add jitter instead
-          var ox = detected_edge_vertices[i][0];
-          var oy = detected_edge_vertices[i][1];
-          //updateHashSpace(ox, oy, true);
-          var random_num_jitter = random(0, 1) * max_jitter_count + 1;
-          for (var ik = 0; ik < random_num_jitter; ik++) {
-            var vx = round(random(-jitter_deviation, jitter_deviation) + ox);
-            var vy = round(random(-jitter_deviation, jitter_deviation) + oy);
-            if (inCanvas(vx, vy)) {
-              updateHashSpace(vx, vy, true);
-            }
-          }
-        }
-      }
-    }
-
-
-    //Then clean up the edge points a little.
-    //Heuristic: if a very bright point has lots of points nearby, remove nearby ones, radius 10?
-
+    draw_all_points(verticesCanvasLayer, verticesHashTable);
+    recordVertices();
+    
     triangulate_and_display();
     completedFilters = true;
     $("#loadingScreen").css("opacity", "0");
@@ -618,7 +619,26 @@ function generate_normal_poly(values) {
 
   }
 }
-//Parameters for auto generating normal poly art.
+//Parameters for auto generating normal poly art. DEPRECATED
 var jitter_deviation = 20; //How far it can be from edge
 var max_jitter_count = 3; //Max number of extra jitter points around edge point
 var jitter_prob = 0.85; //Probability jitter is not added
+
+//Reduce the density of points for better looking poly art when using the generate normal poly art function
+//Higher accuracy, the lower the poly level and detail. So high accuracy is basically really low poly and low accuracy value is higher poly.
+function reduce_point_density(accuracy, random) {
+  for (var t = 255; t >= 10; t-- ){
+    for (var i = 0; i < verticesHashTable.length; i++) {
+      for (var j = 0; j < verticesHashTable[i].length; j++) {
+        if (verticesHashTable[i][j].length == 3) {
+          if (verticesHashTable[i][j][2] == t) {
+            var vx = verticesHashTable[i][j][0];
+            var vy = verticesHashTable[i][j][1];
+            erase_vertices(vx,vy, accuracy);
+            updateHashSpace(vx,vy, true);
+          }
+        }
+      }
+    }
+  }
+}

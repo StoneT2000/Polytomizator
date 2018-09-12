@@ -37,41 +37,12 @@ onmessage = function (e) {
   }
   console.log("complete with filters")
   //must keep redoing filters if pixeldata doesn't transfer to pixel
-  allVertices = [];
-  allVertices.push([0, 0]);
-  allVertices.push([cWidth, 0]);
-  allVertices.push([0, cHeight]);
-  allVertices.push([cWidth, cHeight]);
 
-  for (var i = 0; i < cWidth / 80; i++) {
-    var tempv = i * 80 + Math.round(Math.random(0, 30));
-    var tempv2 = i * 80 + Math.round(Math.random(0, 30));
-    if (inCanvas(tempv, cHeight)) {
-      allVertices.push([tempv, cHeight])
-    }
-    if (inCanvas(tempv2, cHeight)) {
-      allVertices.push([tempv2, 0])
-    }
-
-
-  }
-  for (var i = 0; i < cHeight / 80; i++) {
-    var tempv = i * 80 + Math.round(Math.random(0, 30));
-    var tempv2 = i * 80 + Math.round(Math.random(0, 30));
-    if (inCanvas(cWidth, tempv)) {
-      allVertices.push([cWidth, tempv])
-    }
-    if (inCanvas(0, tempv2)) {
-      allVertices.push([0, tempv2])
-    }
-
-  }
   //return data
   //result
-  //0: allVertices
-  //1: edgePoints, of form [x,y,RGB color values]
-  //2: filtered pixel data
-  var result = [allVertices, edgePoints, pixelData];
+  //0: edgePoints, of form [x,y,RGB color values]
+  //1: filtered pixel data
+  var result = [edgePoints, pixelData];
   postMessage(result);
 }
 //Variables needed
