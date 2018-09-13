@@ -80,14 +80,14 @@ var cHeight = 400; //canvas height
 var triangleCanvasLayer; //Off screen graphics layer for drawing triangles on
 
 //active_canvas is true when user is hovering over canvas
-var active_canvas = false
+var active_canvas = false;
 
 var verticesCanvasLayer; //Off screen graphics layer for putting vertices on and off.
 
 
 function setup() {
 
-  img1 = createImage(1200, 800) //Default white background image
+  img1 = createImage(1200, 800); //Default white background image
   d = pixelDensity(); //pixel density is important for screens with different resolutions (e.g old vs new macbooks)
   loadPixels();
 
@@ -516,6 +516,7 @@ function generate_normal_poly(values) {
 function normal_poly_update_points(pacc, sparsity_factor, rand_density) {
   generateHashSpace();
     
+  //All edge vertices are put in verticeshashTable array if they are bright enough
   for (var i = 0; i < detected_edge_vertices.length; i++) {
     if (detected_edge_vertices[i][2] >= colorThreshold) {
       var ox = detected_edge_vertices[i][0];
@@ -523,11 +524,44 @@ function normal_poly_update_points(pacc, sparsity_factor, rand_density) {
       updateHashSpace(ox, oy, true, detected_edge_vertices[i][2]);
     }
   }
+  
+  //this commented out part adds random points around a filtered out edge vertex after reducing point density. It looks okay? Maybe a bit of more tweaking will make it look nicer, otherwise its not as good as not having it.
+  /*
+  reduce_point_density_by_brightness(pacc * 2);
+  
+  
+  var cos_coeff=[];
+  var sin_coeff=[];
+  for (var t = 0; t < 8; t++) {
+    cos_coeff.push(cos(45*t));
+    sin_coeff.push(sin(45*t));
+  }
+  var new_vertices = [];
+  for (var i = 0; i < verticesHashTable.length; i++) {
+    for (var j = 0; j < verticesHashTable[i].length; j++) {
+      for (var t = 0; t < 8; t++) {
+        var nx = Math.round(verticesHashTable[i][j][0] + 3*pacc*cos_coeff[t]+Math.random(0,1)*2*pacc-pacc);
+        var ny = Math.round(verticesHashTable[i][j][1] + 3*pacc*sin_coeff[t]+Math.random(0,1)*2*pacc-pacc);
+        if (inCanvas(nx,ny) && Math.random(0,1) > 0.8) {
+          new_vertices.push([nx,ny]);
+          //updateHashSpace(nx, ny, true);
+        }
+        
+      }
+    }
+  }
+  for (var i = 0; i< new_vertices.length; i++) {
+    updateHashSpace(new_vertices[i][0], new_vertices[i][1], true);
+  }
+  */
   splitSquare(pacc * sparsity_factor)
   generateRandomSquares(pacc * sparsity_factor, rand_density)
-  //Then clean up the edge points
-  reduce_point_density(pacc * 2);
-
+  reduce_point_density_by_brightness(2*pacc);
+  //recordVertices();
+  reduce_point_density(pacc, false);
+  //recordVertices();
+  
+  
   //Initialize edge and corner points
   updateHashSpace(0, 0, true)
   updateHashSpace(cWidth, 0, true)
@@ -555,8 +589,8 @@ function normal_poly_update_points(pacc, sparsity_factor, rand_density) {
       updateHashSpace(0, tempv2, true);
     }
   }
+
   draw_all_points(verticesCanvasLayer, verticesHashTable);
-  recordVertices();
 
   triangulate_and_display();
   completedFilters = true;
@@ -567,6 +601,13 @@ function normal_poly_update_points(pacc, sparsity_factor, rand_density) {
     $("#loadingScreen").css("z-index", "-10");
   }, 1500);
   loop();
+  
+  
+  
+
+  
+  
+  
   recordVertices();
 }
 
@@ -578,19 +619,32 @@ var jitter_prob = 0.85; //Probability jitter is not added
 
 //Reduce the density of points for better looking poly art when using the generate normal poly art function
 //Higher accuracy, the lower the poly level and detail. So high accuracy is basically really low poly and low accuracy value is higher poly.
-function reduce_point_density(accuracy, random) {
-  for (var t = 255; t >= 10; t-- ){
+function reduce_point_density_by_brightness(accuracy, random) {
+  for (var t = 255; t >= 4; t-- ){
     for (var i = 0; i < verticesHashTable.length; i++) {
       for (var j = 0; j < verticesHashTable[i].length; j++) {
         if (verticesHashTable[i][j].length == 3) {
           if (verticesHashTable[i][j][2] == t) {
             var vx = verticesHashTable[i][j][0];
             var vy = verticesHashTable[i][j][1];
+            var brightness = verticesHashTable[i][j][2];
             erase_vertices(vx,vy, accuracy);
-            updateHashSpace(vx,vy, true);
+            updateHashSpace(vx,vy, true, brightness);
           }
         }
       }
     }
   }
+}
+function reduce_point_density(accuracy, bybright){
+  for (var i = 0; i < verticesHashTable.length; i++) {
+      for (var j = 0; j < verticesHashTable[i].length; j++) {
+        var vx = verticesHashTable[i][j][0];
+        var vy = verticesHashTable[i][j][1];
+        var vbrightness = undefined;
+        erase_vertices(vx,vy, accuracy);
+        updateHashSpace(vx,vy, true, vbrightness);
+      }
+  }
+  
 }

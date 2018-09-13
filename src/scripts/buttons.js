@@ -108,18 +108,6 @@ $(document).ready(function () {
       pointDensity = pointDensityTemp;
     }
   });
-
-  //Color threshold input, which determines how the normal poly is generated
-  $("#colorThreshold").on("focusout", function () {
-    var colorThresholdTemp = parseInt(document.querySelector('#colorThreshold').value);
-    if (isNaN(colorThresholdTemp) === true || colorThresholdTemp < 1) {
-      alert("Type in a number larger than 1 for color threshold");
-      $("#colorThreshold")[0].value = colorThreshold;
-    } else {
-      colorThreshold = colorThresholdTemp;
-
-    }
-  })
   
   //Brush choices
   $("#pointBrush").on("click", function () {
@@ -367,16 +355,18 @@ $(document).ready(function () {
   $("#displaygennormalpoly").on("click", function () {
     open_a_options()
     display_options(false);
-    $("#options_menu_additional").html("<h4>Generate poly art</h4><i id=\"close_a_options\"class=\"fa fa-times\"></i><span>Level of Accuracy</span><input class=\"parameters form-control\" type=\"text\" placeholder=\"≥1\" id=\"poly_accuracy\"><button class=\"btn btn-outline-light\" id=\"gennormalpoly\">Generate</button>");
+    $("#options_menu_additional").html("<h4>Generate poly art</h4><i id=\"close_a_options\"class=\"fa fa-times\"></i><span>Brightness Threshold</span><input class=\"parameters form-control\" type=\"text\" placeholder=\"5-50\" id=\"color_threshold\"><span>Level of Accuracy</span><input class=\"parameters form-control\" type=\"text\" placeholder=\"≥2\" id=\"poly_accuracy\"><button class=\"btn btn-outline-light\" id=\"gennormalpoly\">Generate</button>");
+    $("#color_threshold").val(10);
+    $("#poly_accuracy").val(5)
     $("#gennormalpoly").on("click", function () {
-      //var ct = parseFloat($("#color_threshold").val());
+      var ct = parseFloat($("#color_threshold").val());
       var pacc = parseFloat($("#poly_accuracy").val());
-      /*
-      if (isNaN(ct) || ct < 10) {
+      
+      if (isNaN(ct) || ct < 5) {
         alert("Enter a integer larger than 10 for the color threshold");
         return;
       }
-      */
+      
       if (isNaN(pacc) || pacc < 2) {
         alert("Enter a integer larger than 1 for the level of accuracy");
         return;
@@ -389,7 +379,7 @@ $(document).ready(function () {
           return;
         }
       }
-      colorThreshold = 10;
+      colorThreshold = ct;
       close_a_options();
       generate_normal_poly([cWidth, cHeight, completedFilters, d, colorThreshold, pacc]);
 
