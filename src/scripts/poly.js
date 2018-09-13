@@ -497,128 +497,80 @@ function generate_normal_poly(values) {
       for (var iv = 0; iv < artResult[0].length; iv++) {
         detected_edge_vertices.push([artResult[0][iv][0], artResult[0][iv][1], artResult[0][iv][2]]);
       }
-      for (var i = 0; i < detected_edge_vertices.length; i++) {
-        if (detected_edge_vertices[i][2] >= colorThreshold) {
-          var ox = detected_edge_vertices[i][0];
-          var oy = detected_edge_vertices[i][1];
-          updateHashSpace(ox, oy, true, detected_edge_vertices[i][2]);
-        }
-      }
       copyTo(artResult[1], pixels)
 
       for (var km = 0; km < pixels.length; km++) {
         filteredPixels.push(pixels[km]);
       }
       
-      splitSquare(pacc * sparsity_factor)
-      generateRandomSquares(pacc * sparsity_factor, rand_density)
-
-      //Then clean up the edge points
-      reduce_point_density(pacc * 2);
-      
-      //Initialize edge and corner points
-      updateHashSpace(0, 0, true)
-      updateHashSpace(cWidth, 0, true)
-      updateHashSpace(0, cHeight, true)
-      updateHashSpace(cWidth, cHeight, true)
-      for (var i = 0; i < cWidth / (pacc*3); i++) {
-        var tempv = i * pacc*3 + Math.round(random(0, pacc));
-        var tempv2 = i * pacc*3 + Math.round(random(0, pacc));
-        if (inCanvas(tempv, cHeight)) {
-          updateHashSpace(tempv, cHeight, true)
-        }
-        if (inCanvas(tempv2, 0)) {
-          updateHashSpace(tempv2, 0, true);
-        }
-      }
-      for (var i = 0; i < cHeight / (pacc*3); i++) {
-        var tempv = i * pacc*3 + Math.round(random(0, pacc));
-        var tempv2 = i * pacc*3 + Math.round(random(0, pacc));
-        if (inCanvas(cWidth, tempv)) {
-          updateHashSpace(cWidth, tempv, true);
-        }
-        if (inCanvas(0, tempv2)) {
-          updateHashSpace(0, tempv2, true);
-        }
-      }
-      
-      draw_all_points(verticesCanvasLayer, verticesHashTable);
-      recordVertices();
-      
-      triangulate_and_display();
-      completedFilters = true;
-
-      window.setTimeout(function () {
-        $("#loadingScreen").css("opacity", "0");
-        $("#loadingText").css("opacity", "0");
-        $("#loadingText").css("top", "30%");
-        window.setTimeout(function () {
-          $("#loadingScreen").css("z-index", "-10");
-        }, 1800);
-      }, 0)
-      loop();
-      recordVertices();
+      normal_poly_update_points(pacc, sparsity_factor, rand_density)
       console.log("Webworker took " + ((artWorkerftime - artWorkerstime) / 1000) + "s", "Area: " + (cWidth * cHeight));
     }
   } 
   else {
-    generateHashSpace();
-    
-    for (var i = 0; i < detected_edge_vertices.length; i++) {
-      if (detected_edge_vertices[i][2] >= colorThreshold) {
-        var ox = detected_edge_vertices[i][0];
-        var oy = detected_edge_vertices[i][1];
-        updateHashSpace(ox, oy, true, detected_edge_vertices[i][2]);
-      }
-    }
-    splitSquare(pacc * sparsity_factor)
-    generateRandomSquares(pacc * sparsity_factor, rand_density)
-    //Then clean up the edge points
-    reduce_point_density(pacc * 2);
-    
-    //Initialize edge and corner points
-    updateHashSpace(0, 0, true)
-    updateHashSpace(cWidth, 0, true)
-    updateHashSpace(0, cHeight, true)
-    updateHashSpace(cWidth, cHeight, true)
-    for (var i = 0; i < cWidth / (pacc*3); i++) {
-      var tempv = i * pacc*3 + Math.round(random(0, pacc));
-      var tempv2 = i * pacc*3 + Math.round(random(0, pacc));
-      if (inCanvas(tempv, cHeight)) {
-        updateHashSpace(tempv, cHeight, true)
-      }
-      if (inCanvas(tempv2, 0)) {
-        updateHashSpace(tempv2, 0, true);
-      }
-
-
-    }
-    for (var i = 0; i < cHeight / (pacc*3); i++) {
-      var tempv = i * pacc*3 + Math.round(random(0, pacc));
-      var tempv2 = i * pacc*3 + Math.round(random(0, pacc));
-      if (inCanvas(cWidth, tempv)) {
-        updateHashSpace(cWidth, tempv, true);
-      }
-      if (inCanvas(0, tempv2)) {
-        updateHashSpace(0, tempv2, true);
-      }
-    }
-    draw_all_points(verticesCanvasLayer, verticesHashTable);
-    recordVertices();
-    
-    triangulate_and_display();
-    completedFilters = true;
-    $("#loadingScreen").css("opacity", "0");
-    $("#loadingText").css("opacity", "0");
-    $("#loadingText").css("top", "30%");
-    window.setTimeout(function () {
-      $("#loadingScreen").css("z-index", "-10");
-    }, 1500);
-    loop();
-    recordVertices();
+    normal_poly_update_points(pacc, sparsity_factor, rand_density)
 
   }
 }
+
+function normal_poly_update_points(pacc, sparsity_factor, rand_density) {
+  generateHashSpace();
+    
+  for (var i = 0; i < detected_edge_vertices.length; i++) {
+    if (detected_edge_vertices[i][2] >= colorThreshold) {
+      var ox = detected_edge_vertices[i][0];
+      var oy = detected_edge_vertices[i][1];
+      updateHashSpace(ox, oy, true, detected_edge_vertices[i][2]);
+    }
+  }
+  splitSquare(pacc * sparsity_factor)
+  generateRandomSquares(pacc * sparsity_factor, rand_density)
+  //Then clean up the edge points
+  reduce_point_density(pacc * 2);
+
+  //Initialize edge and corner points
+  updateHashSpace(0, 0, true)
+  updateHashSpace(cWidth, 0, true)
+  updateHashSpace(0, cHeight, true)
+  updateHashSpace(cWidth, cHeight, true)
+  for (var i = 0; i < cWidth / (pacc*3); i++) {
+    var tempv = i * pacc*3 + Math.round(random(0, pacc));
+    var tempv2 = i * pacc*3 + Math.round(random(0, pacc));
+    if (inCanvas(tempv, cHeight)) {
+      updateHashSpace(tempv, cHeight, true)
+    }
+    if (inCanvas(tempv2, 0)) {
+      updateHashSpace(tempv2, 0, true);
+    }
+
+
+  }
+  for (var i = 0; i < cHeight / (pacc*3); i++) {
+    var tempv = i * pacc*3 + Math.round(random(0, pacc));
+    var tempv2 = i * pacc*3 + Math.round(random(0, pacc));
+    if (inCanvas(cWidth, tempv)) {
+      updateHashSpace(cWidth, tempv, true);
+    }
+    if (inCanvas(0, tempv2)) {
+      updateHashSpace(0, tempv2, true);
+    }
+  }
+  draw_all_points(verticesCanvasLayer, verticesHashTable);
+  recordVertices();
+
+  triangulate_and_display();
+  completedFilters = true;
+  $("#loadingScreen").css("opacity", "0");
+  $("#loadingText").css("opacity", "0");
+  $("#loadingText").css("top", "30%");
+  window.setTimeout(function () {
+    $("#loadingScreen").css("z-index", "-10");
+  }, 1500);
+  loop();
+  recordVertices();
+}
+
+
 //Parameters for auto generating normal poly art. DEPRECATED
 var jitter_deviation = 20; //How far it can be from edge
 var max_jitter_count = 3; //Max number of extra jitter points around edge point
