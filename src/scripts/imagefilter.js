@@ -111,7 +111,7 @@ function smoothAvg3(x,y,data,filter_mode){
   gray_value = (0.2126*colors[0] + 0.7152*colors[1] + 0.0722*colors[2])
   
   //Add all points that are at least this bright.
-  if (filter_mode == "edge" && gray_value>=10){
+  if (filter_mode == "edge" && gray_value>=5){
     edgePoints.push([x,y,gray_value]);
   }
   return colors;

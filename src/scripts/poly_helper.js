@@ -23,13 +23,13 @@ function generateHashSpace() {
 }
 
 //Add or delete a vertex from verticesHashTable
-function updateHashSpace(x, y, add) {
+function updateHashSpace(x, y, add, brightness) {
 
   var hashVal = hashCoordinate(x, y);
   var index = findIndexFromHash(hashVal);
   if (add == true) {
     //console.log("x: " + x,"y: "+ y,"hashValue: " + hashVal, "index:" + index);
-    verticesHashTable[index].push([x, y])
+    verticesHashTable[index].push([x, y, brightness])
     
     //Draw on new vertices onto layer
     verticesCanvasLayer.ellipse(x,y, 5, 5);
