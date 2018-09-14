@@ -38,7 +38,7 @@ For maximum experience, it is suggested to use Firefox. The normal poly art auto
 ## Some poly art made by this program
 <p align="center">
   <img src ="https://github.com/StoneT2000/StoneT2000.github.io/blob/master/images/NasaShuttle.jpg" width="399" height="auto"></img>
-  <img src ="https://github.com/StoneT2000/StoneT2000.github.io/blob/master/images/NasaShuttlePoly.jpg" width="399" height="auto"></img>
+  <img src ="https://github.com/StoneT2000/StoneT2000.github.io/blob/master/images/NasaShuttlePolyArt.png" width="399" height="auto"></img>
   <img src ="https://github.com/StoneT2000/StoneT2000.github.io/blob/master/images/MountainHimilayas.jpg" width="800" height="auto"></img>
   <img src ="https://github.com/StoneT2000/StoneT2000.github.io/blob/master/images/MountainHimilayasPoly.jpg" width="800" height="auto"></img>
   <img src ="https://github.com/StoneT2000/StoneT2000.github.io/blob/master/images/PolyFlowerEffect2.gif" width="800" height="auto"></img>
