@@ -32,7 +32,7 @@ npm run build:win
 npm run build:linux
 ```
 
-Or if you want to skip all this techy stuff, head over to the <a href="https://github.com/StoneT2000/Polytomizator/releases"></a> to download the latest version.
+Or if you want to skip all this techy stuff, head over to the <a href="https://github.com/StoneT2000/Polytomizator/releases">releases page</a> to download the latest version.
 
 
 ## Features
