@@ -1,9 +1,9 @@
 {
   "name": "Polytomizator",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A small app that helps generate low-poly art.",
   "repository": "StoneT2000/Polytomizator",
-  "main": "app.js",
+  "main": "PolytomizatorApp/app.js",
   "scripts": {
     "start": "electron ."
   },
