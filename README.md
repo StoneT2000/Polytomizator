@@ -8,7 +8,7 @@ A working link to this program is provided here https://stonet2000.github.io/Pol
 
 Or...
 
-You can clone and run this repository through npm. You will need <a href="https://git-scm.com/">Git</a> and <a href="https://nodejs.org/en/download/">Node.js</a> installed however. Using your command line (e.g Terminal on Mac OSX), run
+You can clone and run this repository through <a href="https://www.npmjs.com/">npm</a>. You will need <a href="https://git-scm.com/">Git</a> and <a href="https://nodejs.org/en/download/">Node.js</a> installed however. Using your command line (e.g Terminal on Mac OSX), run
 
 ``` bash
 # To clone this repository
@@ -32,7 +32,7 @@ npm run build:win
 npm run build:linux
 ```
 
-Or if you want to skip all this techy stuff, head over to the <a href="https://github.com/StoneT2000/Polytomizator/releases">releases page</a> to download the latest version.
+Or if you want to skip all this techy stuff, head over to the <a href="https://github.com/StoneT2000/Polytomizator/releases">releases page</a> to download the latest version. This is built with <a href="https://electronjs.org">Electron</a>.
 
 
 ## Features
