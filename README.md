@@ -9,9 +9,28 @@ A working link to this program is provided here https://stonet2000.github.io/Pol
 Or...
 
 You can clone and run this repository through npm. You will need Git and Node.js installed however. Using your command line (e.g Terminal on Mac OSX)
-'
-Test
-'
+
+``` bash
+# To clone this repository
+git clone 
+# Then to enter the repostory
+cd Polytomizator
+# Install dependencies and start up the app
+npm install && npm start
+```
+
+To compile this into an app run
+
+``` bash
+# Download all app distributions
+npm run build
+# Mac OSX
+npm run build:osx
+# Windows
+npm run build:win
+# Linux
+npm run build:linux
+```
 
 ## Features
 ### Making Poly Art
