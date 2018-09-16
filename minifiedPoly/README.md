@@ -8,9 +8,32 @@ A working link to this program is provided here https://stonet2000.github.io/Pol
 
 Or...
 
-Simply download the repository's zip file, open it, and then open the folder Polytomizator (local), and open index.html.
+You can clone and run this repository through <a href="https://www.npmjs.com/">npm</a>. You will need <a href="https://git-scm.com/">Git</a> and <a href="https://nodejs.org/en/download/">Node.js</a> installed however. Using your command line (e.g Terminal on Mac OSX), run
 
-For maximum experience, it is suggested to use Firefox. The normal poly art auto-generator doesn't work on Chrome or Safari, but everything else does.
+``` bash
+# To clone this repository
+git clone 
+# Then to enter the repostory
+cd Polytomizator
+# Install dependencies and start up the app
+npm install && npm start
+```
+
+To compile this into an app run
+
+``` bash
+# Download all app distributions
+npm run build
+# Mac OSX
+npm run build:osx
+# Windows
+npm run build:win
+# Linux
+npm run build:linux
+```
+
+Or if you want to skip all this techy stuff, head over to the <a href="https://github.com/StoneT2000/Polytomizator/releases">releases page</a> to download the latest version. This is built with <a href="https://electronjs.org">Electron</a>.
+
 
 ## Features
 ### Making Poly Art
