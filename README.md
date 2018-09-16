@@ -8,9 +8,10 @@ A working link to this program is provided here https://stonet2000.github.io/Pol
 
 Or...
 
-Simply download the repository's zip file, open it, and then open the folder Polytomizator (local), and open index.html.
-
-For maximum experience, it is suggested to use Firefox. The normal poly art auto-generator doesn't work on Chrome or Safari, but everything else does.
+You can clone and run this repository through npm. You will need Git and Node.js installed however. Using your command line (e.g Terminal on Mac OSX)
+'
+Test
+'
 
 ## Features
 ### Making Poly Art
