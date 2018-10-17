@@ -72,7 +72,7 @@ var storedVertices = [];
 //Max number of undos allowed.
 var max_undo = 50;
 
-var myCanvas; //The canvas
+var polyCanvas; //The canvas
 var img1; //The current loaded image
 var d; //Pixel density
 var cWidth = 400; //canvas width
@@ -102,7 +102,7 @@ function setup() {
     cWidth = round(img1.width / factor);
     cHeight = round(img1.height / factor);
   }
-  myCanvas = createCanvas(cWidth, cHeight);
+  polyCanvas = createCanvas(cWidth, cHeight);
   origcWidth = cWidth;
   origcHeight = cHeight;
   canvasScale = 1;
@@ -167,7 +167,7 @@ function setup() {
   $("#gamedisplay").css("margin-left", -cWidth / 2);
 
   //Start up canvas
-  myCanvas.parent('gamedisplay');
+  polyCanvas.parent('gamedisplay');
 
   //Change to degrees
   angleMode(DEGREES);

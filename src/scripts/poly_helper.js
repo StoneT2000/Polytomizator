@@ -555,7 +555,7 @@ function loadData(dataStored) {
   //img1 = dataStored[4];
   cWidth = dataStored[4];
   cHeight = dataStored[5];
-  myCanvas = resizeCanvas(cWidth, cHeight);
+  polyCanvas = resizeCanvas(cWidth, cHeight);
   
   triangleCanvasLayer = createGraphics(cWidth, cHeight);
   verticesCanvasLayer = createGraphics(cWidth, cHeight);

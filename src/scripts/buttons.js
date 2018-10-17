@@ -158,14 +158,14 @@ $(document).ready(function () {
         cHeight = round(img1.height / factor);
       }
 
-      myCanvas = createCanvas(cWidth, cHeight);
+      polyCanvas = createCanvas(cWidth, cHeight);
       origcWidth = cWidth;
       origcHeight = cHeight;
       canvasScale = 1;
       $("#gamedisplay").css("width", cWidth);
       $("#gamedisplay").css("margin-left", -cWidth / 2);
 
-      myCanvas.parent('gamedisplay');
+      polyCanvas.parent('gamedisplay');
 
       //Reset values
       triangulations = [0];
