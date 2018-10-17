@@ -6,7 +6,7 @@ This was made using JS and HTML. Primary library used was p5.js.
 ## Using this program
 A working link to this program is provided here https://stonet2000.github.io/Polytomizator
 
-Or...
+Or... (the following is less recommended as it takes longer and was really done because I was learning how to use Electron, npm etc.)
 
 You can clone and run this repository through <a href="https://www.npmjs.com/">npm</a>. You will need <a href="https://git-scm.com/">Git</a> and <a href="https://nodejs.org/en/download/">Node.js</a> installed however. Using your command line (e.g Terminal on Mac OSX), run
 
