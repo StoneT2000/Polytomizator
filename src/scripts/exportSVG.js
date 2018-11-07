@@ -1,4 +1,5 @@
 //store all the triangle and color data into <polygon> tags suitable for svg exporting.
+
 function storeTrianglesToString() {
   var data = ""
   tng = triangulations[triangulations.length - 1];
@@ -16,6 +17,100 @@ function storeTrianglesToString() {
       "style=\"fill:" + hexcolors +
       ";stroke:" + hexcolors + ";\"";
     data += "/>"
+  }
+  return data;
+}
+
+function storeLinesToString() {
+  var data = ""
+  tng = triangulations[triangulations.length - 1];
+  for (var tInd = 0; tInd < tng.length; tInd += 3) {
+    var x1 = triangulatedVerticesFlat[tng[tInd]][0];
+    var x2 = triangulatedVerticesFlat[tng[tInd + 1]][0];
+    var x3 = triangulatedVerticesFlat[tng[tInd + 2]][0];
+    var y1 = triangulatedVerticesFlat[tng[tInd]][1];
+    var y2 = triangulatedVerticesFlat[tng[tInd + 1]][1];
+    var y3 = triangulatedVerticesFlat[tng[tInd + 2]][1];
+    data += "<line x1='" + x1 + "' y1='" +
+      y1 + "' x2='" +
+      x2 + "' y2='" +
+      y2 + "' stroke-width='1' ";
+
+    hexcolors = rgbToHex(tColors[tInd].toFixed(0), tColors[tInd + 1].toFixed(0), tColors[tInd + 2].toFixed(0));
+    data +=
+      "style=\"fill:" + hexcolors +
+      ";stroke:" + hexcolors + ";\"";
+    data += "/>"
+    data += "<line x1='" + x2 + "' y1='" +
+      y2 + "' x2='" +
+      x3 + "' y2='" +
+      y3 + "' stroke-width='1' ";
+
+    hexcolors = rgbToHex(tColors[tInd].toFixed(0), tColors[tInd + 1].toFixed(0), tColors[tInd + 2].toFixed(0));
+    data +=
+      "style=\"fill:" + hexcolors +
+      ";stroke:" + hexcolors + ";\"";
+    data += "/>"
+    data += "<line x1='" + x3 + "' y1='" +
+      y3 + "' x2='" +
+      x1 + "' y2='" +
+      y1 + "' stroke-width='1' ";
+
+    hexcolors = rgbToHex(tColors[tInd].toFixed(0), tColors[tInd + 1].toFixed(0), tColors[tInd + 2].toFixed(0));
+    data +=
+      "style=\"fill:" + hexcolors +
+      ";stroke:" + hexcolors + ";\"";
+    data += "/>"
+  }
+  return data;
+}
+function storeDisconnectLinesToString() {
+  var data = ""
+  tng = triangulations[triangulations.length - 1];
+  for (var tInd = 0; tInd < tng.length; tInd += 3) {
+    var x1 = triangulatedVerticesFlat[tng[tInd]][0];
+    var x2 = triangulatedVerticesFlat[tng[tInd + 1]][0];
+    var x3 = triangulatedVerticesFlat[tng[tInd + 2]][0];
+    var y1 = triangulatedVerticesFlat[tng[tInd]][1];
+    var y2 = triangulatedVerticesFlat[tng[tInd + 1]][1];
+    var y3 = triangulatedVerticesFlat[tng[tInd + 2]][1];
+    var prob = Math.random();
+    if (prob < 0.33){
+      data += "<line x1='" + x1 + "' y1='" +
+        y1 + "' x2='" +
+        x2 + "' y2='" +
+        y2 + "' stroke-width='1' ";
+
+      hexcolors = rgbToHex(tColors[tInd].toFixed(0), tColors[tInd + 1].toFixed(0), tColors[tInd + 2].toFixed(0));
+      data +=
+        "style=\"fill:" + hexcolors +
+        ";stroke:" + hexcolors + ";\"";
+      data += "/>"
+    }
+    else if (prob < 0.66){
+      data += "<line x1='" + x2 + "' y1='" +
+        y2 + "' x2='" +
+        x3 + "' y2='" +
+        y3 + "' stroke-width='1' ";
+
+      hexcolors = rgbToHex(tColors[tInd].toFixed(0), tColors[tInd + 1].toFixed(0), tColors[tInd + 2].toFixed(0));
+      data +=
+        "style=\"fill:" + hexcolors +
+        ";stroke:" + hexcolors + ";\"";
+      data += "/>"
+    }
+    else {
+      data += "<line x1='" + x3 + "' y1='" +
+        y3 + "' x2='" +
+        x1 + "' y2='" +
+        y1 + "' stroke-width='1' ";
+
+      hexcolors = rgbToHex(tColors[tInd].toFixed(0), tColors[tInd + 1].toFixed(0), tColors[tInd + 2].toFixed(0));
+      data +=
+        "style=\"fill:" + hexcolors +
+        ";stroke:" + hexcolors + ";\"";
+      data += "/>"
+    }
   }
   return data;
 }
@@ -55,4 +150,20 @@ function downloadSVG(svgWidth, svgHeight) {
     type: "text/plain;charset=utf-8"
   });
   saveAs(svgblob, "PolyArt.svg");
+}
+function downloadSVGLines(svgWidth, svgHeight) {
+  var text = generateSVGFile(storeLinesToString(), svgWidth, svgHeight)
+  //var filename = "PolyArt.svg";
+  var svgblob = new Blob([text], {
+    type: "text/plain;charset=utf-8"
+  });
+  saveAs(svgblob, "PolyArtLines.svg");
+}
+function downloadSVGDisconnectedLines(svgWidth, svgHeight) {
+  var text = generateSVGFile(storeDisconnectLinesToString(), svgWidth, svgHeight)
+  //var filename = "PolyArt.svg";
+  var svgblob = new Blob([text], {
+    type: "text/plain;charset=utf-8"
+  });
+  saveAs(svgblob, "PolyArtLines.svg");
 }
