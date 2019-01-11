@@ -12,7 +12,7 @@ You can clone and run this repository through <a href="https://www.npmjs.com/">n
 
 ``` bash
 # To clone this repository
-git clone https://stonet2000.github.io/Polytomizator.git
+git clone https://github.com/StoneT2000/Polytomizator.git
 # Then to enter the repostory
 cd Polytomizator
 # Install dependencies and start up the app
