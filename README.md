@@ -84,7 +84,7 @@ The SVG file is created by creating a file with the proper SVG formatting. The p
 #### Poly Art Auto Generation
 Algorithms run are done on a separate thread using web-workers, allowing for a nice loading screen to be displayed.
 
-Edge detection algorithms created through the convolution of a 3x3 smoothing kernel and 3x3 edge detection kernel. The kernels create a photo where edges are bright, which are detected by scanning through the entire array of pixels and for those that are bright, an 'edge' vertex is placed at its position. Then a for loop is run through the detected edge vertices in order of decreasing brightness, and vertices around the detected edge vertex are erased
+Edge detection algorithms created through the convolution of a 3x3 smoothing kernel and 3x3 edge detection kernel. The kernels create a photo where edges are bright, which are detected by scanning through the entire array of pixels and for those that are bright, an 'edge' vertex is placed at its position. Then a for loop is run through the detected edge vertices in order of decreasing brightness, and vertices around the detected edge vertex are erased, a form of Poisson disk sampling.
 
 Then some filler vertices are placed randomly around the canvas.
 
@@ -93,4 +93,4 @@ Once scanned and filtered with edges detected, it doesn't need to be run again u
 In general, a combination of edge detection methods and some vertex filtering functions help create neat looking poly art.
 
 ## Acknowledgements
-Many thanks to Vincent and many others as well for helping make this better.
+Many thanks to Vincent and many others as well for giving suggestions and great feedback.
