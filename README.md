@@ -1,6 +1,10 @@
 # Polytomizator
 A web applet that helps generate poly art using an uploaded background image.
 
+<p align="center">
+  <img src ="https://github.com/StoneT2000/StoneT2000.github.io/blob/master/images/PolyFlowerEffect2.gif" width="800" height="auto"></img>
+</p>
+
 This was made using JS and HTML. Primary library used was p5.js.
 
 ## Using this program
