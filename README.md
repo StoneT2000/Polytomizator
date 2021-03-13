@@ -96,4 +96,4 @@ Once scanned and filtered with edges detected, it doesn't need to be run again u
 In general, a combination of edge detection methods and some vertex filtering functions help create neat looking poly art.
 
 ## Acknowledgements
-Many thanks to Vincent and many others as well for giving suggestions and great feedback.
+Many thanks to @Vince14Genius and many others as well for giving suggestions and great feedback.
