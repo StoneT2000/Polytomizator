@@ -2,9 +2,8 @@
 A web applet that helps generate poly art using an uploaded background image.
 
 <p align="center">
-  <img src ="https://github.com/StoneT2000/StoneT2000.github.io/blob/master/images/PolyFlowerEffect2.gif" width="800" height="auto"></img>
+  <img src ="https://github.com/StoneT2000/StoneT2000.github.io/blob/old/images/PolyFlowerEffect2.gif" width="800" height="auto"></img>
 </p>
-
 This was made using JS and HTML. Primary library used was p5.js.
 
 ## Using this program
@@ -64,11 +63,11 @@ Or if you want to skip all this techy stuff, head over to the <a href="https://g
 
 ## Some poly art made by this program
 <p align="center">
-  <img src ="https://github.com/StoneT2000/StoneT2000.github.io/blob/master/images/NasaShuttle.jpg" width="399" height="auto"></img>
-  <img src ="https://github.com/StoneT2000/StoneT2000.github.io/blob/master/images/NasaShuttlePolyArt.png" width="399" height="auto"></img>
-  <img src ="https://github.com/StoneT2000/StoneT2000.github.io/blob/master/images/MountainHimilayas.jpg" width="800" height="auto"></img>
-  <img src ="https://github.com/StoneT2000/StoneT2000.github.io/blob/master/images/MountainHimilayasPoly.jpg" width="800" height="auto"></img>
-  <img src ="https://github.com/StoneT2000/StoneT2000.github.io/blob/master/images/PolyFlowerEffect2.gif" width="800" height="auto"></img>
+  <img src ="https://github.com/StoneT2000/StoneT2000.github.io/blob/old/images/NasaShuttle.jpg" width="399" height="auto"></img>
+  <img src ="https://github.com/StoneT2000/StoneT2000.github.io/blob/old/images/NasaShuttlePolyArt.png" width="399" height="auto"></img>
+  <img src ="https://github.com/StoneT2000/StoneT2000.github.io/blob/old/images/MountainHimilayas.jpg" width="800" height="auto"></img>
+  <img src ="https://github.com/StoneT2000/StoneT2000.github.io/blob/old/images/MountainHimilayasPoly.jpg" width="800" height="auto"></img>
+  <img src ="https://github.com/StoneT2000/StoneT2000.github.io/blob/old/images/PolyFlowerEffect2.gif" width="800" height="auto"></img>
 </p>
 
 ## Further Technical Details
